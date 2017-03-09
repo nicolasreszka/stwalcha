@@ -8,9 +8,8 @@ Player = {
 	touched = false,
 	xScale = 1,
 	yScale = 1,
-	colorShift = 0,
 	colorCurrent = 0, 
-	protected = false
+	flashWhite = false
 }
 Player.__index = Player
 
@@ -40,19 +39,10 @@ local maxGravity = 32
 
 local thrownDuration = 0.3
 local touchedDuration = 0.15
-local explosionDuration = 6
-
-local colors = {
-	{106, 255, 106},
-	{0, 191, 255},
-	{0, 128, 255},
-	{255, 128, 0}
-}
-
-local chatColor = {255, 40, 222}
+local explosionDuration = 3
 
 local startColorShift = 2
-local targetColorShift = 50
+local endColorShift = 50
 
 function Player.new(x,y,slot)
 	local player = {}
@@ -70,11 +60,7 @@ function Player.new(x,y,slot)
 	player.touchedTimer = Clock.new(touchedDuration)
 	player.explosionTimer = Clock.new(explosionDuration)
 
-	player.color = {
-		colors[slot][1],
-		colors[slot][2],
-		colors[slot][3]
-	}
+	player.color = colors[slot]:clone()
 
 	return player
 end
@@ -102,6 +88,14 @@ function Player:update()
 		else 
 			self:move(accelerationGround,frictionGround,maxSpeedGround)
 			self:jump()
+			
+			if self.moveDirection > 0 
+			and self.vx < 0 and self.vx > -maxSpeedGround*0.6 then
+				instantiateDustRight(self.rect.left,self.rect.bottom-4,2)
+			elseif self.moveDirection < 0 and self.vx > 0 
+			and self.vx < maxSpeedGround*0.6 then
+				instantiateDustLeft(self.rect.right,self.rect.bottom-4,2)
+			end
 		end
 	end
 
@@ -116,7 +110,6 @@ function Player:update()
 	self:horizontalCollisions()
 	self:verticalCollisions()
 
-	-- Keep previous grounded value
 	self.groundedBefore = self.grounded
 	self:applyRestitution()
 
@@ -351,42 +344,33 @@ function Player:applyRestitution()
 	self.yScale = approachValues(self.yScale,1,restitution)
 end
 
-function Player:colorTransition(targetColor)
-	self.color[1] = approachValues(self.color[1],targetColor[1],self.colorShift)
-	self.color[2] =	approachValues(self.color[2],targetColor[2],self.colorShift)
-	self.color[3] = approachValues(self.color[3],targetColor[3],self.colorShift)
-end
-
-function Player:colorCompare(targetColor)
-	if self.color[1] == targetColor[1]
-	and self.color[2] == targetColor[2]
-	and self.color[3] == targetColor[3] then
-		return true
-	else 
-		return false
-	end
-end
-
 function Player:blink()
-	self.colorShift = tween.inOutExpo(startColorShift,targetColorShift,self.explosionTimer);
 	if self.colorCurrent == 0 then
-		self:colorTransition(chatColor)
-		if self:colorCompare(chatColor) then
+		self.color:transform(
+			tween.inOutExpo(startColorShift,endColorShift,self.explosionTimer),
+			chatColor
+		)
+		if self.color:compare(chatColor) then
 			self.colorCurrent = 1
 		end
 	else 
-		self:colorTransition(colors[self.slot])
-		if self:colorCompare(colors[self.slot]) then
+		self.color:transform(
+			tween.inOutExpo(startColorShift,endColorShift,self.explosionTimer),
+			colors[self.slot]
+		)
+		if self.color:compare(colors[self.slot]) then
 			self.colorCurrent = 0
 		end
 	end
 end
 
 function Player:draw()
-	if chat == self.slot then
-		love.graphics.setColor(self.color)
+	if self.flashWhite then
+		WHITE:set()
+	elseif chat == self.slot then
+		self.color:set()
 	else 
-		love.graphics.setColor(colors[self.slot])
+		colors[self.slot]:set()
 	end
 	
 	love.graphics.rectangle(

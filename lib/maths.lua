@@ -8,8 +8,24 @@ function sign(n)
 	end
 end
 
+function clamp(n,low,high) 
+	return math.min(math.max(low, n), high) 
+end
+
+function lengthDirectionX(length,direction)
+	return length * math.cos(direction)
+end
+
+function lengthDirectionY(length,direction)
+	return length * math.sin(direction)
+end
+
 function distance(a,b)
 	return math.sqrt((a.x-b.x)^2+(a.y-b.y)^2)
+end
+
+function angle(a,b) 
+	return math.atan2(b.y-a.y, b.x-a.x) 
 end
 
 function approachValues(begin,change,shift)
@@ -19,3 +35,4 @@ function approachValues(begin,change,shift)
 		return math.max(begin - shift, change)
 	end
 end
+

@@ -4,30 +4,41 @@ require "lib.collisions"
 require "lib.group"
 require "lib.clock"
 require "lib.tween"
+require "lib.color"
 require "lib.camera"
 
-require "bubble"
-require "explosion"
-require "player"
-require "block"
+require "game"
 require "input"
 require "particles"
-require "game"
+require "block"
+require "player"
+require "god"
+require "explosion"
 
 function love.load()
+
 	local joysticks = love.joystick.getJoysticks()
 
 	inputs = {
 		Input.new("left","right","up",joysticks[1]),
 		Input.new("q","d","z",joysticks[2]),
 		Input.new("j","l","i",joysticks[3]),
-		Input.new("kp4","kp6","kp8",joysticks[3])
+		Input.new("kp4","kp6","kp8",joysticks[4])
 	}
 
+	colors = {
+		Color.new(106, 255, 106),
+		Color.new(0, 191, 255),
+		Color.new(255, 0, 50),
+		Color.new(255, 128, 0)
+	}
+
+	chatColor =  Color.new(255, 40, 222)
+
 	camera = Camera.new()
-	
+
 	pause = false
-	numberOfPlayers = 2
+	numberOfPlayers = 3
 	loadMap("maps.test0")
 end
 
@@ -53,8 +64,12 @@ function love.draw()
 	camera:set()
 	blocks:draw()
 	players:draw()
-	bubbles:draw()
 	explosions:draw()
+	
+	if halfTime then
+		god:draw()
+	end
+
 	drawParticles()
 	camera:unset()
 end

@@ -8,8 +8,7 @@ Player = {
 	touched = false,
 	xScale = 1,
 	yScale = 1,
-	colorCurrent = 0, 
-	flashWhite = false
+	colorCurrent = 0
 }
 Player.__index = Player
 
@@ -38,8 +37,8 @@ local gravity = .4
 local maxGravity = 32
 
 local thrownDuration = 0.3
-local touchedDuration = 0.15
-local explosionDuration = 3
+local touchedDuration = 0.2
+local explosionDuration = 10
 
 local startColorShift = 2
 local endColorShift = 50
@@ -60,16 +59,23 @@ function Player.new(x,y,slot)
 	player.touchedTimer = Clock.new(touchedDuration)
 	player.explosionTimer = Clock.new(explosionDuration)
 
-	player.color = colors[slot]:clone()
+	player.color = chatColor:clone()
+
+	player.sfx = {
+		jump = Sound.new(sfx.jump),
+		bump = Sound.new(sfx.bump),
+		land = Sound.new(sfx.land),
+		slide = Sound.new(sfx.slide),
+		tick = Sound.new(sfx.tick)
+	}
 
 	return player
 end
 
 function Player:update()
-
 	self.moveDirection = self.input.rightDown - self.input.leftDown
  	self.grounded = blocks:rectsVsLine(self.rect:bboxBottom())
- 	self:squashAndStretch()
+ 	self:landAndTakeOff()
 	
 	if self.thrown then
 		if not self.grounded then
@@ -89,12 +95,20 @@ function Player:update()
 			self:move(accelerationGround,frictionGround,maxSpeedGround)
 			self:jump()
 			
-			if self.moveDirection > 0 
-			and self.vx < 0 and self.vx > -maxSpeedGround*0.6 then
-				instantiateDustRight(self.rect.left,self.rect.bottom-4,2)
-			elseif self.moveDirection < 0 and self.vx > 0 
-			and self.vx < maxSpeedGround*0.6 then
-				instantiateDustLeft(self.rect.right,self.rect.bottom-4,2)
+			if self.moveDirection > 0 and self.vx < 0 then
+				self.sfx.slide:playAt(self.pos)
+				if self.vx > -maxSpeedGround*0.6 then
+					instantiateDustRight(self.rect.left,self.rect.bottom-4,2)
+				end
+			elseif self.moveDirection < 0 and self.vx > 0 then
+				self.sfx.slide:playAt(self.pos)
+				if self.vx < maxSpeedGround*0.6 then
+					instantiateDustLeft(self.rect.right,self.rect.bottom-4,2)
+				end
+			else 
+				if self.sfx.slide:isPlaying() then
+					self.sfx.slide:pause()
+				end
 			end
 		end
 	end
@@ -126,10 +140,9 @@ function Player:update()
 	end
 end
 
-function Player:squashAndStretch()
+function Player:landAndTakeOff()
 	-- Squash
 	if not self.groundedBefore and self.grounded then
-		self:squash() 
 		instantiateDustBottom(self.rect.left,self.rect.bottom-2,4)
 		instantiateDustBottom(self.rect.right,self.rect.bottom-2,4)
 	-- Stretch
@@ -165,31 +178,42 @@ function Player:move(acceleration,friction,maxSpeed)
 end
 
 function Player:wallJump()
+	local leftWall = blocks:rectsVsLine(self.rect:bboxLeft())
+	local rightWall = blocks:rectsVsLine(self.rect:bboxRight())
+
 	-- Left
-	if blocks:rectsVsLine(self.rect:bboxLeft()) 
-	and not blocks:rectsVsLine(self.rect:bboxRight()) then
+	if leftWall and not rightWall then
 		instantiateDustLeft(
 			self.rect.left+4,
 			self.rect.top+height/4,
 			2
 		)
+		self.sfx.slide:playAt(self.pos)
 		if self.input.jumpPressed then
 			self.vx = jumpForce
 			self.vy = -jumpForce
 			self:stretch()
+			self.sfx.jump:stop()
+			self.sfx.jump:playAt(self.pos)
 		end
 	-- Right
-	elseif not blocks:rectsVsLine(self.rect:bboxLeft()) 
-	and blocks:rectsVsLine(self.rect:bboxRight()) then
+	elseif not leftWall and rightWall then
 		instantiateDustRight(
 			self.rect.right-4,
 			self.rect.top+height/4,
 			2
 		)
+		self.sfx.slide:playAt(self.pos)
 		if self.input.jumpPressed then
 			self.vx = -jumpForce
 			self.vy = -jumpForce
 			self:stretch()
+			self.sfx.jump:stop()
+			self.sfx.jump:playAt(self.pos)
+		end
+	else 
+		if self.sfx.slide:isPlaying() then
+			self.sfx.slide:pause()
 		end
 	end 
 end
@@ -207,13 +231,15 @@ function Player:jump()
 			self.rect.bottom-4,
 			3
 		)
+		self.sfx.jump:stop()
+		self.sfx.jump:playAt(self.pos)
 	end
 end
 
 function Player:getNextX(speed)
 	local v = sign(speed)
 	local nextP = self.rect.pos.x + v
-	if nextP >= mapWidth then
+	if nextP >= mapWidth-4 then
 		nextP = 4
 	elseif nextP <= 0 then
 		nextP = mapWidth-4
@@ -233,13 +259,24 @@ function Player:getNextY(speed)
 end
 
 function Player:changeChat(player)
-	if chat == self.slot and not self.touched then
-		chat = player.slot
-		player.touched = true
-	elseif chat == player.slot and not player.touched 
-		and not player.thrown then
-		chat = self.slot
-		self.touched = true
+	if not self.touched and not player.touched then
+		if chat == self.slot then
+			chat = player.slot
+			self.touched = true
+			self.sfx.tick:stop()
+			player.touched = true
+			player.colorCurrent = 0
+			player.color = chatColor:clone()
+			player.sfx.tick:playAt(player.pos)
+		elseif chat == player.slot then
+			chat = self.slot
+			player.touched = true
+			player.sfx.tick:stop()
+			self.touched = true
+			self.colorCurrent = 0
+			self.color = chatColor:clone()
+			self.sfx.tick:playAt(self.pos)
+		end
 	end
 end
 
@@ -266,10 +303,12 @@ function Player:kickOtherPlayers()
 					player.vy = -math.max(math.abs(self.vx)*0.75,4)
 				end
 				player.pos.x = player.rect.pos.x
-				player.input:vibration(player.thrownTimer.duration)
+				player.input:vibration(thrownDuration)
+				self.input:vibration(thrownDuration)
 			end
 			-- Move player to avoid mutual contact
 			player.rect:translate(player.pos.x,player.rect.pos.y)
+			player.sfx.bump:playAt(player.pos)
 			return 1
 		end
 	end
@@ -310,16 +349,23 @@ function Player:verticalCollisions()
 			self.rect:translate(self.rect.pos.x,self.pos.y)	
 			self.vy = -jumpForce
 			self:stretch()
+			self.input:vibration(thrownDuration)
 			player:squash()
-			player.input:vibration(player.thrownTimer.duration)
+			player.input:vibration(thrownDuration)
+			player.sfx.bump:playAt(player.pos)
 			break
 		-- Wall detected for player or other player
 		elseif blocks:rectsVsRect(self.rect)
 		or self.vy < 0 and player then
-			self.rect:translate(self.rect.pos.x,self.pos.y)	
-			if self.vy < 0 then
-				self:squash()
+			if player then
+				self.input:vibration(thrownDuration)
+				player.input:vibration(thrownDuration)
+			else
+				self.sfx.land:stop()
+				self.sfx.land:playAt(self.pos)
 			end
+			self:squash()
+			self.rect:translate(self.rect.pos.x,self.pos.y)
 			self.vy = 0
 			break
 		-- Move position
@@ -347,27 +393,29 @@ end
 function Player:blink()
 	if self.colorCurrent == 0 then
 		self.color:transform(
-			tween.inOutExpo(startColorShift,endColorShift,self.explosionTimer),
-			chatColor
-		)
-		if self.color:compare(chatColor) then
-			self.colorCurrent = 1
-		end
-	else 
-		self.color:transform(
-			tween.inOutExpo(startColorShift,endColorShift,self.explosionTimer),
+			tween.inExpo(startColorShift,endColorShift,self.explosionTimer),
 			colors[self.slot]
 		)
 		if self.color:compare(colors[self.slot]) then
+			self.colorCurrent = 1
+			self.sfx.tick:stop()
+			self.sfx.tick:playAt(self.pos)
+		end
+	else 
+		self.color:transform(
+			tween.inExpo(startColorShift,endColorShift,self.explosionTimer),
+			chatColor
+		)
+		if self.color:compare(chatColor) then
 			self.colorCurrent = 0
+			self.sfx.tick:stop()
+			self.sfx.tick:playAt(self.pos)
 		end
 	end
 end
 
 function Player:draw()
-	if self.flashWhite then
-		WHITE:set()
-	elseif chat == self.slot then
+	if chat == self.slot then
 		self.color:set()
 	else 
 		colors[self.slot]:set()

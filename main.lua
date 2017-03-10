@@ -14,6 +14,7 @@ require "block"
 require "player"
 require "god"
 require "explosion"
+require "sound"
 
 function love.load()
 
@@ -38,7 +39,9 @@ function love.load()
 	camera = Camera.new()
 
 	pause = false
-	numberOfPlayers = 3
+	numberOfPlayers = 2
+
+	loadAudio()
 	loadMap("maps.test0")
 end
 

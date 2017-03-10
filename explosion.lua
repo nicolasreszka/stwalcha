@@ -14,7 +14,7 @@ function Explosion.new(x,y)
 	for i,player in pairs(players.objects) do
 		inputs[player.slot]:vibration(3)
 	end
-
+	sfx.explosion:playAt(explosion.range.pos)
 	return explosion
 end
 

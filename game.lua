@@ -1,4 +1,17 @@
 
+function loadAudio()
+	sfx = {
+		jump = love.audio.newSource("sounds/jump.wav", "static"),
+		bump = love.audio.newSource("sounds/bump.wav", "static"),
+		land = love.audio.newSource("sounds/land.wav", "static"),
+		slide = love.audio.newSource("sounds/slide.wav", "static"),
+		tick = love.audio.newSource("sounds/tick.wav", "static"),
+		lighting = Sound.new(love.audio.newSource("sounds/lighting.wav", "stream")),
+		explosion = Sound.new(love.audio.newSource("sounds/explosion.wav", "stream"))
+	}
+	love.audio.setPosition(0,0,0)
+end
+
 function loadMap(mapName)
 	local map = require(mapName)
 
@@ -34,7 +47,7 @@ end
 
 function updateGame()
 	if pause then
-
+		
 	else 
 		if halfTime then
 			god:update()

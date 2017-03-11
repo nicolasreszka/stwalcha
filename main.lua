@@ -46,9 +46,9 @@ function love.load()
 end
 
 function love.keypressed(key)
-	if key == "r" then 
-		loadMap("maps.test0")
-	end
+	-- if key == "r" then 
+	-- 	loadMap("maps.test0")
+	-- end
 
 	if key == "escape" then
 		pause = not pause

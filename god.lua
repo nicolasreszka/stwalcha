@@ -57,6 +57,15 @@ function God:update()
 				halfTime = false
 			end
 		end
+
+	else 
+		if self.wait then
+			self.waitTimer:tick()
+			if self.waitTimer:alarm() then
+				loadMap("maps/test0")
+				self.wait = false
+			end
+		end
 	end
 end
 
@@ -73,5 +82,14 @@ function God:draw()
 			lastY = y
 		end	
 		love.graphics.setLineWidth(1)
+	end
+
+	if players.size <= 1 then
+		WHITE:set()
+		if players.size == 0 then
+			love.graphics.print("Nobody wins !", 300, 300, 0, 3, 3)
+		else 
+			love.graphics.print("Player ".. players.objects[1].slot .. " wins !", 300, 300, 0, 3, 3)
+		end
 	end
 end

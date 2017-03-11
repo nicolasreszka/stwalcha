@@ -74,12 +74,15 @@ end
 
 function Player:update()
 	self.moveDirection = self.input.rightDown - self.input.leftDown
- 	self.grounded = blocks:rectsVsLine(self.rect:bboxBottom())
+
+	self:getGrounded()
  	self:landAndTakeOff()
 	
 	if self.thrown then
 		if not self.grounded then
 			self:fall()
+		else 
+			self.vy = 0
 		end
 		self.thrownTimer:tick()
 		if self.thrownTimer:alarm() then
@@ -92,6 +95,7 @@ function Player:update()
 			self:move(accelerationAir,frictionAir,maxSpeedAir)
 			self:wallJump()
 		else 
+			self.vy = 0
 			self:move(accelerationGround,frictionGround,maxSpeedGround)
 			self:jump()
 			
@@ -140,11 +144,26 @@ function Player:update()
 	end
 end
 
+function Player:getGrounded() 
+	if self.rect.bottom >= mapHeight then
+		self.grounded = blocks:rectsVsLine(Line.new(self.rect.left, 1, self.rect.right, 1))
+		if self.grounded then
+			self.pos.y = mapHeight-height
+			self.rect:translate(self.pos.x,self.pos.y)
+		end
+	else 
+		self.grounded = blocks:rectsVsLine(self.rect:bboxBottom())
+	end
+end
+
 function Player:landAndTakeOff()
 	-- Squash
 	if not self.groundedBefore and self.grounded then
 		instantiateDustBottom(self.rect.left,self.rect.bottom-2,4)
 		instantiateDustBottom(self.rect.right,self.rect.bottom-2,4)
+		self.sfx.land:stop()
+		self.sfx.land:playAt(self.pos)
+		self:squash()
 	-- Stretch
 	elseif self.groundedBefore and not self.grounded then
 		self:stretch()
@@ -178,8 +197,18 @@ function Player:move(acceleration,friction,maxSpeed)
 end
 
 function Player:wallJump()
-	local leftWall = blocks:rectsVsLine(self.rect:bboxLeft())
-	local rightWall = blocks:rectsVsLine(self.rect:bboxRight())
+	local leftWall, rightWall
+	if self.rect.left <= 0 then
+		leftWall = blocks:rectsVsLine(Line.new(mapWidth-1,self.rect.top,mapWidth-1,self.rect.bottom))
+	else 
+		leftWall = blocks:rectsVsLine(self.rect:bboxLeft())
+	end
+
+	if self.rect.right >= mapWidth then
+		rightWall = blocks:rectsVsLine(Line.new(1,self.rect.top,1,self.rect.bottom))
+	else 
+		rightWall = blocks:rectsVsLine(self.rect:bboxRight())
+	end
 
 	-- Left
 	if leftWall and not rightWall then
@@ -237,23 +266,21 @@ function Player:jump()
 end
 
 function Player:getNextX(speed)
-	local v = sign(speed)
-	local nextP = self.rect.pos.x + v
-	if nextP >= mapWidth-4 then
-		nextP = 4
-	elseif nextP <= 0 then
-		nextP = mapWidth-4
+	local nextP = self.rect.pos.x + sign(speed)
+	if nextP > mapWidth-width then
+		nextP = 0
+	elseif nextP < 0 then
+		nextP = mapWidth-width
 	end
 	return nextP
 end
 
 function Player:getNextY(speed)
-	local v = sign(speed)
-	local nextP = self.rect.pos.y + v
+	local nextP = self.rect.pos.y + sign(speed)
 	if nextP > mapHeight then
-		nextP = 4
+		nextP = height/2
 	elseif nextP < 0 then
-		nextP = mapHeight-4
+		nextP = mapHeight-height/2
 	end
 	return nextP
 end
@@ -360,11 +387,11 @@ function Player:verticalCollisions()
 			if player then
 				self.input:vibration(thrownDuration)
 				player.input:vibration(thrownDuration)
-			else
+			elseif self.vy < 0 then
 				self.sfx.land:stop()
 				self.sfx.land:playAt(self.pos)
+				self:squash()
 			end
-			self:squash()
 			self.rect:translate(self.rect.pos.x,self.pos.y)
 			self.vy = 0
 			break

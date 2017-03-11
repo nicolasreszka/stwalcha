@@ -1,8 +1,8 @@
 function pointVsRect(point, rect) 
-    if point.x <= rect.left or point.x >= rect.right 
-    or point.y <= rect.top  or point.y >= rect.bottom then
-    	return false
-    else 
+	if point.x <= rect.left or point.x >= rect.right 
+	or point.y <= rect.top  or point.y >= rect.bottom then
+		return false
+	else
 		return true
 	end
 end

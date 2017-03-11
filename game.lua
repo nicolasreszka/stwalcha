@@ -12,7 +12,7 @@ function loadAudio()
 	love.audio.setPosition(0,0,0)
 end
 
-function loadMap(mapName)
+function loadMap()
 	local map = require(mapName)
 
 	players = Group.new()

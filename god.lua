@@ -62,7 +62,7 @@ function God:update()
 		if self.wait then
 			self.waitTimer:tick()
 			if self.waitTimer:alarm() then
-				loadMap("maps/test0")
+				loadMap()
 				self.wait = false
 			end
 		end

@@ -19,7 +19,7 @@ local squashX = 1.50
 local squashY = 0.75
 local stretchX = 0.50
 local stretchY = 1.25
-local restitution = 0.05
+local restitution = 0.035
 
 local accelerationGround = .4
 local accelerationAir = .6
@@ -81,8 +81,6 @@ function Player:update()
 	if self.thrown then
 		if not self.grounded then
 			self:fall()
-		else 
-			self.vy = 0
 		end
 		self.thrownTimer:tick()
 		if self.thrownTimer:alarm() then

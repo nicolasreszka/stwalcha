@@ -39,16 +39,23 @@ function love.load()
 	camera = Camera.new()
 
 	pause = false
-	numberOfPlayers = 2
+	numberOfPlayers = 3
 
 	loadAudio()
-	loadMap("maps.test0")
+	mapName = "maps.test0"
+	loadMap()
 end
 
 function love.keypressed(key)
-	-- if key == "r" then 
-	-- 	loadMap("maps.test0")
-	-- end
+	if key == "kp1" then 
+		mapName = "maps.test0"
+		loadMap()
+	end
+
+	if key == "kp2" then 
+		mapName = "maps.test1"
+		loadMap()
+	end
 
 	if key == "escape" then
 		pause = not pause

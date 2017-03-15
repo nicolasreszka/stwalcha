@@ -1,17 +1,33 @@
 God = {}
 God.__index = God
 
+local baseEyeColor = YELLOW:clone()
 local shake = 4
 
 function God.new()
 	local god = {}
 	setmetatable(god, God)
 
-	god.waitTimer = Clock.new(2)
-	god.wait = true
+	god.state = "arrival"
 
+	god.arrivalTimer = Clock.new(1)
+	god.lookTimer = Clock.new(3)
+	god.lookSubTimer = Clock.new(0.5)
+	god.lookSubTimer:forceAlarm()
+	god.waitTimer = Clock.new(1.5)
 	god.lightingTimer = Clock.new(0.5)
-	god.lighting = false
+	god.fireworksTimer = Clock.new(0.5)
+
+	god.choice = love.math.random(1,players.size)
+	god.player = nil
+
+	god.pos = Point.new(mapWidth/2,-128)
+
+	god.eyeColor = baseEyeColor:clone()
+	god.leftEye = Point.new(god.pos.x-40,god.pos.y-8)
+	god.rightEye = Point.new(god.pos.x+24,god.pos.y-8)
+
+	god.lookAngle = math.rad(270)
 
 	return god
 end
@@ -19,21 +35,50 @@ end
 function God:update()
 	if players.size > 1 then
 
-		if self.wait then
-			self.waitTimer:tick()
-			if self.waitTimer:alarm() then
+		if self.state == "arrival" then
+			self.arrivalTimer:tick()
+			self.pos.y = tween.inExpo(-128,mapHeight/2,self.arrivalTimer)
+			
+			if self.arrivalTimer:alarm() then
+				self.state = "lookAround"
+			end
+		elseif self.state == "lookAround" then
 
+			self.lookSubTimer:tick()
+			if self.lookSubTimer:alarm() then
+				if self.choice == players.size then
+					self.choice = 0
+				end
+				self.choice = approachValues(self.choice,players.size,1)
+				self.player = players.objects[self.choice]
+				self.lookSubTimer:reset()
+			end
+
+			self.lookTimer:tick()
+			if self.lookTimer:alarm() then
 				self.choice = love.math.random(1,players.size)
 				self.player = players.objects[self.choice]
+				self.lookTimer:reset()
+				self.state = "wait"
+			end
+
+		elseif self.state == "wait" then
+			self.waitTimer:tick()
+
+			self.eyeColor:transform(
+				tween.inExpo(1,50,self.waitTimer),
+				RED
+			)
+
+			if self.waitTimer:alarm() then
+
 				self.player.input:vibration(0.5)
 				sfx.lighting:playAt(self.player.pos)
 
-				self.wait = false
-				self.lighting = true
+				self.waitTimer:reset()
+				self.state = "lighting"
 			end
-		end
-
-		if self.lighting then
+		elseif self.state == "lighting" then
 			camera:move(
 				love.math.random(-shake,shake),
 				love.math.random(-shake,shake)
@@ -41,36 +86,94 @@ function God:update()
 
 			self.lightingTimer:tick()
 			if self.lightingTimer:alarm() then
-
-				self.waitTimer:reset()
-				self.lightingTimer:reset()
-
-				self.wait = true
-				self.lighting = false
-
 				self.player.touched = true
 				self.player.colorCurrent = 0
 				self.player.color = chatColor:clone()
 				self.player.sfx.tick:playAt(self.player.pos)
 				
 				chat = self.player.slot
+
+				self.lightingTimer:reset()
+				self.state = "departure"
+			end
+
+		elseif self.state == "departure" then
+			self.pos.y = tween.outExpo(-128,mapHeight/2,self.arrivalTimer)
+			self.arrivalTimer:rewind()
+
+			if self.arrivalTimer:zero() then
 				halfTime = false
+				self.state = "arrival"
+				self.eyeColor = baseEyeColor:clone()
 			end
 		end
 
 	else 
-		if self.wait then
+		if self.state == "arrival" then
+			self.arrivalTimer:tick()
+			self.pos.y = tween.inExpo(-128,mapHeight/2,self.arrivalTimer)
+			
+			if self.arrivalTimer:alarm() then
+				self.waitTimer:setDuration(5)
+				self.state = "wait"
+			end
+		elseif self.state == "wait" then
+			self.fireworksTimer:tick()
+			if self.fireworksTimer:alarm() then
+				instantiateFireworks(
+					love.math.random(256,700),
+					love.math.random(128,512),
+					love.math.random(8,12)
+				)
+				self.fireworksTimer:reset()
+			end
+
 			self.waitTimer:tick()
 			if self.waitTimer:alarm() then
 				loadMap()
-				self.wait = false
 			end
 		end
 	end
 end
 
 function God:draw()
-	if self.lighting then 
+	GREEN:set()
+	love.graphics.rectangle("line",self.pos.x-64,self.pos.y-64,128,128)
+	BLUE:set()
+	love.graphics.rectangle("fill",self.pos.x-48,self.pos.y-16,24,24)
+	love.graphics.rectangle("fill",self.pos.x+24,self.pos.y-16,24,24)
+
+	if players.size > 1 then
+		if self.state == "arrival" then
+			self.lookAngle = math.rad(90)
+		else
+			if self.player ~= nil then
+				local eyeDirection = angle(self.pos, self.player.pos)
+				self.lookAngle = math.rad(
+					approachValues(math.deg(self.lookAngle), math.deg(eyeDirection),5)
+				)
+			end
+		end
+	elseif players.size == 1 then
+		local eyeDirection = angle(self.pos, players.objects[1].pos)
+		self.lookAngle = math.rad(
+			approachValues(math.deg(self.lookAngle), math.deg(eyeDirection),5)
+		)
+	else 
+		self.lookAngle = math.rad(90)
+	end
+
+	self.eyeColor:set()
+	god.leftEye.x = god.pos.x-40 + lengthDirectionX(8,self.lookAngle)
+	god.leftEye.y = god.pos.y-8 + lengthDirectionY(8,self.lookAngle)
+
+	god.rightEye.x = god.pos.x+32 + lengthDirectionX(8,self.lookAngle)
+	god.rightEye.y = god.pos.y-8 + lengthDirectionY(8,self.lookAngle)
+
+	love.graphics.rectangle("fill",self.leftEye.x,self.leftEye.y,8,8)
+	love.graphics.rectangle("fill",self.rightEye.x,self.rightEye.y,8,8)
+
+	if self.state == "lighting" then 
 		WHITE:set()
 		local lastY = self.player.pos.y
 		local lastX = self.player.pos.x+self.player.rect.w/2
@@ -82,14 +185,5 @@ function God:draw()
 			lastY = y
 		end	
 		love.graphics.setLineWidth(1)
-	end
-
-	if players.size <= 1 then
-		WHITE:set()
-		if players.size == 0 then
-			love.graphics.print("Nobody wins !", 300, 300, 0, 3, 3)
-		else 
-			love.graphics.print("Player ".. players.objects[1].slot .. " wins !", 300, 300, 0, 3, 3)
-		end
 	end
 end

@@ -18,7 +18,6 @@ function loadMap()
 	players = Group.new()
 	blocks = Group.new()
 	explosions = Group.new()
-	god = God.new()
 
 	for i, layer in pairs(map.layers) do
 		local tile = 1
@@ -39,6 +38,7 @@ function loadMap()
 	mapWidth  = map.width  * map.tilewidth
 	mapHeight = map.height * map.tileheight
 
+	god = God.new()
 	initializeParticles() 
 
 	chat = 0
@@ -54,7 +54,7 @@ function updateGame()
 		end
 
 		explosions:update()
-		if explosions.size == 0 and not god.lighting then
+		if explosions.size == 0 and god.state ~= "lighting" then
 			if camera.pos.x ~= 0 or camera.pos.y ~= 0 then
 				camera.pos.x = approachValues(camera.pos.x,0,1)
 				camera.pos.y = approachValues(camera.pos.y,0,1)

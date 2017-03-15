@@ -16,8 +16,8 @@ local width = 32
 local height = 32
 
 local squashX = 1.50
-local squashY = 0.75
-local stretchX = 0.50
+local squashY = .75
+local stretchX = .50
 local stretchY = 1.25
 local restitution = 0.035
 
@@ -36,8 +36,8 @@ local jumpForce = 8
 local gravity = .4
 local maxGravity = 32
 
-local thrownDuration = 0.3
-local touchedDuration = 0.2
+local thrownDuration = .3
+local touchedDuration = .2
 local explosionDuration = 10
 
 local startColorShift = 2

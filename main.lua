@@ -39,9 +39,11 @@ function love.load()
 	camera = Camera.new()
 
 	pause = false
-	numberOfPlayers = 3
+
+	numberOfPlayers = 2
 
 	loadAudio()
+
 	mapName = "maps.test0"
 	loadMap()
 end

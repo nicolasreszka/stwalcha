@@ -29,8 +29,23 @@ function Clock:setDuration(duration)
 	self.duration = duration
 end
 
+function Clock:setTime(time)
+	self.time = time
+	if self.time > self.duration then
+		self.time = self.duration
+	end
+end
+
 function Clock:reset()
 	self.time = 0
+end
+
+function Clock:forceAlarm()
+	self.time = self.duration
+end
+
+function Clock:zero()
+	return self.time == 0
 end
 
 function Clock:alarm()

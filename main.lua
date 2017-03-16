@@ -40,7 +40,7 @@ function love.load()
 
 	pause = false
 
-	numberOfPlayers = 2
+	numberOfPlayers = 3
 
 	loadAudio()
 

@@ -36,6 +36,7 @@ function God:update()
 	if players.size > 1 then
 
 		if self.state == "arrival" then
+
 			if self.arrivalTimer:zero() then
 				sfx.god:stop()
 				sfx.god:playAt(self.pos)
@@ -43,7 +44,8 @@ function God:update()
 
 			self.arrivalTimer:tick()
 			self.pos.y = tween.inExpo(-128,mapHeight/2,self.arrivalTimer)
-			
+			sfx.god:setPosition(self.pos)
+
 			if self.arrivalTimer:alarm() then
 				self.state = "lookAround"
 			end
@@ -109,6 +111,7 @@ function God:update()
 
 			self.pos.y = tween.outExpo(-128,mapHeight/2,self.arrivalTimer)
 			self.arrivalTimer:rewind()
+			sfx.god:setPosition(self.pos)
 
 			if self.arrivalTimer:zero() then
 				halfTime = false
@@ -125,7 +128,8 @@ function God:update()
 
 			self.arrivalTimer:tick()
 			self.pos.y = tween.inExpo(-128,mapHeight/2,self.arrivalTimer)
-			
+			sfx.god:setPosition(self.pos)
+
 			if self.arrivalTimer:alarm() then
 				if players.size == 1 then
 					self.waitTimer:setDuration(5)

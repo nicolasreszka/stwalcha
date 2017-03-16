@@ -9,12 +9,16 @@ function Sound.new(source)
 	return sound
 end
 
-function Sound:playAt(position)
-	local w = 1024/2
-	local h = 768/2
+function Sound:setPosition(position)
+	local w = mapWidth/2
+	local h = mapHeight/2
 	local x = (position.x-w)/w
 	local y = (position.y-h)/h
 	self.source:setPosition(x,y,0)
+end
+
+function Sound:playAt(position)
+	self:setPosition(position)
 	self.source:play()
 end
 

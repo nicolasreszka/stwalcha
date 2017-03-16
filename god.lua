@@ -16,7 +16,7 @@ function God.new()
 	god.lookSubTimer:forceAlarm()
 	god.waitTimer = Clock.new(1.5)
 	god.lightingTimer = Clock.new(0.5)
-	god.fireworksTimer = Clock.new(0.5)
+	god.fireworksTimer = Clock.new(.15)
 
 	god.choice = love.math.random(1,players.size)
 	god.player = nil
@@ -36,6 +36,11 @@ function God:update()
 	if players.size > 1 then
 
 		if self.state == "arrival" then
+			if self.arrivalTimer:zero() then
+				sfx.god:stop()
+				sfx.god:playAt(self.pos)
+			end
+
 			self.arrivalTimer:tick()
 			self.pos.y = tween.inExpo(-128,mapHeight/2,self.arrivalTimer)
 			
@@ -98,6 +103,10 @@ function God:update()
 			end
 
 		elseif self.state == "departure" then
+			if self.arrivalTimer:alarm() then
+				sfx.god:playAt(self.pos)
+			end
+
 			self.pos.y = tween.outExpo(-128,mapHeight/2,self.arrivalTimer)
 			self.arrivalTimer:rewind()
 
@@ -110,22 +119,31 @@ function God:update()
 
 	else 
 		if self.state == "arrival" then
+			if self.arrivalTimer:zero() then
+				sfx.god:playAt(self.pos)
+			end
+
 			self.arrivalTimer:tick()
 			self.pos.y = tween.inExpo(-128,mapHeight/2,self.arrivalTimer)
 			
 			if self.arrivalTimer:alarm() then
-				self.waitTimer:setDuration(5)
+				if players.size == 1 then
+					self.waitTimer:setDuration(5)
+				end
 				self.state = "wait"
 			end
 		elseif self.state == "wait" then
-			self.fireworksTimer:tick()
-			if self.fireworksTimer:alarm() then
-				instantiateFireworks(
-					love.math.random(256,700),
-					love.math.random(128,512),
-					love.math.random(8,12)
-				)
-				self.fireworksTimer:reset()
+			if players.size == 1 then
+				self.fireworksTimer:tick()
+				if self.fireworksTimer:alarm() and self.fireworksTimer.duration < 0.5 then
+					local fireX = love.math.random(256,700)
+					local fireY = love.math.random(128,512)
+					local fire = Sound.new(sfx.fireworks)
+					fire:playAt(Point.new(fireX,fireY))
+					instantiateFireworks(fireX,fireY,love.math.random(8,12))
+					self.fireworksTimer:setDuration(self.fireworksTimer.duration*1.1)
+					self.fireworksTimer:reset()
+				end
 			end
 
 			self.waitTimer:tick()

@@ -26,16 +26,28 @@ function initializeParticles()
 	confettis:setColors(255, 255, 255, 255, 255, 255, 255, 0) 
 
 	redFireworks = love.graphics.newParticleSystem(squareImage, 100)
-	redFireworks:setParticleLifetime(2, 4) 
-	redFireworks:setSizeVariation(0.5)
+	redFireworks:setParticleLifetime(1, 2) 
+	redFireworks:setSizeVariation(1)
 	redFireworks:setLinearAcceleration(-300, -100, 300, 300)
-	redFireworks:setColors(255, 0, 0, 255, 255, 64, 128, 0) 
+	redFireworks:setColors(
+		255, 0, 255, 255,
+		255, 0, 0, 255, 
+		255, 0, 0, 0
+	) 
 
 	blueFireworks = redFireworks:clone()
-	blueFireworks:setColors(0, 255, 0, 255, 64, 255, 128, 0) 
+	blueFireworks:setColors(
+		128, 128, 255, 255,
+		0, 0, 255, 255,
+		0, 0, 255, 0
+	) 
 
 	greenFireworks = redFireworks:clone()
-	greenFireworks:setColors(0, 0, 255, 255, 128, 64, 255, 0) 
+	greenFireworks:setColors(
+		255, 255, 128, 255, 
+		128, 255, 0, 255,
+		0, 255, 0, 0
+	) 
 end
 
 function updateParticles()

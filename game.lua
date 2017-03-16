@@ -6,8 +6,10 @@ function loadAudio()
 		land = love.audio.newSource("sounds/land.wav", "static"),
 		slide = love.audio.newSource("sounds/slide.wav", "static"),
 		tick = love.audio.newSource("sounds/tick.wav", "static"),
+		fireworks = love.audio.newSource("sounds/fireworks.wav", "stream"),
 		lighting = Sound.new(love.audio.newSource("sounds/lighting.wav", "stream")),
-		explosion = Sound.new(love.audio.newSource("sounds/explosion.wav", "stream"))
+		explosion = Sound.new(love.audio.newSource("sounds/explosion.wav", "stream")),
+		god = Sound.new(love.audio.newSource("sounds/god.wav", "stream"))
 	}
 	love.audio.setPosition(0,0,0)
 end

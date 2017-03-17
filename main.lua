@@ -75,14 +75,20 @@ end
 function love.draw()
 	camera:set()
 	blocks:draw()
-	players:draw()
-	explosions:draw()
-	
-	if halfTime then
-		god:draw()
+
+	if not worldCreationEffect then
+
+		players:draw()
+		explosions:draw()
+		
+		if halfTime then
+			god:draw()
+		end
+
+		drawParticles()
+
 	end
 
-	drawParticles()
 	camera:unset()
 end
 

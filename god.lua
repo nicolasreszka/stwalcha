@@ -103,8 +103,8 @@ function God:choiceAutomate()
 			love.math.random(-shake,shake),
 			love.math.random(-shake,shake)
 		)
-		self:createLighting()
 		self.lightingTimer:tick()
+		self:createLighting()
 		if self.lightingTimer:alarm() then
 			self.player.touched = true
 			self.player.colorCurrent = 0
@@ -196,7 +196,7 @@ function God:draw()
 	love.graphics.rectangle("fill",self.rightEye.x,self.rightEye.y,8,8)
 
 	if self.state == "lighting" then 
-		if self.lightingPoints[1] ~= nil then
+		if not self.lightingTimer:zero() then
 			WHITE:set()
 			local lastY = self.lightingPoints[1].y
 			local lastX = self.lightingPoints[1].x

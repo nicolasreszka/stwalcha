@@ -34,7 +34,7 @@ local maxSpeedAir = 10
 
 local jumpForce = 8
 local gravity = .4
-local maxGravity = 32
+local maxGravity = 48
 
 local thrownDuration = .3
 local touchedDuration = .2

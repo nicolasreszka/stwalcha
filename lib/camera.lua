@@ -14,7 +14,7 @@ end
 function Camera:set()
 	love.graphics.push()
 	love.graphics.rotate(-self.rotation)
-	love.graphics.scale(1/self.scaleX, 1/self.scaleY)
+	love.graphics.scale(self.scaleX, self.scaleY)
 	love.graphics.translate(-self.pos.x, -self.pos.y)
 end
 
@@ -42,14 +42,23 @@ function Camera:rotate(rotation)
 	self.rotation = self.rotation + rotation
 end
 
-function Camera:scale(scaleX, scaleY)
-	self.scaleX = scaleX or self.scaleX
-	self.scaleY = scaleY or self.scaleY
+function Camera:setScale(sx, sy)
+	sx = sx or self.scaleX
+	self.scaleX = sx
+	self.scaleY = sy or sx
 end
 
-function Camera:zoom(scaleX, scaleY)
-	scaleX = scaleX or 1
-	self.scaleX = self.scaleX * scaleX
-	self.scaleY = self.scaleY * (scaleX or scaleY)
+function Camera:scale(sx, sy)
+	sx = sx or 1
+	self.scaleX = self.scaleX * sx
+	self.scaleY = self.scaleY * (sy or sx)
+end
+
+function Camera:zoom(zx, zy)
+	zx = zx or 1
+	self:scale(
+		1/zx,
+		1/(zy or zx)
+	)
 end
 

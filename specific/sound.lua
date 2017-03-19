@@ -10,10 +10,8 @@ function Sound.new(source)
 end
 
 function Sound:setPosition(position)
-	local w = mapWidth/2
-	local h = mapHeight/2
-	local x = (position.x-w)/w
-	local y = (position.y-h)/h
+	local x = (position.x-audioListener.x)/audioListener.x
+	local y = (position.y-audioListener.y)/audioListener.y
 	self.source:setPosition(x,y,0)
 end
 

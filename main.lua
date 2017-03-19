@@ -17,12 +17,34 @@ require "specific.input"
 require "specific.particles"
 require "specific.sound"
 
+require "states.menu"
 require "states.game"
 
+function switchState(newState)
+	state = newState
+end
+
+function setState(newState)
+	state = newState
+	state.load()
+end
 
 function love.load()
-
 	screen = Screen.new(1024,768)
+
+	love.audio.setPosition(0,0,0)
+	audioListener = Point.new(512,384)
+	sfx = {
+		jump = love.audio.newSource("sounds/jump.wav", "static"),
+		bump = love.audio.newSource("sounds/bump.wav", "static"),
+		land = love.audio.newSource("sounds/land.wav", "static"),
+		slide = love.audio.newSource("sounds/slide.wav", "static"),
+		tick = love.audio.newSource("sounds/tick.wav", "static"),
+		fireworks = love.audio.newSource("sounds/fireworks.wav", "stream"),
+		lighting = Sound.new(love.audio.newSource("sounds/lighting.wav", "stream")),
+		explosion = Sound.new(love.audio.newSource("sounds/explosion.wav", "stream")),
+		god = Sound.new(love.audio.newSource("sounds/god.wav", "stream"))
+	}
 	
 	local joysticks = love.joystick.getJoysticks()
 
@@ -40,35 +62,33 @@ function love.load()
 		Color.new(255, 128, 0)
 	}
 
-	chatColor =  Color.new(255, 40, 222)
-
 	camera = Camera.new()
 
-	pause = false
+	chatColor =  Color.new(255, 40, 222)
 
 	numberOfPlayers = 3
 
-	loadAudio()
-
 	mapName = "maps.test0"
-	loadMap()
+
+	setState(game)
 end
 
 function love.keypressed(key)
+	if key == "kp0" then
+		setState(menu)
+	end 
+
 	if key == "kp1" then 
 		mapName = "maps.test0"
-		loadMap()
+		setState(game)
 	end
 
 	if key == "kp2" then 
 		mapName = "maps.test1"
-		loadMap()
+		setState(game)
 	end
 
-	if key == "escape" then
-		pause = not pause
-	end
-
+	state.keypressed(key)
 end
 
 function love.update(dt)
@@ -76,7 +96,7 @@ function love.update(dt)
 		love.timer.sleep(1/60 - dt)
 	end
 
-	updateGame()
+	state.update(dt)
 end
  
 function love.resize(w,h)
@@ -84,22 +104,6 @@ function love.resize(w,h)
 end
 
 function love.draw()
-
-	screen:set()
-	camera:set()
-	blocks:draw()
-
-	players:draw()
-	explosions:draw()
-	
-	if halfTime then
-		god:draw()
-	end
-
-	drawParticles()
-	camera:unset()
-	screen:unset()
-	screen:draw()
-
+	state.draw()
 end
 

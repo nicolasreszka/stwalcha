@@ -1,27 +1,10 @@
-
-function loadAudio()
-	sfx = {
-		jump = love.audio.newSource("sounds/jump.wav", "static"),
-		bump = love.audio.newSource("sounds/bump.wav", "static"),
-		land = love.audio.newSource("sounds/land.wav", "static"),
-		slide = love.audio.newSource("sounds/slide.wav", "static"),
-		tick = love.audio.newSource("sounds/tick.wav", "static"),
-		fireworks = love.audio.newSource("sounds/fireworks.wav", "stream"),
-		lighting = Sound.new(love.audio.newSource("sounds/lighting.wav", "stream")),
-		explosion = Sound.new(love.audio.newSource("sounds/explosion.wav", "stream")),
-		god = Sound.new(love.audio.newSource("sounds/god.wav", "stream"))
-	}
-	love.audio.setPosition(0,0,0)
-end
+game = {}
 
 function loadMap()
 	local map = require(mapName)
 
 	mapWidth  = map.width  * map.tilewidth
 	mapHeight = map.height * map.tileheight
-
-	worldCreationEffect = false
-	worldCreationEffectTimer = Clock.new(2.1)
 
 	players = Group.new()
 	blocks = Group.new()
@@ -44,12 +27,23 @@ function loadMap()
 			end
 		end
 	end
+end
 
+function game.load()
+	camera:translate(0,0)
+	pause = false
+	loadMap()
 	chat = 0
 	halfTime = true
 end
 
-function updateGame()
+function game.keypressed(key)
+	if key == "escape" then
+		pause = not pause
+	end
+end
+
+function game.update(dt)
 	if pause then
 		
 	else 
@@ -73,5 +67,22 @@ function updateGame()
 		updateParticles()
 
 	end
+end
+
+function game.draw()
+	screen:set()
+	camera:set()
+	blocks:draw()
+
+	players:draw()
+	explosions:draw()
 	
+	if halfTime then
+		god:draw()
+	end
+
+	drawParticles()
+	camera:unset()
+	screen:unset()
+	screen:draw()
 end

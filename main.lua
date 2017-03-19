@@ -59,6 +59,10 @@ function love.keypressed(key)
 		loadMap()
 	end
 
+	if key == "kp3" then
+		generateMap()
+	end
+
 	if key == "escape" then
 		pause = not pause
 	end

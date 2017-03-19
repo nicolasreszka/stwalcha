@@ -7,22 +7,22 @@ function Block.new(x,y)
 	block.rect = Rect.new(x,y,16,16)
 	if worldCreationEffect then
 		block.rect:translate(x,y-mapHeight)
+		block.targetY = y
+		block.delay = Clock.new(
+			love.math.random()*2
+		)
 	end
-	block.pos = Point.new(x,y)
-	block.delay = Clock.new(
-		love.math.random()*2
-	)
 	return block
 end
 
 function Block:update()
 	self.delay:tick()
 	self.rect:translate(
-		self.pos.x, 
-		self.pos.y-mapHeight+tween.inOutExpo(0,mapHeight,self.delay)
+		self.rect.pos.x, 
+		self.targetY-mapHeight+tween.inOutExpo(0,mapHeight,self.delay)
 	)
 	if worldCreationEffectTimer:alarm() then
-		self.rect:translate(self.pos.x,self.pos.y)
+		self.rect:translate(self.rect.pos.x,self.targetY)
 	end
 end
 

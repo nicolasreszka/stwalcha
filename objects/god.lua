@@ -158,7 +158,7 @@ function God:victoryAutomate()
 		end
 		self.waitTimer:tick()
 		if self.waitTimer:alarm() then
-			loadMap()
+			setState(game)
 		end
 	end
 end

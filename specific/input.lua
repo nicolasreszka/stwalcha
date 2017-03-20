@@ -9,13 +9,13 @@ Input.__index = Input
 
 local deadzone = 0.25
 
-function Input.new(left,right,jump,joystick)
+function Input.new(left,right,jump)
 	local input = {}
 	setmetatable(input, Input)
 	input.left = left
 	input.right = right
 	input.jump = jump
-	input.joystick = joystick
+	input.joystick = nil
 	return input
 end
 

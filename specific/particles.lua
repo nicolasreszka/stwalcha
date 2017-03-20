@@ -1,5 +1,5 @@
 function initializeParticles() 
-	local squareImage = love.graphics.newImage('sprites/square.png')
+	local squareImage = love.graphics.newImage('sprites/particle.png')
 
 	dustBottom = love.graphics.newParticleSystem(squareImage, 100)
 	dustBottom:setParticleLifetime(0.2,0.4)

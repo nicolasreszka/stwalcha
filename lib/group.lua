@@ -24,6 +24,30 @@ function Group:remove(objectToRemove)
 	end
 end
 
+function Group:mousemoved()
+	for i, object in pairs(self.objects) do
+		if object.mousemoved ~= nil then
+			object:mousemoved(x,y)
+		end
+	end
+end
+
+function Group:mousepressed()
+	for i, object in pairs(self.objects) do
+		if object.mousepressed ~= nil then
+			object:mousepressed()
+		end
+	end
+end
+
+function Group:keypressed()
+	for i, object in pairs(self.objects) do
+		if object.keypressed ~= nil then
+			object:keypressed()
+		end
+	end
+end
+
 function Group:update()
 	for i, object in pairs(self.objects) do
 		if object.update ~= nil then

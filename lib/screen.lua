@@ -4,7 +4,7 @@ Screen.__index = Screen
 function Screen.new(w,h)
 	screen = {}
 	setmetatable(screen, Screen)
-	screen.x, screen.y = 0
+	screen.x, screen.y = 0, 0
 	screen.w, screen.h = w, h
 	screen.scale = 1
 	screen.canvas = love.graphics.newCanvas(w, h)

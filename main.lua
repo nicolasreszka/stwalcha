@@ -16,21 +16,26 @@ require "objects.explosion"
 require "specific.input"
 require "specific.particles"
 require "specific.sound"
+require "specific.button"
 
-require "states.menu"
-require "states.game"
+menu = require "states.menu"
+game = require "states.game"
 
-function switchState(newState)
-	state = newState
+function switchState(state)
+	gameState = state
 end
 
-function setState(newState)
-	state = newState
-	state.load()
+function setState(state)
+	gameState = state
+	gameState:load()
 end
 
 function love.load()
 	screen = Screen.new(1024,768)
+	camera = Camera.new()
+
+	font = love.graphics.newFont("sprites/font.ttf",32)
+	love.graphics.setFont(font)
 
 	love.audio.setPosition(0,0,0)
 	audioListener = Point.new(512,384)
@@ -46,15 +51,16 @@ function love.load()
 		god = Sound.new(love.audio.newSource("sounds/god.wav", "stream"))
 	}
 	
-	local joysticks = love.joystick.getJoysticks()
-
+	mouse = Point.new(0,0)
+	menuInput = require("specific.menuInput")
 	inputs = {
-		Input.new("left","right","up",joysticks[1]),
-		Input.new("q","d","z",joysticks[2]),
-		Input.new("j","l","i",joysticks[3]),
-		Input.new("kp4","kp6","kp8",joysticks[4])
+		Input.new("left","right","up"),
+		Input.new("q","d","z"),
+		Input.new("j","l","i"),
+		Input.new("kp4","kp6","kp8")
 	}
-
+	
+	chatColor =  Color.new(255, 40, 222)
 	colors = {
 		Color.new(106, 255, 106),
 		Color.new(0, 191, 255),
@@ -62,15 +68,39 @@ function love.load()
 		Color.new(255, 128, 0)
 	}
 
-	camera = Camera.new()
-
-	chatColor =  Color.new(255, 40, 222)
-
-	numberOfPlayers = 3
-
+	numberOfPlayers = 2
 	mapName = "maps.test0"
+	setState(menu)
+end
 
-	setState(game)
+function love.joystickadded(joystick)
+	if menuInput.joystick == nil 
+	or not menuInput.joystick:isConnected()	then
+		menuInput.joystick = joystick
+	end
+
+	for i, input in pairs(inputs) do
+		if input.joystick == nil 
+		or not input.joystick:isConnected() then
+			input.joystick = joystick
+			break
+		end
+	end
+end
+
+function love.mousemoved(x,y)
+	mouse.x = (x - screen.x)/screen.scale + camera.pos.x
+	mouse.y = (y - screen.y)/screen.scale + camera.pos.y
+
+	if gameState.mousemoved ~= nil then
+		gameState:mousemoved()
+	end
+end
+
+function love.mousepressed(x,y,button)
+	if gameState.mousepressed ~= nil then
+		gameState:mousepressed(x,y,button)
+	end
 end
 
 function love.keypressed(key)
@@ -88,7 +118,9 @@ function love.keypressed(key)
 		setState(game)
 	end
 
-	state.keypressed(key)
+	if gameState.keypressed ~= nil then
+		gameState:keypressed(key)
+	end
 end
 
 function love.update(dt)
@@ -96,7 +128,8 @@ function love.update(dt)
 		love.timer.sleep(1/60 - dt)
 	end
 
-	state.update(dt)
+	menuInput:update()
+	gameState:update(dt)
 end
  
 function love.resize(w,h)
@@ -104,6 +137,9 @@ function love.resize(w,h)
 end
 
 function love.draw()
-	state.draw()
+	screen:set()
+	gameState:draw()
+	screen:unset()
+	screen:draw()
 end
 

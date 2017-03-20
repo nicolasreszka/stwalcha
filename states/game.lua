@@ -1,4 +1,4 @@
-game = {}
+local game = {}
 
 function loadMap()
 	local map = require(mapName)
@@ -23,27 +23,25 @@ function loadMap()
 				elseif layer.data[tile] == 2 and players.size < numberOfPlayers then
 					players:add(Player.new(x,y,players.size+1))
 				end
-				tile = tile+1
+				tile = tile + 1
 			end
 		end
 	end
 end
 
-function game.load()
+function game:load()
 	camera:translate(0,0)
 	pause = false
-	loadMap()
 	chat = 0
 	halfTime = true
+	loadMap()
 end
 
-function game.keypressed(key)
-	if key == "escape" then
+function game:update(dt)
+	if menuInput.pausePressed then
 		pause = not pause
 	end
-end
 
-function game.update(dt)
 	if pause then
 		
 	else 
@@ -69,8 +67,7 @@ function game.update(dt)
 	end
 end
 
-function game.draw()
-	screen:set()
+function game:draw()
 	camera:set()
 	blocks:draw()
 
@@ -83,6 +80,6 @@ function game.draw()
 
 	drawParticles()
 	camera:unset()
-	screen:unset()
-	screen:draw()
 end
+
+return game

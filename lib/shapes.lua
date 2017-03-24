@@ -9,6 +9,10 @@ function Point.new(x,y)
 	return point
 end
 
+function Point:distanceTo(point)
+	return distance(self,point)
+end
+
 function Point:draw()
 	love.graphics.points(self.x,self.y)
 end
@@ -48,13 +52,21 @@ function Rect.new(x,y,w,h)
 	return rect
 end
 
-function Rect:translate(x,y)
+function Rect:setX(x)
 	self.pos.x = x
 	self.left  = self.pos.x
 	self.right = self.pos.x+self.w
+end
+
+function Rect:setY(y)
 	self.pos.y  = y
 	self.top    = self.pos.y
 	self.bottom = self.pos.y+self.h 
+end
+
+function Rect:translate(x,y)
+	self:setX(x)
+	self:setY(y)
 end
 
 function Rect:move(dx,dy)

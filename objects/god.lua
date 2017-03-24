@@ -1,4 +1,4 @@
-God = {}
+God = Object.new()
 God.__index = God
 
 local baseEyeColor = YELLOW:clone()
@@ -19,7 +19,7 @@ function God.new()
 	god.lightingTimer = Clock.new(0.5)
 	god.fireworksTimer = Clock.new(.15)
 
-	god.choice = love.math.random(1,players.size)
+	god.choice = love.math.random(1,game.players.size)
 	god.player = nil
 
 	god.pos = Point.new(mapWidth/2,-128)
@@ -35,7 +35,7 @@ function God.new()
 end
 
 function God:update()
-	if players.size > 1 then
+	if game.players.size > 1 then
 		self:choiceAutomate()
 		if self.state == "arrival" then
 			self.lookAngle = math.rad(90)
@@ -44,8 +44,8 @@ function God:update()
 		end
 	else 
 		self:victoryAutomate()
-		if players.size == 1 then
-			self:eyeMovement(players.objects[1])
+		if game.players.size == 1 then
+			self:eyeMovement(game.players.objects[1])
 		else 
 			self.lookAngle = math.rad(90)
 		end
@@ -63,7 +63,7 @@ function God:choiceAutomate()
 			sfx.god:playAt(self.pos)
 		end
 		self.arrivalTimer:tick()
-		self.pos.y = tween.inExpo(-128,mapHeight/2,self.arrivalTimer)
+		self.pos.y = inExpo(-128,mapHeight/2,self.arrivalTimer)
 		sfx.god:setPosition(self.pos)
 		if self.arrivalTimer:alarm() then
 			self.state = "lookAround"
@@ -71,24 +71,24 @@ function God:choiceAutomate()
 	elseif self.state == "lookAround" then
 		self.lookSubTimer:tick()
 		if self.lookSubTimer:alarm() then
-			if self.choice == players.size then
+			if self.choice == game.players.size then
 				self.choice = 0
 			end
-			self.choice = approachValues(self.choice,players.size,1)
-			self.player = players.objects[self.choice]
+			self.choice = approachValues(self.choice,game.players.size,1)
+			self.player = game.players.objects[self.choice]
 			self.lookSubTimer:reset()
 		end
 		self.lookTimer:tick()
 		if self.lookTimer:alarm() then
-			self.choice = love.math.random(1,players.size)
-			self.player = players.objects[self.choice]
+			self.choice = love.math.random(1,game.players.size)
+			self.player = game.players.objects[self.choice]
 			self.lookTimer:reset()
 			self.state = "wait"
 		end
 	elseif self.state == "wait" then
 		self.waitTimer:tick()
 		self.eyeColor:transform(
-			tween.inExpo(1,50,self.waitTimer),
+			inExpo(1,50,self.waitTimer),
 			RED
 		)
 		if self.waitTimer:alarm() then
@@ -110,7 +110,7 @@ function God:choiceAutomate()
 			self.player.colorCurrent = 0
 			self.player.color = chatColor:clone()
 			self.player.sfx.tick:playAt(self.player.pos)
-			chat = self.player.slot
+			game.chat = self.player.slot
 			self.lightingTimer:reset()
 			self.state = "departure"
 		end
@@ -118,11 +118,11 @@ function God:choiceAutomate()
 		if self.arrivalTimer:alarm() then
 			sfx.god:playAt(self.pos)
 		end
-		self.pos.y = tween.outExpo(-128,mapHeight/2,self.arrivalTimer)
+		self.pos.y = outExpo(-128,mapHeight/2,self.arrivalTimer)
 		self.arrivalTimer:rewind()
 		sfx.god:setPosition(self.pos)
 		if self.arrivalTimer:zero() then
-			halfTime = false
+			game.halfTime = false
 			self.state = "arrival"
 			self.eyeColor = baseEyeColor:clone()
 		end
@@ -135,16 +135,16 @@ function God:victoryAutomate()
 			sfx.god:playAt(self.pos)
 		end
 		self.arrivalTimer:tick()
-		self.pos.y = tween.inExpo(-128,mapHeight/2,self.arrivalTimer)
+		self.pos.y = inExpo(-128,mapHeight/2,self.arrivalTimer)
 		sfx.god:setPosition(self.pos)
 		if self.arrivalTimer:alarm() then
-			if players.size == 1 then
+			if game.players.size == 1 then
 				self.waitTimer:setDuration(5)
 			end
 			self.state = "wait"
 		end
 	elseif self.state == "wait" then
-		if players.size == 1 then
+		if game.players.size == 1 then
 			self.fireworksTimer:tick()
 			if self.fireworksTimer:alarm() and self.fireworksTimer.duration < 0.5 then
 				local fireX = love.math.random(256,700)
@@ -158,7 +158,7 @@ function God:victoryAutomate()
 		end
 		self.waitTimer:tick()
 		if self.waitTimer:alarm() then
-			setState(game)
+			game:load()
 		end
 	end
 end

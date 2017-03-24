@@ -38,7 +38,7 @@ function rectVsRect(rect1,rect2)
 end
 
 function lineVsRect(line, rect)
-	 --both points axis are outside
+	
 	if (line.a.x <= rect.left and line.b.x <= rect.left) 
 	or (line.a.y <= rect.top  and line.b.y <= rect.top) 
 	or (line.a.x >= rect.right  and line.b.x >= rect.right) 
@@ -46,7 +46,6 @@ function lineVsRect(line, rect)
 		return false
 	end
 
-	--at least one point is inside
 	if pointVsRect(line.a,rect) or pointVsRect(line.b,rect) then
 		return true
 	end

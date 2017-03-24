@@ -42,23 +42,23 @@ function Camera:rotate(rotation)
 	self.rotation = self.rotation + rotation
 end
 
-function Camera:setScale(sx, sy)
-	sx = sx or self.scaleX
-	self.scaleX = sx
-	self.scaleY = sy or sx
+function Camera:setScale(scaleX, scaleY)
+	scaleX = scaleX or self.scaleX
+	self.scaleX = scaleX
+	self.scaleY = scaleY or scaleX
 end
 
-function Camera:scale(sx, sy)
-	sx = sx or 1
-	self.scaleX = self.scaleX * sx
-	self.scaleY = self.scaleY * (sy or sx)
+function Camera:scale(scaleX, scaleY)
+	scaleX = scaleX or 1
+	self.scaleX = self.scaleX * scaleX
+	self.scaleY = self.scaleY * (scaleY or scaleX)
 end
 
-function Camera:zoom(zx, zy)
-	zx = zx or 1
+function Camera:zoom(zoomX, zoomY)
+	zoomX = zoomX or 1
 	self:scale(
-		1/zx,
-		1/(zy or zx)
+		1/zoomX,
+		1/(zoomY or zoomX)
 	)
 end
 

@@ -8,6 +8,11 @@ function sign(n)
 	end
 end
 
+function round(n,decimal) 
+	decimal = 10^(decimal or 0) 
+	return math.floor(n*decimal+0.5)/decimal
+end
+
 function clamp(n,low,high) 
 	return math.min(math.max(low, n), high) 
 end

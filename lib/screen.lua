@@ -7,7 +7,7 @@ function Screen.new(w,h)
 	screen.x, screen.y = 0, 0
 	screen.w, screen.h = w, h
 	screen.scale = 1
-	screen.canvas = love.graphics.newCanvas(w, h)
+	screen.canvas = love.graphics.newCanvas(w,h)
 	screen.canvas:setFilter("nearest")
 	return screen
 end
@@ -39,7 +39,7 @@ function Screen:unset()
 end
 
 function Screen:draw()
-	love.graphics.setColor(255, 255, 255, 255)
+	WHITE:set()
 	love.graphics.setBlendMode("alpha","premultiplied")
 	love.graphics.draw(self.canvas, self.x, self.y, 0, self.scale)
 end

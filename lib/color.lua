@@ -4,9 +4,9 @@ Color.__index = Color
 function Color.new(r,g,b,a)
 	local color = {}
 	setmetatable(color, Color)
-	color.red = r
-	color.green = g
-	color.blue = b
+	color.red = (r or 0)
+	color.green = (g or 0)
+	color.blue = (b or 0)
 	color.alpha = (a or 255)
 	return color
 end
@@ -24,14 +24,10 @@ function Color:set()
 end
 
 function Color:compare(color)
-	if self.red == color.red 
-	and self.green == color.green
-	and self.blue == color.blue
-	and self.alpha == color.alpha then
-		return true
-	else 
-		return false
-	end
+	return (self.red == color.red 
+		and self.green == color.green
+		and self.blue == color.blue
+		and self.alpha == color.alpha)
 end
 
 function Color:transform(shift, color)

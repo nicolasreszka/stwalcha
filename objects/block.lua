@@ -1,4 +1,4 @@
-Block = {}
+Block = Object.new()
 Block.__index = Block
 
 function Block.new(x,y)

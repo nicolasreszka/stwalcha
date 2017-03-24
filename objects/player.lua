@@ -1,15 +1,4 @@
-Player = {
-	moveDirection = 0,
-	grounded = false,
-	groundedBefore = false,
-	vx = 0,
-	vy = 0,
-	thrown = false,
-	touched = false,
-	xScale = 1,
-	yScale = 1,
-	colorCurrent = 0
-}
+Player = Object.new()
 Player.__index = Player
 
 local width = 32
@@ -46,6 +35,17 @@ local endColorShift = 50
 function Player.new(x,y,slot)
 	local player = {}
 	setmetatable(player, Player)
+
+	player.moveDirection = 0
+	player.grounded = false
+	player.groundedBefore = false
+	player.vx = 0
+	player.vy = 0
+	player.thrown = false
+	player.touched = false
+	player.xScale = 1
+	player.yScale = 1
+	player.colorCurrent = 0
 
 	player.slot = slot
 	player.input = inputs[slot]
@@ -129,13 +129,13 @@ function Player:update()
 	self.groundedBefore = self.grounded
 	self:applyRestitution()
 
-	if chat == self.slot then
+	if game.chat == self.slot then
 		self:blink()
 		self.explosionTimer:tick()
 		if self.explosionTimer:alarm() then
 			self.input:vibration(2)
-			explosions:add(Explosion.new(self.pos.x,self.pos.y))
-			players:remove(self)
+			game.explosions:add(Explosion.new(self.pos.x,self.pos.y))
+			game.players:remove(self)
 		end
 	else 
 		self.explosionTimer:reset()
@@ -144,13 +144,13 @@ end
 
 function Player:getGrounded() 
 	if self.rect.bottom >= mapHeight then
-		self.grounded = blocks:rectsVsLine(Line.new(self.rect.left, 1, self.rect.right, 1))
+		self.grounded = game.blocks:rectsVsLine(Line.new(self.rect.left, 1, self.rect.right, 1))
 		if self.grounded then
 			self.pos.y = mapHeight-height
 			self.rect:translate(self.pos.x,self.pos.y)
 		end
 	else 
-		self.grounded = blocks:rectsVsLine(self.rect:bboxBottom())
+		self.grounded = game.blocks:rectsVsLine(self.rect:bboxBottom())
 	end
 end
 
@@ -179,7 +179,7 @@ function Player:move(acceleration,friction,maxSpeed)
 	if self.moveDirection == 0 then
 		self.vx = approachValues(
 			self.vx, 0,
-			tween.inExpo(0.1,friction,self.frictionTimer)
+			inExpo(0.1,friction,self.frictionTimer)
 		)
 		self.frictionTimer:tick()
 		self.accelerationTimer:rewind()
@@ -187,7 +187,7 @@ function Player:move(acceleration,friction,maxSpeed)
 	else 
 		self.vx = approachValues(
 			self.vx, maxSpeed*self.moveDirection,
-			tween.outExpo(0.1,acceleration,self.accelerationTimer)
+			outExpo(0.1,acceleration,self.accelerationTimer)
 		)
 		self.frictionTimer:reset()
 		self.accelerationTimer:tick()
@@ -197,15 +197,15 @@ end
 function Player:wallJump()
 	local leftWall, rightWall
 	if self.rect.left <= 0 then
-		leftWall = blocks:rectsVsLine(Line.new(mapWidth-1,self.rect.top,mapWidth-1,self.rect.bottom))
+		leftWall = game.blocks:rectsVsLine(Line.new(mapWidth-1,self.rect.top,mapWidth-1,self.rect.bottom))
 	else 
-		leftWall = blocks:rectsVsLine(self.rect:bboxLeft())
+		leftWall = game.blocks:rectsVsLine(self.rect:bboxLeft())
 	end
 
 	if self.rect.right >= mapWidth then
-		rightWall = blocks:rectsVsLine(Line.new(1,self.rect.top,1,self.rect.bottom))
+		rightWall = game.blocks:rectsVsLine(Line.new(1,self.rect.top,1,self.rect.bottom))
 	else 
-		rightWall = blocks:rectsVsLine(self.rect:bboxRight())
+		rightWall = game.blocks:rectsVsLine(self.rect:bboxRight())
 	end
 
 	-- Left
@@ -285,16 +285,16 @@ end
 
 function Player:changeChat(player)
 	if not self.touched and not player.touched then
-		if chat == self.slot then
-			chat = player.slot
+		if game.chat == self.slot then
+			game.chat = player.slot
 			self.touched = true
 			self.sfx.tick:stop()
 			player.touched = true
 			player.colorCurrent = 0
 			player.color = chatColor:clone()
 			player.sfx.tick:playAt(player.pos)
-		elseif chat == player.slot then
-			chat = self.slot
+		elseif game.chat == player.slot then
+			game.chat = self.slot
 			player.touched = true
 			player.sfx.tick:stop()
 			self.touched = true
@@ -307,16 +307,16 @@ end
 
 function Player:kickOtherPlayers() 
 	-- Check for players
-	local player = players:rectsVsRect(self.rect)
+	local player = game.players:rectsVsRect(self.rect)
 	if not player then
 		return -1
 	else 
 		self:changeChat(player)
 		-- Move only the rectangle
-		player.rect:translate(player:getNextX(self.vx),player.rect.pos.y)
+		player.rect:setX(player:getNextX(self.vx))
 		-- Check for other players or walls
-		local otherPlayer = players:rectsVsRect(player.rect)
-		if otherPlayer and otherPlayer ~= self or blocks:rectsVsRect(player.rect) then
+		local otherPlayer = game.players:rectsVsRect(player.rect)
+		if otherPlayer and otherPlayer ~= self or game.blocks:rectsVsRect(player.rect) then
 			player.rect:translate(player.pos.x,player.rect.pos.y)	
 			return 0
 		else 
@@ -342,14 +342,14 @@ end
 function Player:horizontalCollisions()
 	for i = 1, math.abs(self.vx) do
 		-- Move only the rectangle
-		self.rect:translate(self:getNextX(self.vx),self.rect.pos.y)
+		self.rect:setX(self:getNextX(self.vx))
 		-- Check for other players and kick them in the ass
 		local kick = self:kickOtherPlayers()
 		-- Other player was kicked
 		if kick == 1 then
 			self.rect:translate(self.pos.x,self.rect.pos.y)	
 		-- Wall detected for player or other player
-		elseif kick == 0 or blocks:rectsVsRect(self.rect) then
+		elseif kick == 0 or game.blocks:rectsVsRect(self.rect) then
 			self.rect:translate(self.pos.x,self.rect.pos.y)	
 			self.vx = 0
 			break
@@ -363,9 +363,9 @@ end
 function Player:verticalCollisions()
 	for i = 1, math.abs(self.vy) do
 		-- Move only the rectangle
-		self.rect:translate(self.rect.pos.x,self:getNextY(self.vy))
+		self.rect:setY(self:getNextY(self.vy))
 		-- Check for other players 
-		local player = players:rectsVsRect(self.rect)
+		local player = game.players:rectsVsRect(self.rect)
 		if player then
 			self:changeChat(player)
 		end
@@ -380,7 +380,7 @@ function Player:verticalCollisions()
 			player.sfx.bump:playAt(player.pos)
 			break
 		-- Wall detected for player or other player
-		elseif blocks:rectsVsRect(self.rect)
+		elseif game.blocks:rectsVsRect(self.rect)
 		or self.vy < 0 and player then
 			if player then
 				self.input:vibration(thrownDuration)
@@ -418,7 +418,7 @@ end
 function Player:blink()
 	if self.colorCurrent == 0 then
 		self.color:transform(
-			tween.inExpo(startColorShift,endColorShift,self.explosionTimer),
+			inExpo(startColorShift,endColorShift,self.explosionTimer),
 			colors[self.slot]
 		)
 		if self.color:compare(colors[self.slot]) then
@@ -428,7 +428,7 @@ function Player:blink()
 		end
 	else 
 		self.color:transform(
-			tween.inExpo(startColorShift,endColorShift,self.explosionTimer),
+			inExpo(startColorShift,endColorShift,self.explosionTimer),
 			chatColor
 		)
 		if self.color:compare(chatColor) then
@@ -440,7 +440,7 @@ function Player:blink()
 end
 
 function Player:draw()
-	if chat == self.slot then
+	if game.chat == self.slot then
 		self.color:set()
 	else 
 		colors[self.slot]:set()

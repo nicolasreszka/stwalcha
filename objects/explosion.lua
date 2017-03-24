@@ -1,4 +1,4 @@
-Explosion = {}
+Explosion = Object.new()
 Explosion.__index = Explosion
 
 local maxRadius = 200
@@ -11,7 +11,7 @@ function Explosion.new(x,y)
 	explosion.range = Circle.new(x,y,16)
 	explosion.clock = Clock.new(1.5)
 	explosion.speed = 0
-	for i,player in pairs(players.objects) do
+	for i,player in pairs(game.players.objects) do
 		inputs[player.slot]:vibration(3)
 	end
 	sfx.explosion:playAt(explosion.range.pos)
@@ -20,23 +20,23 @@ end
 
 function Explosion:update()
 	self.clock:tick()
-	self.speed = tween.inOutExpo(6,32,self.clock)
+	self.speed = inOutExpo(6,32,self.clock)
 	self.range.radius = self.range.radius + self.speed
 
 	if self.range.radius < maxRadius then
-		local list = players:rectsVsCircleList(self.range)
+		local list = game.players:rectsVsCircleList(self.range)
 		for i, player in pairs(list) do
-			players:remove(player)
+			game.players:remove(player)
 		end
 
-		local list = blocks:rectsVsCircleList(self.range)
+		local list = game.blocks:rectsVsCircleList(self.range)
 		for i, block in pairs(list) do
 			instantiateConfettis(
 				block.rect.left+block.rect.w/2,
 				block.rect.top+block.rect.h/2,
 				1
 			)
-			blocks:remove(block)
+			game.blocks:remove(block)
 		end
 
 		camera:move(
@@ -51,8 +51,8 @@ function Explosion:update()
 	end
 
 	if self.clock:alarm() then
-		halfTime = true
-		explosions:remove(self)
+		game.halfTime = true
+		game.explosions:remove(self)
 	end
 end
 

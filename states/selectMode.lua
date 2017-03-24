@@ -1,75 +1,80 @@
-menu = State.new()
+selectMode = State.new()
 
-function menu:load()
+function selectMode:load()
 	self.interface = ListInterface.new()
 	self.interface:add(Button.new(
-		"play",
+		"2 players mode",
 		Rect.new(64,64,256,64),
 		function() 
-			selectMode:set()
+			numberOfPlayers = 2
+			selectMap:set()
 			gameState:load()
 		end
 	))
 	self.interface:add(Button.new(
-		"controls",
+		"3 players mode",
 		Rect.new(64,192,256,64),
 		function() 
-
+			numberOfPlayers = 3
+			selectMap:set()
+			gameState:load()
 		end
 	))
 	self.interface:add(Button.new(
-		"options",
+		"4 players mode",
 		Rect.new(64,320,256,64),
 		function() 
-			options:set()
-			options:load()
+			numberOfPlayers = 4
+			selectMap:set()
+			gameState:load()
 		end
 	))
 	self.interface:add(Button.new(
-		"quit",
+		"back",
 		Rect.new(64,448,128,64),
 		function() 
-			love.event.quit()
+			menu:set()
+			gameState:load()
 		end
 	))
 end
 
-function menu:mousemoved(x,y,dx,dy,istouch) 
+function selectMode:mousemoved(x,y,dx,dy,istouch) 
 	self.interface:mousemoved(x,y,dx,dy,istouch)
 end
 
-function menu:mousepressed(x,y,button,istouch)
+function selectMode:mousepressed(x,y,button,istouch)
 	self.interface:mousepressed(x,y,button,istouch)
 end
 
-function menu:mousereleased(x,y,button,istouch)
+function selectMode:mousereleased(x,y,button,istouch)
 	self.interface:mousereleased(x,y,button,istouch)
 end
 
-function menu:keypressed(key,scancode,isrepeat)
+function selectMode:keypressed(key,scancode,isrepeat)
 	self.interface:keypressed(key,scancode,isreapeat)
 end
 
-function menu:keyreleased(key,scancode)
+function selectMode:keyreleased(key,scancode)
 	self.interface:keyreleased(key,scancode)
 end
 
-function menu:gamepadpressed(joystick,button) 
+function selectMode:gamepadpressed(joystick,button) 
 	self.interface:gamepadpressed(inputs[1].joystick,button)
 end
 
-function menu:gamepadreleased(joystick,button) 
+function selectMode:gamepadreleased(joystick,button) 
 	self.interface:gamepadreleased(inputs[1].joystick,button)
 end
 
-function menu:gamepadaxis(joystick,axis,value) 
+function selectMode:gamepadaxis(joystick,axis,value) 
 	self.interface:gamepadaxis(inputs[1].joystick,axis,value) 
 end
 
-function menu:update(dt)
+function selectMode:update(dt)
 	self.interface:update(dt)
 end
 
-function menu:draw()
+function selectMode:draw()
 	self.interface:draw()
 end

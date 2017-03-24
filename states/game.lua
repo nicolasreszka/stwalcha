@@ -1,4 +1,4 @@
-local game = {}
+game = State.new()
 
 function loadMap()
 	local map = require(mapName)
@@ -6,10 +6,10 @@ function loadMap()
 	mapWidth  = map.width  * map.tilewidth
 	mapHeight = map.height * map.tileheight
 
-	players = Group.new()
-	blocks = Group.new()
-	explosions = Group.new()
-	god = God.new()
+	game.players = Group.new()
+	game.blocks = Group.new()
+	game.explosions = Group.new()
+	game.god = God.new()
 	initializeParticles() 
 
 	for i, layer in pairs(map.layers) do
@@ -19,9 +19,9 @@ function loadMap()
 				local x = tileX * map.tilewidth  + layer.offsetx
 				local y = tileY * map.tileheight + layer.offsety
 				if layer.data[tile] == 1 then
-					blocks:add(Block.new(x,y))
-				elseif layer.data[tile] == 2 and players.size < numberOfPlayers then
-					players:add(Player.new(x,y,players.size+1))
+					game.blocks:add(Block.new(x,y))
+				elseif layer.data[tile] == 2 and game.players.size < numberOfPlayers then
+					game.players:add(Player.new(x,y,game.players.size+1))
 				end
 				tile = tile + 1
 			end
@@ -31,26 +31,28 @@ end
 
 function game:load()
 	camera:translate(0,0)
-	pause = false
-	chat = 0
-	halfTime = true
+	self.pause = false
+	self.chat = 0
+	self.halfTime = true
 	loadMap()
 end
 
-function game:update(dt)
-	if menuInput.pausePressed then
-		pause = not pause
+function game:keypressed(key,scancode,isrepeat)
+	if scancode == "escape" then
+		self.pause = not self.pause
 	end
+end
 
-	if pause then
+function game:update(dt)
+	if self.pause then
 		
 	else 
-		if halfTime then
-			god:update()
+		if self.halfTime then
+			self.god:update()
 		end
 
-		explosions:update()
-		if explosions.size == 0 and god.state ~= "lighting" then
+		self.explosions:update()
+		if self.explosions.size == 0 and self.god.state ~= "lighting" then
 			if camera.pos.x ~= 0 or camera.pos.y ~= 0 then
 				camera.pos.x = approachValues(camera.pos.x,0,1)
 				camera.pos.y = approachValues(camera.pos.y,0,1)
@@ -61,25 +63,22 @@ function game:update(dt)
 			input:update()
 		end
 
-		players:update()
+		self.players:update()
 		updateParticles()
-
 	end
 end
 
 function game:draw()
 	camera:set()
-	blocks:draw()
+	self.blocks:draw()
 
-	players:draw()
-	explosions:draw()
+	self.players:draw()
+	self.explosions:draw()
 	
-	if halfTime then
-		god:draw()
+	if self.halfTime then
+		self.god:draw()
 	end
 
 	drawParticles()
 	camera:unset()
 end
-
-return game

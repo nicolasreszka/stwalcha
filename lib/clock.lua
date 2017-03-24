@@ -25,8 +25,8 @@ function Clock:rewind()
 	)
 end 
 
-function Clock:setDuration(duration)
-	self.duration = duration
+function Clock:reset()
+	self.time = 0
 end
 
 function Clock:setTime(time)
@@ -36,8 +36,8 @@ function Clock:setTime(time)
 	end
 end
 
-function Clock:reset()
-	self.time = 0
+function Clock:setDuration(duration)
+	self.duration = duration
 end
 
 function Clock:forceAlarm()

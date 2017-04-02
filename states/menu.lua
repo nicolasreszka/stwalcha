@@ -14,7 +14,8 @@ function menu:load()
 		"controls",
 		Rect.new(64,192,256,64),
 		function() 
-
+			controls:set()
+			gameState:load()
 		end
 	))
 	self.interface:add(Button.new(
@@ -22,7 +23,7 @@ function menu:load()
 		Rect.new(64,320,256,64),
 		function() 
 			options:set()
-			options:load()
+			gameState:load()
 		end
 	))
 	self.interface:add(Button.new(

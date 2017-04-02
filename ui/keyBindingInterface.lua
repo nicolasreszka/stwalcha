@@ -1,17 +1,17 @@
-GridInterface = {}
-GridInterface.__index = GridInterface
+KeyBindingInterface = {}
+KeyBindingInterface.__index = KeyBindingInterface
 
 local deadZone = 0.5
 
-function GridInterface.new(width,height)
+function KeyBindingInterface.new()
 	local interface = {}
-	setmetatable(interface, GridInterface)
+	setmetatable(interface, KeyBindingInterface)
 	interface.objects = {}
-	for i=1,width do
+	interface.width = 3
+	interface.height = 5
+	for i=1,3 do
 		table.insert(interface.objects,{})
 	end
-	interface.width = width
-	interface.height = height
 	interface.index = Point.new(1,1)
 	interface.keyLeft = false
 	interface.keyRight = false
@@ -21,27 +21,29 @@ function GridInterface.new(width,height)
 	return interface
 end
 
-function GridInterface:add(x,object)
+function KeyBindingInterface:add(x,object)
 	table.insert(self.objects[x], object)
 	return object
 end
 
-function GridInterface:mousemoved(x,y,dx,dy,istouch) 
-	for x=1,self.width do
-		for y,object in pairs(self.objects[x]) do 
-			if object:hover() then
-				self.index.x = x
-				self.index.y = y
+function KeyBindingInterface:mousemoved(x,y,dx,dy,istouch) 
+	if not self.objects[self.index.x][self.index.y].rebinding then
+		for x=1,self.width do
+			for y,object in pairs(self.objects[x]) do 
+				if object:hover() then
+					self.index.x = x
+					self.index.y = y
+				end
 			end
 		end
 	end
 end
 
-function GridInterface:mousepressed(x,y,button,istouch)
+function KeyBindingInterface:mousepressed(x,y,button,istouch)
 	self.objects[self.index.x][self.index.y]:mousepressed(x,y,button,istouch)
 end
 
-function GridInterface:keypressed(key,scancode,isrepeat)
+function KeyBindingInterface:keypressed(key,scancode,isrepeat)
 	if scancode == "left" then
 		self.keyLeft = true
 	end
@@ -54,10 +56,20 @@ function GridInterface:keypressed(key,scancode,isrepeat)
 	if scancode == "down" then
 		self.keyDown = true
 	end
+
+	if scancode == "escape" then
+		if self.objects[self.index.x][self.index.y].rebinding then
+			self.objects[self.index.x][self.index.y].rebinding = false
+		else 	
+			menu:set()
+			gameState:load()
+		end
+	end
+
 	self.objects[self.index.x][self.index.y]:keypressed(key,scancode,isrepeat)
 end
 
-function GridInterface:keyreleased(key,scancode)
+function KeyBindingInterface:keyreleased(key,scancode)
 	if scancode == "left" then
 		self.keyLeft = false
 	end
@@ -72,7 +84,7 @@ function GridInterface:keyreleased(key,scancode)
 	end
 end
 
-function GridInterface:gamepadpressed(joystick,button) 
+function KeyBindingInterface:gamepadpressed(joystick,button) 
 	if button == "dpleft" then
 		self.keyLeft = true
 	end
@@ -85,10 +97,20 @@ function GridInterface:gamepadpressed(joystick,button)
 	if button == "dpdown" then
 		self.keyDown = true
 	end
+	
+	if button == "b" then
+		if self.objects[self.index.x][self.index.y].rebinding then
+			self.objects[self.index.x][self.index.y].rebinding = false
+		else 	
+			menu:set()
+			gameState:load()
+		end
+	end
+
 	self.objects[self.index.x][self.index.y]:gamepadpressed(joystick,button) 
 end
 
-function GridInterface:gamepadreleased(joystick,button) 
+function KeyBindingInterface:gamepadreleased(joystick,button) 
 	if button == "dpleft" then
 		self.keyLeft = false
 	end
@@ -103,7 +125,7 @@ function GridInterface:gamepadreleased(joystick,button)
 	end
 end
 
-function GridInterface:gamepadaxis(joystick,axis,value) 
+function KeyBindingInterface:gamepadaxis(joystick,axis,value) 
 
 	if axis == "lefty" then
 		if value > deadZone then
@@ -131,45 +153,47 @@ function GridInterface:gamepadaxis(joystick,axis,value)
 	end
 end
 
-function GridInterface:update(dt)
-	if self.keyUp then
-		if self.delay:zero() then
-			if self.index.y > 1 then
-				self.index.y = self.index.y - 1 
-			else 	
-				self.index.y = self.height
+function KeyBindingInterface:update(dt)
+	if not self.objects[self.index.x][self.index.y].rebinding then
+		if self.keyUp then
+			if self.delay:zero() then
+				if self.index.y > 1 then
+					self.index.y = self.index.y - 1 
+				else 	
+					self.index.y = self.height
+				end
+				self.delay:tick()
 			end
-			self.delay:tick()
-		end
-	elseif self.keyDown then
-		if self.delay:zero() then
-			if self.index.y < self.height then
-				self.index.y = self.index.y + 1 
-			else 	
-				self.index.y = 1
+		elseif self.keyDown then
+			if self.delay:zero() then
+				if self.index.y < self.height then
+					self.index.y = self.index.y + 1 
+				else 	
+					self.index.y = 1
+				end
+				self.delay:tick()
 			end
-			self.delay:tick()
-		end
-	elseif self.keyLeft then
-		if self.delay:zero() then
-			if self.index.x > 1 then
-				self.index.x = self.index.x - 1 
-			else 	
-				self.index.x = self.width
+		elseif self.keyLeft then
+			if self.delay:zero() then
+				if self.index.x > 1 then
+					self.index.x = self.index.x - 1 
+				else 	
+					self.index.x = self.width
+				end
+				self.delay:tick()
 			end
-			self.delay:tick()
-		end
-	elseif self.keyRight then
-		if self.delay:zero() then
-			if self.index.x < self.width then
-				self.index.x = self.index.x + 1 
-			else 	
-				self.index.x = 1
+		elseif self.keyRight then
+			if self.delay:zero() then
+				if self.index.x < self.width then
+					self.index.x = self.index.x + 1 
+				else 	
+					self.index.x = 1
+				end
+				self.delay:tick()
 			end
-			self.delay:tick()
+		else 
+			self.delay:reset()
 		end
-	else 
-		self.delay:reset()
 	end
 
 	if not self.delay:zero() then
@@ -182,7 +206,10 @@ function GridInterface:update(dt)
 	for x=1,self.width do
 		for y,object in pairs(self.objects[x]) do 
 			if x == self.index.x and y == self.index.y then
-				object.active = true
+				if not object.active then
+					object.active = true
+					object.rebinding = false
+				end
 			elseif self.objects[self.index.x][self.index.y] ~= object then
 				object.active = false
 			end
@@ -191,10 +218,14 @@ function GridInterface:update(dt)
 	end
 end
 
-function GridInterface:draw()
+function KeyBindingInterface:draw()
 	for x=1,self.width do
 		for y,object in pairs(self.objects[x]) do 
 			object:draw()
 		end
 	end
 end
+
+
+
+	

@@ -53,6 +53,11 @@ end
 
 function selectMode:keypressed(key,scancode,isrepeat)
 	self.interface:keypressed(key,scancode,isreapeat)
+
+	if scancode == "escape" then
+		menu:set()
+		gameState:load()
+	end
 end
 
 function selectMode:keyreleased(key,scancode)
@@ -61,6 +66,11 @@ end
 
 function selectMode:gamepadpressed(joystick,button) 
 	self.interface:gamepadpressed(inputs[1].joystick,button)
+
+	if joystick == inputs[1].joystick and button == "b" then
+		menu:set()
+		gameState:load()
+	end
 end
 
 function selectMode:gamepadreleased(joystick,button) 

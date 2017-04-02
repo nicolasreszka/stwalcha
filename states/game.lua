@@ -1,6 +1,6 @@
 game = State.new()
 
-function loadMap()
+function game:loadMap()
 	local map = require(mapName)
 
 	mapWidth  = map.width  * map.tilewidth
@@ -34,18 +34,99 @@ function game:load()
 	self.pause = false
 	self.chat = 0
 	self.halfTime = true
-	loadMap()
+	self:loadMap()
+	self.interface = ListInterface.new()
+	self.interface:add(Button.new(
+		"resume",
+		Rect.new(64,64,256,64),
+		function() 
+			self.pause = not self.pause
+		end
+	))
+	self.interface:add(Button.new(
+		"change map",
+		Rect.new(64,192,256,64),
+		function() 
+			selectMap:set()
+			gameState:load()
+		end
+	))
+	self.interface:add(Button.new(
+		"back to main menu",
+		Rect.new(64,320,256,64),
+		function() 
+			menu:set()
+			gameState:load()
+		end
+	))
+	self.interface:add(Button.new(
+		"quit",
+		Rect.new(64,448,128,64),
+		function() 
+			love.event.quit()
+		end
+	))
+end
+
+function game:mousemoved(x,y,dx,dy,istouch) 
+	if self.pause then
+		self.interface:mousemoved(x,y,dx,dy,istouch)
+	end
+end
+
+function game:mousepressed(x,y,button,istouch)
+	if self.pause then
+		self.interface:mousepressed(x,y,button,istouch)
+	end
+end
+
+function game:mousereleased(x,y,button,istouch)
+	if self.pause then
+		self.interface:mousereleased(x,y,button,istouch)
+	end
 end
 
 function game:keypressed(key,scancode,isrepeat)
 	if scancode == "escape" then
 		self.pause = not self.pause
 	end
+
+	if self.pause then
+		self.interface:keypressed(key,scancode,isreapeat)
+	end
+end
+
+function game:keyreleased(key,scancode)
+	if self.pause then
+		self.interface:keyreleased(key,scancode)
+	end
+end
+
+function game:gamepadpressed(joystick,button) 
+	if button == "start" then
+		self.pause = not self.pause
+	end
+
+	if self.pause then
+		self.interface:gamepadpressed(joystick,button)
+	end
+end
+
+function game:gamepadreleased(joystick,button) 
+	if self.pause then
+		self.interface:gamepadreleased(joystick,button)
+	end
+end
+
+function game:gamepadaxis(joystick,axis,value) 
+	if self.pause then
+		self.interface:gamepadaxis(joystick,axis,value) 
+	end
 end
 
 function game:update(dt)
 	if self.pause then
-		
+		self.interface:update(dt)
 	else 
 		if self.halfTime then
 			self.god:update()
@@ -81,4 +162,10 @@ function game:draw()
 
 	drawParticles()
 	camera:unset()
+
+	if self.pause then
+		love.graphics.setColor(0,0,0,192)
+		love.graphics.rectangle("fill",0,0,screen.w,screen.h)
+		self.interface:draw()
+	end
 end

@@ -26,6 +26,12 @@ function options:load()
 		"back",
 		Rect.new(64,320,128,64),
 		function() 
+			local data = ""
+			data = data .. "fullscreen = " .. booleanToString(love.window.getFullscreen())
+			data = data .. ";"
+			data = data .. "volume = " .. love.audio.getVolume()
+			data = data .. ";"
+			love.filesystem.write("settings.txt",data)
 			menu:set()
 			gameState:load()
 		end
@@ -46,6 +52,11 @@ end
 
 function options:keypressed(key,scancode,isrepeat)
 	self.interface:keypressed(key,scancode,isreapeat)
+
+	if scancode == "escape" then
+		menu:set()
+		gameState:load()
+	end
 end
 
 function options:keyreleased(key,scancode)
@@ -54,6 +65,11 @@ end
 
 function options:gamepadpressed(joystick,button) 
 	self.interface:gamepadpressed(inputs[1].joystick,button)
+
+	if joystick == inputs[1].joystick and button == "b" then
+		menu:set()
+		gameState:load()
+	end
 end
 
 function options:gamepadreleased(joystick,button) 

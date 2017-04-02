@@ -1,7 +1,7 @@
 selectMap = State.new()
 
 function selectMap:load()
-	self.interface = GridInterface.new(2,1)
+	self.interface = GridInterface.new(2,2)
 	self.interface:add(1,Button.new(
 		"map 1",
 		Rect.new(64,64,128,64),
@@ -20,6 +20,16 @@ function selectMap:load()
 			gameState:load()
 		end
 	))
+	local backButton = Button.new(
+		"back",
+		Rect.new(64,192,128,64),
+		function() 
+			selectMode:set()
+			gameState:load()
+		end
+	)
+	self.interface:add(1,backButton)
+	self.interface:add(2,backButton)
 end
 
 function selectMap:mousemoved(x,y,dx,dy,istouch) 
@@ -32,6 +42,11 @@ end
 
 function selectMap:keypressed(key,scancode,isrepeat)
 	self.interface:keypressed(key,scancode,isreapeat)
+
+	if scancode == "escape" then
+		selectMode:set()
+		gameState:load()
+	end
 end
 
 function selectMap:keyreleased(key,scancode)
@@ -40,6 +55,11 @@ end
 
 function selectMap:gamepadpressed(joystick,button) 
 	self.interface:gamepadpressed(inputs[1].joystick,button)
+
+	if joystick == inputs[1].joystick and button == "b" then
+		selectMode:set()
+		gameState:load()
+	end
 end
 
 function selectMap:gamepadreleased(joystick,button) 

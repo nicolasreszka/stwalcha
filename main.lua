@@ -10,13 +10,16 @@ require "lib.state"
 require "lib.object"
 require "lib.group"
 require "lib.sound"
+require "lib.strings"
 
 require "ui.interfaceComponent"
 require "ui.button"
 require "ui.switch"
 require "ui.slider"
+require "ui.keyBinder"
 require "ui.listInterface"
 require "ui.gridInterface"
+require "ui.keyBindingInterface"
 
 require "objects.input"
 require "objects.block"
@@ -26,37 +29,76 @@ require "objects.explosion"
 require "objects.particles"
 
 require "states.menu"
+require "states.controls"
 require "states.options"
 require "states.selectMode"
 require "states.selectMap"
 require "states.game"
 
+function loadData(filename)
+	local text = love.filesystem.read(filename)
+	local strings = text:split(";")
+	local data = {}
+	for i = 1, #strings do
+		local variable = strings[i]:split(" = ")
+		local value = variable[2]
+		if value == "true" then
+			value = true
+		elseif value == "false" then
+			value = false
+		elseif value == "nil" then
+			value = nil
+		elseif tonumber(value) then
+			value = tonumber(value)
+		end
+		data[variable[1]] = value
+	end
+	return data
+end
+
 function love.load()
 	screen = Screen.new(1024,768)
 	camera = Camera.new()
 	mouse = Point.new(0,0)
-
-	love.audio.setPosition(0,0,0)
 	audioListener = Point.new(screen.w/2,screen.h/2)
-
+	
+	love.audio.setPosition(0,0,0)
 	sfx = {
-		jump = love.audio.newSource("sounds/jump.wav", "static"),
-		bump = love.audio.newSource("sounds/bump.wav", "static"),
-		land = love.audio.newSource("sounds/land.wav", "static"),
-		slide = love.audio.newSource("sounds/slide.wav", "static"),
-		tick = love.audio.newSource("sounds/tick.wav", "static"),
+		jump = 		love.audio.newSource("sounds/jump.wav", "static"),
+		bump = 		love.audio.newSource("sounds/bump.wav", "static"),
+		land = 		love.audio.newSource("sounds/land.wav", "static"),
+		slide = 	love.audio.newSource("sounds/slide.wav", "static"),
+		tick = 		love.audio.newSource("sounds/tick.wav", "static"),
 		fireworks = love.audio.newSource("sounds/fireworks.wav", "stream"),
-		lighting = Sound.new(love.audio.newSource("sounds/lighting.wav", "stream")),
+		lighting =  Sound.new(love.audio.newSource("sounds/lighting.wav", "stream")),
 		explosion = Sound.new(love.audio.newSource("sounds/explosion.wav", "stream")),
-		god = Sound.new(love.audio.newSource("sounds/god.wav", "stream"))
+		god = 		Sound.new(love.audio.newSource("sounds/god.wav", "stream"))
 	}
 
-	inputs = {
-		Input.new("left","right","up"),
-		Input.new("q","d","z"),
-		Input.new("j","l","i"),
-		Input.new("kp4","kp6","kp8")
-	}
+	if love.filesystem.exists("settings.txt") then
+		local data = loadData("settings.txt")
+		love.window.setFullscreen(data["fullscreen"])
+		love.audio.setVolume(data["volume"])
+	end
+
+	if love.filesystem.exists("controls.txt") then
+		local data = loadData("controls.txt")
+		inputs = {}
+		for i = 1, 4 do
+			inputs[i] = Input.new(
+				data["left" .. i],
+				data["right" .. i],
+				data["jump" .. i]
+			)
+		end
+	else 
+		inputs = {
+			Input.new("left","right","up"),
+			Input.new("q","d","z"),
+			Input.new("j","l","i"),
+			Input.new("kp4","kp6","kp8")
+		}
+	end
 
 	chatColor =  Color.new(255, 40, 222)
 	colors = {

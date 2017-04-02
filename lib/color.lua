@@ -4,9 +4,9 @@ Color.__index = Color
 function Color.new(r,g,b,a)
 	local color = {}
 	setmetatable(color, Color)
-	color.red = (r or 0)
-	color.green = (g or 0)
-	color.blue = (b or 0)
+	color.red = r
+	color.green = g
+	color.blue = b
 	color.alpha = (a or 255)
 	return color
 end

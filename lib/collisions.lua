@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 function pointVsRect(point, rect) 
 	if point.x <= rect.left or point.x >= rect.right 
 	or point.y <= rect.top  or point.y >= rect.bottom then

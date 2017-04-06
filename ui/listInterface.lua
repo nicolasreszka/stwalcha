@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 ListInterface = {}
 ListInterface.__index = ListInterface
 

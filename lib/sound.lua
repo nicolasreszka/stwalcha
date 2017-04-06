@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 Sound = {}
 Sound.__index = Sound
 

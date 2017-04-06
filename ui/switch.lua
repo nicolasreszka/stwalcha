@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 Switch = InterfaceComponent.new()
 Switch.__index = Switch
 
@@ -113,12 +115,13 @@ function Switch:draw()
 	end
 	self.rect:draw("line")
 
+	love.graphics.setFont(font32)
 	love.graphics.print(self.label, self.rect.left+8, self.rect.top+8)
 
 	if self.on then
-		love.graphics.print("on", self.rect.right-32, self.rect.top+8);
+		love.graphics.print("on", self.rect.right-64, self.rect.top+8);
 	else
-		love.graphics.print("off", self.rect.right-32, self.rect.top+8);
+		love.graphics.print("off", self.rect.right-64, self.rect.top+8);
 	
 	end
 

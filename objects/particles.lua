@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 function initializeParticles() 
 	local squareImage = love.graphics.newImage('sprites/particle.png')
 

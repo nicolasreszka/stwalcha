@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 Group = {}
 Group.__index = Group 
 

@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 InterfaceComponent = {}
 InterfaceComponent.__index = InterfaceComponent
 

@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 Button = InterfaceComponent.new()
 Button.__index = Button
 
@@ -54,5 +56,6 @@ function Button:draw()
 	end
 
 	self.rect:draw("line")
+	love.graphics.setFont(font32)
 	love.graphics.print(self.label, self.rect.left+8, self.rect.top+8);
 end

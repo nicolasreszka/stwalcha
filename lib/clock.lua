@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 Clock = {}
 Clock.__index = Clock
 

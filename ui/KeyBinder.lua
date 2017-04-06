@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 KeyBinder = InterfaceComponent.new()
 KeyBinder.__index = KeyBinder
 
@@ -74,5 +76,6 @@ function KeyBinder:draw()
 	end
 
 	self.rect:draw("line")
+	love.graphics.setFont(font32)
 	love.graphics.print(self.key, self.rect.left+8, self.rect.top+8);
 end

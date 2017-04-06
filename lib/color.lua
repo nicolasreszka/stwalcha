@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 Color = {}
 Color.__index = Color
 

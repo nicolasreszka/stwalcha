@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 GridInterface = {}
 GridInterface.__index = GridInterface
 

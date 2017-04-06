@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 Screen = {}
 Screen.__index = Screen
 

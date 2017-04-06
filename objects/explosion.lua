@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 Explosion = Object.new()
 Explosion.__index = Explosion
 

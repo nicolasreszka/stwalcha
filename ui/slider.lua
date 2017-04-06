@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 Slider = InterfaceComponent.new()
 Slider.__index = Slider
 
@@ -237,6 +239,8 @@ function Slider:draw()
 	self.track:draw("line")
 	self.knob:draw("fill")
 
+	love.graphics.setFont(font32)
 	love.graphics.print(self.label, self.rect.left+8, self.rect.top+8)
+	love.graphics.setFont(font16)
 	love.graphics.print(math.floor(self.value*100), self.track.left-32, self.track.top)
 end

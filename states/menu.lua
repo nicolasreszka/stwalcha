@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 menu = State.new()
 
 function menu:load()
@@ -72,5 +74,10 @@ function menu:update(dt)
 end
 
 function menu:draw()
+	WHITE:set()
+	love.graphics.setFont(font48)
+	love.graphics.print("Stwalcha",512,64)
+	love.graphics.setFont(font32)
+	love.graphics.print("2017 Nicolas Reszka", 512,600)
 	self.interface:draw()
 end

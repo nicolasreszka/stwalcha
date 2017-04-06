@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 game = State.new()
 
 function game:loadMap()
@@ -38,14 +40,14 @@ function game:load()
 	self.interface = ListInterface.new()
 	self.interface:add(Button.new(
 		"resume",
-		Rect.new(64,64,256,64),
+		Rect.new(64,64,320,64),
 		function() 
 			self.pause = not self.pause
 		end
 	))
 	self.interface:add(Button.new(
 		"change map",
-		Rect.new(64,192,256,64),
+		Rect.new(64,192,320,64),
 		function() 
 			selectMap:set()
 			gameState:load()
@@ -53,7 +55,7 @@ function game:load()
 	))
 	self.interface:add(Button.new(
 		"back to main menu",
-		Rect.new(64,320,256,64),
+		Rect.new(64,320,320,64),
 		function() 
 			menu:set()
 			gameState:load()
@@ -166,6 +168,9 @@ function game:draw()
 	if self.pause then
 		love.graphics.setColor(0,0,0,192)
 		love.graphics.rectangle("fill",0,0,screen.w,screen.h)
+		WHITE:set()
+		love.graphics.setFont(font48)
+		love.graphics.print("Pause",512,64)
 		self.interface:draw()
 	end
 end

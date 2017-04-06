@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 Block = Object.new()
 Block.__index = Block
 

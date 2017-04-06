@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 Input = {
 	leftDown = 0,
 	rightDown = 0,

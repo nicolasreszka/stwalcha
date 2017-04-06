@@ -1,8 +1,10 @@
+--Author : Nicolas Reszka
+
 controls = State.new()
 
 function controls:load()
 	self.interface = KeyBindingInterface.new()
-	local componentWidth = 64
+	local componentWidth = 128
 	local componentHeight = 64
 	local margin = 32
 	for y=1,4 do	
@@ -105,5 +107,14 @@ function controls:update(dt)
 end
 
 function controls:draw()
+	for i=1,4 do
+		love.graphics.setFont(font32)
+		love.graphics.print("player " .. i, 32, 32+96*i)
+	end
+
+	love.graphics.print("left", 256, 64)
+	love.graphics.print("right", 416,64)
+	love.graphics.print("jump", 576, 64)
+
 	self.interface:draw()
 end

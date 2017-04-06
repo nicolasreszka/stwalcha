@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 Player = Object.new()
 Player.__index = Player
 

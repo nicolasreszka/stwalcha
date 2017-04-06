@@ -1,10 +1,12 @@
+--Author : Nicolas Reszka
+
 options = State.new()
 
 function options:load()
 	self.interface = ListInterface.new()
 	self.interface:add(Switch.new(
 		"fullscreen",
-		Rect.new(64,64,256,64),
+		Rect.new(64,64,360,64),
 		love.window.getFullscreen(),
 		function(on) 
 			if on then
@@ -16,7 +18,7 @@ function options:load()
 	))
 	self.interface:add(Slider.new(
 		"volume",
-		Rect.new(64,192,256,64),
+		Rect.new(64,192,360,64),
 		love.audio.getVolume(),
 		function(value) 
 			love.audio.setVolume(value)
@@ -85,5 +87,8 @@ function options:update(dt)
 end
 
 function options:draw()
+	WHITE:set()
+	love.graphics.setFont(font48)
+	love.graphics.print("Options",512,64)
 	self.interface:draw()
 end

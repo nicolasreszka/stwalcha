@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 KeyBindingInterface = {}
 KeyBindingInterface.__index = KeyBindingInterface
 

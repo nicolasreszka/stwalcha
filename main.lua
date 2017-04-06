@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 require "lib.maths"
 require "lib.color"
 require "lib.shapes"
@@ -61,7 +63,11 @@ function love.load()
 	camera = Camera.new()
 	mouse = Point.new(0,0)
 	audioListener = Point.new(screen.w/2,screen.h/2)
-	
+
+	font16 = love.graphics.newFont("sprites/font.ttf", 16)
+	font32 = love.graphics.newFont("sprites/font.ttf", 32)
+	font48 = love.graphics.newFont("sprites/font.ttf", 48)
+
 	love.audio.setPosition(0,0,0)
 	sfx = {
 		jump = 		love.audio.newSource("sounds/jump.wav", "static"),

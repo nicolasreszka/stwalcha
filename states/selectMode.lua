@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 selectMode = State.new()
 
 function selectMode:load()

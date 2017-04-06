@@ -1,7 +1,9 @@
+--Author : Nicolas Reszka
+
 selectMap = State.new()
 
 function selectMap:load()
-	self.interface = GridInterface.new(2,2)
+	self.interface = GridInterface.new(3,4)
 	self.interface:add(1,Button.new(
 		"map 1",
 		Rect.new(64,64,128,64),
@@ -13,16 +15,52 @@ function selectMap:load()
 	))
 	self.interface:add(2,Button.new(
 		"map 2",
-		Rect.new(320,64,128,64),
+		Rect.new(230,64,128,64),
 		function() 
 			mapName = "maps.test1"
 			game:set()
 			gameState:load()
 		end
 	))
+	self.interface:add(3,Button.new(
+		"map 3",
+		Rect.new(396,64,128,64),
+		function() 
+			mapName = "maps.test2"
+			game:set()
+			gameState:load()
+		end
+	))
+	self.interface:add(1,Button.new(
+		"map 4",
+		Rect.new(64,192,128,64),
+		function() 
+			mapName = "maps.test3"
+			game:set()
+			gameState:load()
+		end
+	))
+	self.interface:add(2,Button.new(
+		"map 5",
+		Rect.new(230,192,128,64),
+		function() 
+			mapName = "maps.test4"
+			game:set()
+			gameState:load()
+		end
+	))
+	self.interface:add(3,Button.new(
+		"map 6",
+		Rect.new(396,192,128,64),
+		function() 
+			mapName = "maps.test5"
+			game:set()
+			gameState:load()
+		end
+	))
 	local backButton = Button.new(
 		"back",
-		Rect.new(64,192,128,64),
+		Rect.new(64,448,128,64),
 		function() 
 			selectMode:set()
 			gameState:load()
@@ -30,6 +68,7 @@ function selectMap:load()
 	)
 	self.interface:add(1,backButton)
 	self.interface:add(2,backButton)
+	self.interface:add(3,backButton)
 end
 
 function selectMap:mousemoved(x,y,dx,dy,istouch) 

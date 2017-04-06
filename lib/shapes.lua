@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 Point = {}
 Point.__index = Point
 

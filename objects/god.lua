@@ -1,3 +1,5 @@
+--Author : Nicolas Reszka
+
 God = Object.new()
 God.__index = God
 

@@ -23,6 +23,7 @@ require "ui.listInterface"
 require "ui.gridInterface"
 require "ui.keyBindingInterface"
 require "ui.characterSelector"
+require "ui.animatedText"
 
 require "objects.input"
 require "objects.block"
@@ -68,6 +69,7 @@ function love.load()
 	font16 = love.graphics.newFont("sprites/font.ttf", 16)
 	font32 = love.graphics.newFont("sprites/font.ttf", 32)
 	font48 = love.graphics.newFont("sprites/font.ttf", 48)
+	font72 = love.graphics.newFont("sprites/font.ttf", 72)
 
 	love.audio.setPosition(0,0,0)
 	sfx = {

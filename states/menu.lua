@@ -4,37 +4,44 @@ menu = State.new()
 
 function menu:load()
 	self.interface = ListInterface.new()
+	local left = 384
+	local top = 256
+	local margin = 64+16
 	self.interface:add(Button.new(
-		"play",
-		Rect.new(64,64,256,64),
+		"Play",
+		Rect.new(left,top,256,64),
 		function() 
 			selectCharacters:set()
 			gameState:load()
 		end
 	))
 	self.interface:add(Button.new(
-		"controls",
-		Rect.new(64,192,256,64),
+		"Controls",
+		Rect.new(left,top + margin * 1,256,64),
 		function() 
 			controls:set()
 			gameState:load()
 		end
 	))
 	self.interface:add(Button.new(
-		"options",
-		Rect.new(64,320,256,64),
+		"Options",
+		Rect.new(left,top + margin * 2,256,64),
 		function() 
 			options:set()
 			gameState:load()
 		end
 	))
 	self.interface:add(Button.new(
-		"quit",
-		Rect.new(64,448,128,64),
+		"Quit",
+		Rect.new(left,top + margin * 3,256,64),
 		function() 
 			love.event.quit()
 		end
 	))
+	self.title = AnimatedText.new(
+		200,64,"Stwalcha",
+		1,16,string.len("Stwalcha")*72
+	)
 end
 
 function menu:mousemoved(x,y,dx,dy,istouch) 
@@ -71,13 +78,14 @@ end
 
 function menu:update(dt)
 	self.interface:update(dt)
+	self.title:update(dt)
 end
 
 function menu:draw()
-	WHITE:set()
-	love.graphics.setFont(font48)
-	love.graphics.print("Stwalcha",512,64)
-	love.graphics.setFont(font32)
-	love.graphics.print("2017 Nicolas Reszka", 512,600)
+	love.graphics.setFont(font72)
+	self.title:draw()
+	-- GREEN:set()
+	-- love.graphics.setFont(font16)
+	-- love.graphics.print("2017 Nicolas Reszka", 32,700)
 	self.interface:draw()
 end

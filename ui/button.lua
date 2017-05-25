@@ -12,6 +12,11 @@ function Button.new(label,rect,callback)
 	button.active = false
 	button.keyOK = false
 	button.mouseOK = false
+	button.animatedText = AnimatedText.new(
+		rect.left, 
+		rect.top+12,
+		label,1,16,rect.w
+	)
 	return button
 end
 
@@ -43,19 +48,26 @@ function Button:update(dt)
 		or self.mouseOK and self:hover() then
 			self.callback()
 		end
+		self.animatedText:update(dt)
 	end
 	self.keyOK = false
 	self.mouseOK = false
 end
 
 function Button:draw()
+	love.graphics.setFont(font32)
 	if self.active then
-		RED:set()
+		self.animatedText:draw()
 	else 
 		GREEN:set()
+		love.graphics.printf(
+			self.label, 
+			self.rect.left, 
+			self.rect.top+12,
+			self.rect.w, "center"
+		);
 	end
+	--self.rect:draw("line")
 
-	self.rect:draw("line")
-	love.graphics.setFont(font32)
-	love.graphics.print(self.label, self.rect.left+8, self.rect.top+8);
+	
 end

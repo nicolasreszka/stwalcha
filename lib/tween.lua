@@ -27,3 +27,7 @@ function inOutExpo(begin, change, clock)
 	end
 	return change/2 * (-math.pow(2, -10 * (time-1)) + 2) + begin
 end
+
+function linear(begin, change, clock) 
+	return change * clock.time / clock.duration + begin 
+end

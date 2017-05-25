@@ -31,6 +31,7 @@ require "objects.player"
 require "objects.god"
 require "objects.explosion"
 require "objects.particles"
+require "objects.characters"
 
 require "states.menu"
 require "states.controls"
@@ -64,6 +65,8 @@ function love.load()
 	screen = Screen.new(1024,768)
 	camera = Camera.new()
 	mouse = Point.new(0,0)
+	mouse.leftDown = false
+	mouse.leftPressed = false
 	audioListener = Point.new(screen.w/2,screen.h/2)
 
 	font16 = love.graphics.newFont("sprites/font.ttf", 16)
@@ -117,7 +120,10 @@ function love.load()
 		Color.new(255, 0, 50),
 		Color.new(255, 128, 0)
 	}
+	mapName = "maps.test0"
+
 	isPlaying = {false,false,false,false}
+	choosenCharacters = {nil,nil,nil,nil}
 
 	menu:set()
 	gameState:load()
@@ -142,10 +148,19 @@ end
 
 function love.mousepressed(x,y,button,istouch)
 	gameState:mousepressed(x,y,button,istouch)
+	if button == 1 then
+		if mouse.leftDown == false then
+			mouse.leftPressed = true
+		end
+		mouse.leftDown = true
+	end
 end
 
 function love.mousereleased(x,y,button,istouch)
 	gameState:mousereleased(x,y,button,istouch)
+	if button == 1 then
+		mouse.leftDown = false
+	end
 end
 
 function love.keypressed(key,scancode,isrepeat)
@@ -173,6 +188,7 @@ function love.update(dt)
 		love.timer.sleep(1/60 - dt)
 	end
 	gameState:update(dt)
+	mouse.leftPressed = false
 end
 
 function love.resize(w,h)

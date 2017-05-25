@@ -3,30 +3,6 @@
 Player = Object.new()
 Player.__index = Player
 
-local width = 32
-local height = 32
-
-local squashX = 1.50
-local squashY = .75
-local stretchX = .50
-local stretchY = 1.25
-local restitution = 0.035
-
-local accelerationGround = .4
-local accelerationAir = .6
-local accelerationDuration = 1
-
-local frictionGround = .4
-local frictionAir = .2
-local frictionDuration = .2
-
-local maxSpeedGround = 8
-local maxSpeedAir = 10
-
-local jumpForce = 8
-local gravity = .4
-local maxGravity = 48
-
 local thrownDuration = .3
 local touchedDuration = .2
 local explosionDuration = 10
@@ -34,7 +10,7 @@ local explosionDuration = 10
 local startColorShift = 2
 local endColorShift = 50
 
-function Player.new(x,y,slot)
+function Player.new(x,y,slot,character)
 	local player = {}
 	setmetatable(player, Player)
 
@@ -53,10 +29,11 @@ function Player.new(x,y,slot)
 	player.input = inputs[slot]
 
 	player.pos = Point.new(x,y)
-	player.rect = Rect.new(x,y,width,height)
+	player.rect = Rect.new(x,y,character.width,character.height)
 
-	player.accelerationTimer = Clock.new(accelerationDuration)
-	player.frictionTimer = Clock.new(frictionDuration)
+	player.accelerationTimer = Clock.new(character.accelerationDuration)
+	player.frictionTimer = Clock.new(character.frictionDuration)
+
 	player.thrownTimer = Clock.new(thrownDuration)
 	player.touchedTimer = Clock.new(touchedDuration)
 	player.explosionTimer = Clock.new(explosionDuration)
@@ -70,6 +47,32 @@ function Player.new(x,y,slot)
 		slide = Sound.new(sfx.slide),
 		tick = Sound.new(sfx.tick)
 	}
+
+	player.width = character.width
+	player.height = character.height
+
+	player.squashX = character.squashX
+	player.squashY = character.squashY
+	player.stretchX = character.stretchX
+	player.stretchY =  character.stretchY
+	player.restitution = character.restitution
+
+	player.accelerationGround =  character.accelerationGround
+	player.accelerationAir =  character.accelerationAir
+
+	player.frictionGround = character.frictionGround
+	player.frictionAir = character.frictionAir
+	player.maxSpeedGround = character.maxSpeedGround
+	player.maxSpeedAir = character.maxSpeedAir
+
+	player.jumpForce = character.jumpForce
+	player.gravity = character.gravity
+	player.maxGravity = character.maxGravity
+	player.image = character.image
+	player.sprite = love.graphics.newQuad(
+		player.width*(player.slot-1), 0, player.width, player.height, 
+		player.image:getDimensions()
+	)
 
 	return player
 end
@@ -92,21 +95,21 @@ function Player:update()
 	else 
 		if not self.grounded then
 			self:fall()
-			self:move(accelerationAir,frictionAir,maxSpeedAir)
+			self:move(self.accelerationAir,self.frictionAir,self.maxSpeedAir)
 			self:wallJump()
 		else 
 			self.vy = 0
-			self:move(accelerationGround,frictionGround,maxSpeedGround)
+			self:move(self.accelerationGround,self.frictionGround,self.maxSpeedGround)
 			self:jump()
 			
 			if self.moveDirection > 0 and self.vx < 0 then
 				self.sfx.slide:playAt(self.pos)
-				if self.vx > -maxSpeedGround*0.6 then
+				if self.vx > -self.maxSpeedGround*0.6 then
 					instantiateDustRight(self.rect.left,self.rect.bottom-4,2)
 				end
 			elseif self.moveDirection < 0 and self.vx > 0 then
 				self.sfx.slide:playAt(self.pos)
-				if self.vx < maxSpeedGround*0.6 then
+				if self.vx < self.maxSpeedGround*0.6 then
 					instantiateDustLeft(self.rect.right,self.rect.bottom-4,2)
 				end
 			else 
@@ -148,7 +151,7 @@ function Player:getGrounded()
 	if self.rect.bottom >= mapHeight then
 		self.grounded = game.blocks:rectsVsLine(Line.new(self.rect.left, 1, self.rect.right, 1))
 		if self.grounded then
-			self.pos.y = mapHeight-height
+			self.pos.y = mapHeight-self.height
 			self.rect:translate(self.pos.x,self.pos.y)
 		end
 	else 
@@ -171,8 +174,8 @@ function Player:landAndTakeOff()
 end
 
 function Player:fall()
-	if self.vy < maxGravity then
-		self.vy = self.vy + gravity
+	if self.vy < self.maxGravity then
+		self.vy = self.vy + self.gravity
 	end
 end
 
@@ -214,13 +217,13 @@ function Player:wallJump()
 	if leftWall and not rightWall then
 		instantiateDustLeft(
 			self.rect.left+4,
-			self.rect.top+height/4,
+			self.rect.top+self.height/4,
 			2
 		)
 		self.sfx.slide:playAt(self.pos)
 		if self.input.jumpPressed then
-			self.vx = jumpForce
-			self.vy = -jumpForce
+			self.vx = self.jumpForce
+			self.vy = -self.jumpForce
 			self:stretch()
 			self.sfx.jump:stop()
 			self.sfx.jump:playAt(self.pos)
@@ -229,13 +232,13 @@ function Player:wallJump()
 	elseif not leftWall and rightWall then
 		instantiateDustRight(
 			self.rect.right-4,
-			self.rect.top+height/4,
+			self.rect.top+self.height/4,
 			2
 		)
 		self.sfx.slide:playAt(self.pos)
 		if self.input.jumpPressed then
-			self.vx = -jumpForce
-			self.vy = -jumpForce
+			self.vx = -self.jumpForce
+			self.vy = -self.jumpForce
 			self:stretch()
 			self.sfx.jump:stop()
 			self.sfx.jump:playAt(self.pos)
@@ -249,7 +252,7 @@ end
 
 function Player:jump()
 	if self.input.jumpPressed then
-		self.vy = -jumpForce
+		self.vy = -self.jumpForce
 		instantiateDustBottom(
 			self.rect.left+12,
 			self.rect.bottom-4,
@@ -267,10 +270,10 @@ end
 
 function Player:getNextX(speed)
 	local nextP = self.rect.pos.x + sign(speed)
-	if nextP > mapWidth-width then
+	if nextP > mapWidth-self.width then
 		nextP = 0
 	elseif nextP < 0 then
-		nextP = mapWidth-width
+		nextP = mapWidth-self.width
 	end
 	return nextP
 end
@@ -278,9 +281,9 @@ end
 function Player:getNextY(speed)
 	local nextP = self.rect.pos.y + sign(speed)
 	if nextP > mapHeight then
-		nextP = height/2
+		nextP = self.height/2
 	elseif nextP < 0 then
-		nextP = mapHeight-height/2
+		nextP = mapHeight-self.height/2
 	end
 	return nextP
 end
@@ -374,7 +377,7 @@ function Player:verticalCollisions()
 		-- Jump on other player
 		if self.vy > 0 and player then
 			self.rect:translate(self.rect.pos.x,self.pos.y)	
-			self.vy = -jumpForce
+			self.vy = -self.jumpForce
 			self:stretch()
 			self.input:vibration(thrownDuration)
 			player:squash()
@@ -403,18 +406,18 @@ function Player:verticalCollisions()
 end
 
 function Player:squash()
-	self.xScale = squashX
-	self.yScale = squashY
+	self.xScale = self.squashX
+	self.yScale = self.squashY
 end
 
 function Player:stretch()
-	self.xScale = stretchX
-	self.yScale = stretchY
+	self.xScale = self.stretchX
+	self.yScale = self.stretchY
 end
 
 function Player:applyRestitution()
-	self.xScale = approachValues(self.xScale,1,restitution)
-	self.yScale = approachValues(self.yScale,1,restitution)
+	self.xScale = approachValues(self.xScale,1,self.restitution)
+	self.yScale = approachValues(self.yScale,1,self.restitution)
 end
 
 function Player:blink()
@@ -447,12 +450,14 @@ function Player:draw()
 	else 
 		colors[self.slot]:set()
 	end
-	
-	love.graphics.rectangle(
-		"fill", 
-		self.pos.x-self.xScale*width/2+width/2, 
-		self.pos.y-self.yScale*height/2+height/2, 
-		width*self.xScale, 
-		height*self.yScale
+
+	love.graphics.draw(
+		self.image,
+		self.pos.x-self.xScale*self.width/2+self.width/2, 
+		self.pos.y-self.yScale*self.height/2+self.height/2, 
+		0,
+		self.xScale, 
+		self.yScale
 	)
+
 end

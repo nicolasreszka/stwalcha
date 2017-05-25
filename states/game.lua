@@ -14,6 +14,8 @@ function game:loadMap()
 	game.god = God.new()
 	initializeParticles() 
 
+	local playerCounter = 0
+
 	for i, layer in pairs(map.layers) do
 		local tile = 1
 		for tileY = 0, layer.height-1 do
@@ -22,8 +24,18 @@ function game:loadMap()
 				local y = tileY * map.tileheight + layer.offsety
 				if layer.data[tile] == 1 then
 					game.blocks:add(Block.new(x,y))
-				elseif layer.data[tile] == 2 and game.players.size < numberOfPlayers then
-					game.players:add(Player.new(x,y,game.players.size+1))
+				elseif layer.data[tile] == 2  then
+					playerCounter = playerCounter + 1
+					if isPlaying[playerCounter]  then
+						game.players:add(
+							Player.new(
+								x,y,
+								playerCounter,
+								choosenCharacters[playerCounter]
+							)
+						)
+					end
+					
 				end
 				tile = tile + 1
 			end

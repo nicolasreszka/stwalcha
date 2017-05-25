@@ -18,8 +18,8 @@ function selectCharacters:load()
 	)
 	self.backButton = Rect.new(32,680,128,64)
 	self.backHover = false
+	self.wait = Clock.new(.2)
 end
-
 
 function selectCharacters:isEveryoneReady()
 	local count = 0
@@ -41,11 +41,21 @@ function selectCharacters:isEveryoneReady()
 end
 
 function selectCharacters:update(dt)
+	
 	for i, input in pairs(inputs) do
 		input:update()
 	end
+	
+	local isEveryoneLeft = true
 	for i, selector in pairs(self.selectors) do
-		selector:update(dt)
+		if not self.wait:alarm() then 
+			self.wait:tick()	
+		else
+			selector:update(dt)
+		end
+		if selector:getState() ~= "inactive" then
+			isEveryoneLeft = false
+		end
 	end
 	if self:isEveryoneReady() then
 		for i, selector in pairs(self.selectors) do
@@ -58,10 +68,11 @@ function selectCharacters:update(dt)
 	self.backHover = pointVsRect(mouse,self.backButton)
 	if self.backHover then
 		self.backText:update(dt)
-		if mouse.leftPressed then
-			menu:set()
-			menu:load()
-		end
+	end
+
+	if isEveryoneLeft or self.backHover and mouse.leftPressed then
+		menu:set()
+		menu:load()
 	end
 
 end

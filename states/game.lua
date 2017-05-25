@@ -50,36 +50,43 @@ function game:load()
 	self.halfTime = true
 	self:loadMap()
 	self.interface = ListInterface.new()
+	local left = 384
+	local top = 256
+	local margin = 64+16
 	self.interface:add(Button.new(
-		"resume",
-		Rect.new(64,64,320,64),
+		"Resume",
+		Rect.new(left,top,256,64),
 		function() 
 			self.pause = not self.pause
 		end
 	))
 	self.interface:add(Button.new(
-		"change map",
-		Rect.new(64,192,320,64),
+		"Change map",
+		Rect.new(left,top + margin * 1,256,64),
 		function() 
 			selectMap:set()
 			gameState:load()
 		end
 	))
 	self.interface:add(Button.new(
-		"back to main menu",
-		Rect.new(64,320,320,64),
+		"Back to main menu",
+		Rect.new(left-32,top + margin * 2,320,64),
 		function() 
 			menu:set()
 			gameState:load()
 		end
 	))
 	self.interface:add(Button.new(
-		"quit",
-		Rect.new(64,448,128,64),
+		"Quit",
+		Rect.new(left,top + margin * 3,256,64),
 		function() 
 			love.event.quit()
 		end
 	))
+	self.title = AnimatedText.new(
+		0,64,"Pause",
+		2,10,screen.w
+	)
 end
 
 function game:mousemoved(x,y,dx,dy,istouch) 
@@ -141,6 +148,7 @@ end
 function game:update(dt)
 	if self.pause then
 		self.interface:update(dt)
+		self.title:update(dt)
 	else 
 		if self.halfTime then
 			self.god:update()
@@ -180,9 +188,8 @@ function game:draw()
 	if self.pause then
 		love.graphics.setColor(0,0,0,192)
 		love.graphics.rectangle("fill",0,0,screen.w,screen.h)
-		WHITE:set()
-		love.graphics.setFont(font48)
-		love.graphics.print("Pause",512,64)
+		love.graphics.setFont(font72)
+		self.title:draw()
 		self.interface:draw()
 	end
 end

@@ -34,6 +34,28 @@ function CharacterSelector.new(slot)
 		selector.x, selector.y+256, selector.w, 32
 	)
 
+
+	selector.leftButton = Rect.new(
+		selector.x+96,selector.y+128,32,32
+	)
+
+	selector.leftText = AnimatedText.new(
+		selector.x+96,selector.y+128,
+		"<",1,
+		10,selector.leftButton.w,colorMode
+	)
+
+	selector.rightButton = Rect.new(
+		selector.x+selector.w-128,selector.y+128,32,32
+	)
+
+	selector.rightText = AnimatedText.new(
+		selector.x+selector.w-128,selector.y+128,
+		">",1,
+		10,selector.rightButton.w,colorMode
+	)
+
+
 	selector.readyButtonText = AnimatedText.new(
 		selector.x,selector.y+256,
 		"Press [jump] when ready",1,
@@ -54,7 +76,7 @@ function CharacterSelector.new(slot)
 
 	selector.readyText = AnimatedText.new(
 		selector.x,selector.y+128,
-		"Player " .. slot .. " is ready !",1,
+		"Player " .. slot .. " is ready !",.5,
 		10,selector.w,colorMode
 	)
 
@@ -102,7 +124,20 @@ function CharacterSelector:update(dt)
 			self.leaveText:update(dt)
 		end
 
-		if inputs[self.slot].leftDown ~= 0 then
+		local leftHover = pointVsRect(mouse,self.leftButton)
+
+		if leftHover then
+			self.leftText:update(dt)
+		end
+
+		local rightHover = pointVsRect(mouse,self.rightButton)
+
+		if rightHover then
+			self.rightText:update(dt)
+		end
+
+		if inputs[self.slot].leftDown ~= 0 
+		or leftHover and mouse.leftPressed then
 			if self.delay:zero() then
 				if self.index > 1 then
 					self.index = self.index - 1 
@@ -111,7 +146,8 @@ function CharacterSelector:update(dt)
 				end
 				self.delay:tick()
 			end
-		elseif inputs[self.slot].rightDown ~= 0 then
+		elseif inputs[self.slot].rightDown ~= 0
+		or rightHover and mouse.leftPressed then
 			if self.delay:zero() then
 				if self.index < #characters then
 					self.index = self.index + 1 
@@ -173,8 +209,37 @@ function CharacterSelector:draw()
 				self.w,"center"
 			)
 		end
+
+		self.color:set()
+		self.leftButton:draw("line")
+		
+		if pointVsRect(mouse,self.leftButton)  then
+			self.leftText:draw()
+		else
+			love.graphics.printf(
+				"<",
+				self.leftText.x,self.leftText.y,
+				self.leftButton.w,"center"
+			)
+		end
+
+		self.color:set()
+		self.rightButton:draw("line")
+
+		if pointVsRect(mouse,self.rightButton)  then
+			self.rightText:draw()
+		else
+			love.graphics.printf(
+				">",
+				self.rightText.x,self.rightText.y,
+				self.rightButton.w,"center"
+			)
+		end
+
 		colors[self.slot]:set()
 		love.graphics.setFont(font32)
+
+
 		love.graphics.printf(
 			characters[self.index].name,
 			self.x, 
@@ -193,6 +258,7 @@ function CharacterSelector:draw()
 			self.y+160-characters[self.index].height, 
 			0
 		)
+
 		local otherCharacter = self.index-1
 		if otherCharacter < 1 then
 			otherCharacter = #characters

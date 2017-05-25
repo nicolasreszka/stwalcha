@@ -8,7 +8,7 @@ function menu:load()
 		"play",
 		Rect.new(64,64,256,64),
 		function() 
-			selectMode:set()
+			selectCharacters:set()
 			gameState:load()
 		end
 	))

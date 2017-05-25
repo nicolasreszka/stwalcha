@@ -5,18 +5,22 @@ Input = {
 	rightDown = 0,
 	jumpDown = false,
 	jumpPressed = false,
-	jumpBefore = false
+	jumpBefore = false,
+	backDown = false,
+	backPressed = false,
+	backBefore = false
 }
 Input.__index = Input
 
 local deadzone = 0.25
 
-function Input.new(left,right,jump)
+function Input.new(left,right,jump,back)
 	local input = {}
 	setmetatable(input, Input)
 	input.left = left
 	input.right = right
 	input.jump = jump
+	input.back = back
 	input.joystick = nil
 	return input
 end
@@ -59,4 +63,18 @@ function Input:update()
 	end
 
 	self.jumpBefore = self.jumpDown
+
+	if love.keyboard.isDown(self.back)
+	or self.joystick and self.joystick:isGamepadDown("b") then
+		self.backDown = true
+	else 
+		self.backDown = false
+	end
+
+	self.backPressed = false
+	if not self.backBefore and self.backDown then
+		self.backPressed = true
+	end
+
+	self.backBefore = self.backDown
 end

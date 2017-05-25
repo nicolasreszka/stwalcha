@@ -22,6 +22,7 @@ require "ui.keyBinder"
 require "ui.listInterface"
 require "ui.gridInterface"
 require "ui.keyBindingInterface"
+require "ui.characterSelector"
 
 require "objects.input"
 require "objects.block"
@@ -33,7 +34,7 @@ require "objects.particles"
 require "states.menu"
 require "states.controls"
 require "states.options"
-require "states.selectMode"
+require "states.selectCharacters"
 require "states.selectMap"
 require "states.game"
 
@@ -94,15 +95,16 @@ function love.load()
 			inputs[i] = Input.new(
 				data["left" .. i],
 				data["right" .. i],
-				data["jump" .. i]
+				data["jump" .. i],
+				data["back" .. i]
 			)
 		end
 	else 
 		inputs = {
-			Input.new("left","right","up"),
-			Input.new("q","d","z"),
-			Input.new("j","l","i"),
-			Input.new("kp4","kp6","kp8")
+			Input.new("left","right","up","down"),
+			Input.new("q","d","z","s"),
+			Input.new("j","l","i","k"),
+			Input.new("kp4","kp6","kp8","kp5")
 		}
 	end
 
@@ -113,6 +115,7 @@ function love.load()
 		Color.new(255, 0, 50),
 		Color.new(255, 128, 0)
 	}
+	isPlaying = {false,false,false,false}
 
 	menu:set()
 	gameState:load()

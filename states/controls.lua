@@ -47,6 +47,19 @@ function controls:load()
 				inputs[y].jump = key
 			end
 		))
+		self.interface:add(4,KeyBinder.new(
+			"back",
+			inputs[y].back,
+			Rect.new(
+				256+(componentWidth +margin)*3,
+				128+(componentHeight+margin)*(y-1),
+				componentWidth,
+				componentHeight
+			),
+			function(key) 
+				inputs[y].back = key
+			end
+		))
 	end
 
 	local backButton = Button.new(
@@ -63,6 +76,7 @@ function controls:load()
 				data = data .. "left" .. i .. " = " .. input.left .. ";"
 				data = data .. "right" .. i .. " = " .. input.right .. ";"
 				data = data .. "jump" .. i .. " = " .. input.jump .. ";"
+				data = data .. "back" .. i .. " = " .. input.back .. ";"
 			end
 			love.filesystem.write("controls.txt",data)
 			menu:set()
@@ -72,6 +86,7 @@ function controls:load()
 	self.interface:add(1,backButton)
 	self.interface:add(2,backButton)
 	self.interface:add(3,backButton)
+	self.interface:add(4,backButton)
 end
 
 function controls:mousemoved(x,y,dx,dy,istouch) 
@@ -115,6 +130,7 @@ function controls:draw()
 	love.graphics.print("left", 256, 64)
 	love.graphics.print("right", 416,64)
 	love.graphics.print("jump", 576, 64)
+	love.graphics.print("back", 736, 64)
 
 	self.interface:draw()
 end

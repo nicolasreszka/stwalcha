@@ -9,9 +9,9 @@ function KeyBindingInterface.new()
 	local interface = {}
 	setmetatable(interface, KeyBindingInterface)
 	interface.objects = {}
-	interface.width = 3
+	interface.width = 4
 	interface.height = 5
-	for i=1,3 do
+	for i=1,4 do
 		table.insert(interface.objects,{})
 	end
 	interface.index = Point.new(1,1)

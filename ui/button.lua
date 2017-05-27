@@ -67,7 +67,6 @@ function Button:draw()
 			self.rect.w, "center"
 		);
 	end
-	--self.rect:draw("line")
 
 	
 end

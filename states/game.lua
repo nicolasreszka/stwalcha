@@ -12,6 +12,7 @@ function game:loadMap()
 	game.blocks = Group.new()
 	game.explosions = Group.new()
 	game.god = God.new()
+	game.customParticles = Group.new()
 	initializeParticles() 
 
 	local playerCounter = 0
@@ -166,6 +167,7 @@ function game:update(dt)
 			input:update()
 		end
 
+		self.customParticles:update(dt)
 		self.players:update()
 		updateParticles()
 	end
@@ -175,6 +177,7 @@ function game:draw()
 	camera:set()
 	self.blocks:draw()
 
+	self.customParticles:draw()
 	self.players:draw()
 	self.explosions:draw()
 	

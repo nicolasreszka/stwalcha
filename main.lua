@@ -32,6 +32,7 @@ require "objects.god"
 require "objects.explosion"
 require "objects.particles"
 require "objects.characters"
+require "objects.customParticles"
 
 require "states.menu"
 require "states.controls"

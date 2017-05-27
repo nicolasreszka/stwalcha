@@ -74,6 +74,11 @@ function Player.new(x,y,slot,character)
 		player.image:getDimensions()
 	)
 
+	player.name = character.name
+	player.weedClock = Clock.new(0.15)
+	player.rainbowClock = Clock.new(0.01)
+	player.waitForParticles = false
+
 	return player
 end
 
@@ -83,6 +88,42 @@ function Player:update()
 	self:getGrounded()
  	self:landAndTakeOff()
 	
+ 	if self.name == "Mary" then
+ 		if self.waitForParticles then
+	 		self.weedClock:tick()
+	 		if self.weedClock:alarm() then
+	 			self.waitForParticles = false
+	 			self.weedClock:reset()
+	 		end
+	 	elseif self.vx ~= 0 or self.vy ~= 0 then
+	 		game.customParticles:add(
+	 			Weed.new(
+	 				self.pos.x,self.pos.y,colors[self.slot]
+	 			)
+	 		)
+	 		self.waitForParticles = true
+	 	end
+ 	end
+
+ 	if self.name == "Henry" then
+ 		if self.waitForParticles then
+	 		self.rainbowClock:tick()
+	 		if self.rainbowClock:alarm() then
+	 			self.waitForParticles = false
+	 			self.rainbowClock:reset()
+	 		end
+	 	elseif self.vx ~= 0 or self.vy ~= 0 then
+	 		game.customParticles:add(
+	 			Rainbow.new(
+	 				self.pos.x+self.width/2,
+	 				self.pos.y+self.height/2,
+	 				angle({x=0,y=0},{x=self.vx,y=self.vy}) 
+	 			)
+	 		)
+	 		self.waitForParticles = true
+	 	end
+ 	end
+
 	if self.thrown then
 		if not self.grounded then
 			self:fall()
@@ -95,6 +136,11 @@ function Player:update()
 	else 
 		if not self.grounded then
 			self:fall()
+			if self.name == "Lama" then
+				if self.input.jumpPressed then
+					self.vy = -2
+				end
+			end
 			self:move(self.accelerationAir,self.frictionAir,self.maxSpeedAir)
 			self:wallJump()
 		else 
@@ -104,12 +150,12 @@ function Player:update()
 			
 			if self.moveDirection > 0 and self.vx < 0 then
 				self.sfx.slide:playAt(self.pos)
-				if self.vx > -self.maxSpeedGround*0.6 then
+				if self.vx > -self.maxSpeedGround*0.6 and self.name ~= "Mary" then
 					instantiateDustRight(self.rect.left,self.rect.bottom-4,2)
 				end
 			elseif self.moveDirection < 0 and self.vx > 0 then
 				self.sfx.slide:playAt(self.pos)
-				if self.vx < self.maxSpeedGround*0.6 then
+				if self.vx < self.maxSpeedGround*0.6 and self.name ~= "Mary" then
 					instantiateDustLeft(self.rect.right,self.rect.bottom-4,2)
 				end
 			else 
@@ -162,8 +208,10 @@ end
 function Player:landAndTakeOff()
 	-- Squash
 	if not self.groundedBefore and self.grounded then
-		instantiateDustBottom(self.rect.left,self.rect.bottom-2,4)
-		instantiateDustBottom(self.rect.right,self.rect.bottom-2,4)
+		if self.name ~= "Mary" then
+			instantiateDustBottom(self.rect.left,self.rect.bottom-2,4)
+			instantiateDustBottom(self.rect.right,self.rect.bottom-2,4)
+		end
 		self.sfx.land:stop()
 		self.sfx.land:playAt(self.pos)
 		self:squash()
@@ -215,13 +263,20 @@ function Player:wallJump()
 
 	-- Left
 	if leftWall and not rightWall then
-		instantiateDustLeft(
-			self.rect.left+4,
-			self.rect.top+self.height/4,
-			2
-		)
-		self.sfx.slide:playAt(self.pos)
-		if self.input.jumpPressed then
+		if self.name == "Simon" then
+			self.vy = 0
+		else
+			if self.name ~= "Mary" then
+				instantiateDustLeft(
+					self.rect.left+4,
+					self.rect.top+self.height/4,
+					2
+				)
+			end
+			self.sfx.slide:playAt(self.pos)
+		end
+
+		if self.name == "Boot" or self.input.jumpPressed then
 			self.vx = self.jumpForce
 			self.vy = -self.jumpForce
 			self:stretch()
@@ -230,13 +285,19 @@ function Player:wallJump()
 		end
 	-- Right
 	elseif not leftWall and rightWall then
-		instantiateDustRight(
-			self.rect.right-4,
-			self.rect.top+self.height/4,
-			2
-		)
-		self.sfx.slide:playAt(self.pos)
-		if self.input.jumpPressed then
+		if self.name == "Simon" then
+			self.vy = 0
+		else
+			if self.name ~= "Mary" then
+				instantiateDustRight(
+					self.rect.right-4,
+					self.rect.top+self.height/4,
+					2
+				)
+			end
+			self.sfx.slide:playAt(self.pos)
+		end
+		if self.name == "Boot" or self.input.jumpPressed then
 			self.vx = -self.jumpForce
 			self.vy = -self.jumpForce
 			self:stretch()
@@ -251,18 +312,20 @@ function Player:wallJump()
 end
 
 function Player:jump()
-	if self.input.jumpPressed then
+	if self.name == "Boot" or self.input.jumpPressed then
 		self.vy = -self.jumpForce
-		instantiateDustBottom(
-			self.rect.left+12,
-			self.rect.bottom-4,
-			3
-		)
-		instantiateDustBottom(
-			self.rect.right-12,
-			self.rect.bottom-4,
-			3
-		)
+		if self.name ~= "Mary" then
+			instantiateDustBottom(
+				self.rect.left+12,
+				self.rect.bottom-4,
+				3
+			)
+			instantiateDustBottom(
+				self.rect.right-12,
+				self.rect.bottom-4,
+				3
+			)
+		end
 		self.sfx.jump:stop()
 		self.sfx.jump:playAt(self.pos)
 	end

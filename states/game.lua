@@ -179,7 +179,13 @@ function game:draw()
 
 	if mapName == "maps.clouds" then
 		love.graphics.setColor(30, 147, 206)
-		love.graphics.rectangle("fill",0,0,screen.w,screen.h)
+		love.graphics.rectangle(
+			"fill",
+			camera.pos.x,
+			camera.pos.y,
+			screen.w,
+			screen.h
+		)
 	end
 
 	self.blocks:draw()

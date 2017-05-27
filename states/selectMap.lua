@@ -2,73 +2,37 @@
 
 selectMap = State.new()
 
+local mapScreens = {
+	love.graphics.newImage('maps/neon.png')
+}
+
 function selectMap:load()
-	self.interface = GridInterface.new(3,4)
-	self.interface:add(1,Button.new(
-		"map 1",
-		Rect.new(64,64,128,64),
+	self.interface = ListInterface.new()
+	self.interface:add(Button.new(
+		"Neon",
+		Rect.new(64,256,128,64),
 		function() 
-			mapName = "maps.test0"
+			mapName = "maps.neon"
 			game:set()
 			gameState:load()
 		end
 	))
-	self.interface:add(2,Button.new(
-		"map 2",
-		Rect.new(230,64,128,64),
-		function() 
-			mapName = "maps.test1"
-			game:set()
-			gameState:load()
-		end
-	))
-	self.interface:add(3,Button.new(
-		"map 3",
-		Rect.new(396,64,128,64),
-		function() 
-			mapName = "maps.test2"
-			game:set()
-			gameState:load()
-		end
-	))
-	self.interface:add(1,Button.new(
-		"map 4",
-		Rect.new(64,192,128,64),
-		function() 
-			mapName = "maps.test3"
-			game:set()
-			gameState:load()
-		end
-	))
-	self.interface:add(2,Button.new(
-		"map 5",
-		Rect.new(230,192,128,64),
-		function() 
-			mapName = "maps.test4"
-			game:set()
-			gameState:load()
-		end
-	))
-	self.interface:add(3,Button.new(
-		"map 6",
-		Rect.new(396,192,128,64),
-		function() 
-			mapName = "maps.test5"
-			game:set()
-			gameState:load()
-		end
-	))
-	local backButton = Button.new(
-		"back",
+	self.interface:add(Button.new(
+		"Back",
 		Rect.new(64,448,128,64),
 		function() 
-			selectMode:set()
-			gameState:load()
+			selectCharacters:set()
+			for i, selector in pairs(selectCharacters.selectors) do
+				if selector:getState() == "ready" then
+					selector:setState("joined")
+				end 
+			end
 		end
+	))
+	self.title = AnimatedText.new(
+		0,48,"Map selection",
+		1.5,10,screen.w
 	)
-	self.interface:add(1,backButton)
-	self.interface:add(2,backButton)
-	self.interface:add(3,backButton)
 end
 
 function selectMap:mousemoved(x,y,dx,dy,istouch) 
@@ -111,8 +75,29 @@ end
 
 function selectMap:update(dt)
 	self.interface:update(dt)
+	self.title:update(dt)
 end
 
 function selectMap:draw()
+	if self.interface.index ~= self.interface.size then
+		local screenX = 256
+		local screenY = 160
+		local screenScale = 0.6
+		GREEN:set()
+		love.graphics.rectangle(
+			"line",
+			screenX,screenY,
+			screen.w*screenScale,
+			screen.h*screenScale
+		)
+		WHITE:set()
+		love.graphics.draw(
+			mapScreens[self.interface.index], 
+			screenX, screenY, 0, screenScale
+		)
+	end
+
 	self.interface:draw()
+	love.graphics.setFont(font72)
+	self.title:draw()
 end

@@ -184,7 +184,7 @@ function ListInterface:update(dt)
 	end
 end
 
-function ListInterface:draw()
+function ListInterface:draw(mode)
 	for i, object in pairs(self.objects) do
 		object:draw()
 	end

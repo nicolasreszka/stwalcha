@@ -41,6 +41,8 @@ function Screen:unset()
 end
 
 function Screen:draw()
+	love.graphics.setColor( 0, 0, 4 )
+	love.graphics.rectangle("fill",self.x,self.y,self.w*self.scale,self.h*self.scale)
 	WHITE:set()
 	love.graphics.setBlendMode("alpha","premultiplied")
 	love.graphics.draw(self.canvas, self.x, self.y, 0, self.scale)

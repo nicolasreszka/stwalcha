@@ -61,8 +61,8 @@ function selectCharacters:update(dt)
 		for i, selector in pairs(self.selectors) do
 			isPlaying[i] = (selector:getState() == "ready")
 		end
-		game:set()
-		game:load()
+		selectMap:set()
+		selectMap:load()
 	end
 
 	self.backHover = pointVsRect(mouse,self.backButton)

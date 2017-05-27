@@ -54,7 +54,7 @@ function Button:update(dt)
 	self.mouseOK = false
 end
 
-function Button:draw()
+function Button:draw(mode)
 	love.graphics.setFont(font32)
 	if self.active then
 		self.animatedText:draw()

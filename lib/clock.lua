@@ -42,6 +42,10 @@ function Clock:setDuration(duration)
 	self.duration = duration
 end
 
+function Clock:getDuration()
+	return self.duration 
+end
+
 function Clock:forceAlarm()
 	self.time = self.duration
 end

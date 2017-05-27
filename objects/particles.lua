@@ -1,7 +1,9 @@
 --Author : Nicolas Reszka
 
-function initializeParticles() 
-	local squareImage = love.graphics.newImage('sprites/particle.png')
+local squareImage = love.graphics.newImage('sprites/particle.png')
+local rainImage = love.graphics.newImage('sprites/rainParticle.png')
+
+function initializeParticles()
 
 	dustBottom = love.graphics.newParticleSystem(squareImage, 100)
 	dustBottom:setParticleLifetime(0.2,0.4)
@@ -26,6 +28,12 @@ function initializeParticles()
 	confettis:setSizeVariation(1)
 	confettis:setLinearAcceleration(-20, 200, 20, 300)
 	confettis:setColors(255, 255, 255, 255, 255, 255, 255, 0) 
+
+	rain = love.graphics.newParticleSystem(rainImage, 500)
+	rain:setParticleLifetime(4, 6) 
+	rain:setSizeVariation(1)
+	rain:setLinearAcceleration(-20, 200, 20, 300)
+	rain:setColors(255, 255, 255, 255, 255, 255, 255, 0) 
 
 	redFireworks = love.graphics.newParticleSystem(squareImage, 100)
 	redFireworks:setParticleLifetime(1, 2) 
@@ -61,10 +69,12 @@ function updateParticles()
 	greenFireworks:update(dt)
 	blueFireworks:update(dt)
 	confettis:update(dt)
+	rain:update(dt)
 end
 
 function drawParticles()
 	WHITE:set()
+	love.graphics.draw(rain)
 	love.graphics.draw(dustBottom)
 	love.graphics.draw(dustLeft)
 	love.graphics.draw(dustRight)
@@ -73,6 +83,7 @@ function drawParticles()
 	love.graphics.draw(blueFireworks)
 	love.graphics.setColor(255,0,128)
 	love.graphics.draw(confettis)
+
 end
 
 function instantiateDustBottom(x,y,amount)
@@ -93,6 +104,11 @@ end
 function instantiateConfettis(x,y,amount)
 	confettis:setPosition(x,y)
 	confettis:emit(amount)
+end
+
+function instantiateRain(x,y,amount)
+	rain:setPosition(x,y)
+	rain:emit(amount)
 end
 
 function instantiateFireworks(x,y,amount)

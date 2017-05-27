@@ -203,6 +203,12 @@ function Player:getGrounded()
 	else 
 		self.grounded = game.blocks:rectsVsLine(self.rect:bboxBottom())
 	end
+
+	if self.grounded then
+		if self.grounded.type == "cloud" then
+			self.grounded.erosion = true
+		end
+	end
 end
 
 function Player:landAndTakeOff()
@@ -259,6 +265,18 @@ function Player:wallJump()
 		rightWall = game.blocks:rectsVsLine(Line.new(1,self.rect.top,1,self.rect.bottom))
 	else 
 		rightWall = game.blocks:rectsVsLine(self.rect:bboxRight())
+	end
+
+	if leftWall then
+		if leftWall.type == "cloud" then
+			leftWall.erosion = true
+		end
+	end
+
+	if rightWall then
+		if rightWall.type == "cloud" then
+			rightWall.erosion = true
+		end
 	end
 
 	-- Left

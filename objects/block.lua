@@ -6,6 +6,7 @@ Block.__index = Block
 function Block.new(x,y)
 	local block = {}
 	setmetatable(block, Block)
+	block.type = "block"
 	block.rect = Rect.new(x,y,16,16)
 	return block
 end

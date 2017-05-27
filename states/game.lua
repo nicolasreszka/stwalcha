@@ -36,7 +36,8 @@ function game:loadMap()
 							)
 						)
 					end
-					
+				elseif layer.data[tile] == 3 then
+					game.blocks:add(Cloud.new(x,y))
 				end
 				tile = tile + 1
 			end
@@ -166,7 +167,7 @@ function game:update(dt)
 		for i, input in pairs(inputs) do
 			input:update()
 		end
-
+		self.blocks:update(dt)
 		self.customParticles:update(dt)
 		self.players:update()
 		updateParticles()
@@ -175,6 +176,12 @@ end
 
 function game:draw()
 	camera:set()
+
+	if mapName == "maps.clouds" then
+		love.graphics.setColor(30, 147, 206)
+		love.graphics.rectangle("fill",0,0,screen.w,screen.h)
+	end
+
 	self.blocks:draw()
 
 	self.customParticles:draw()

@@ -33,11 +33,19 @@ function Explosion:update()
 
 		local list = game.blocks:rectsVsCircleList(self.range)
 		for i, block in pairs(list) do
-			instantiateConfettis(
-				block.rect.left+block.rect.w/2,
-				block.rect.top+block.rect.h/2,
-				1
-			)
+			if block.type == "block" then
+				instantiateConfettis(
+					block.rect.left+block.rect.w/2,
+					block.rect.top+block.rect.h/2,
+					1
+				)
+			elseif block.type == "cloud" then
+				instantiateRain(
+					block.rectBackup.left+block.rectBackup.w/2,
+					block.rectBackup.top+block.rectBackup.h/2,
+					1
+				)
+			end
 			game.blocks:remove(block)
 		end
 

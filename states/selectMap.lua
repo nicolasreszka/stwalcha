@@ -4,7 +4,7 @@ selectMap = State.new()
 
 local mapScreens = {
 	love.graphics.newImage('maps/neon.png'),
-	love.graphics.newImage('maps/neon.png')
+	love.graphics.newImage('maps/clouds.png')
 }
 
 function selectMap:load()

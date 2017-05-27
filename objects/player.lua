@@ -362,9 +362,9 @@ end
 function Player:getNextY(speed)
 	local nextP = self.rect.pos.y + sign(speed)
 	if nextP > mapHeight then
-		nextP = self.height/2
-	elseif nextP < 0 then
-		nextP = mapHeight-self.height/2
+		nextP = -self.height/4
+	elseif nextP < -self.height/2 then
+		nextP = mapHeight-self.height/4
 	end
 	return nextP
 end

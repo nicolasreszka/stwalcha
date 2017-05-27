@@ -114,6 +114,10 @@ function game:keypressed(key,scancode,isrepeat)
 		self.pause = not self.pause
 	end
 
+	if scancode == "r" then
+		self:load()
+	end
+
 	if self.pause then
 		self.interface:keypressed(key,scancode,isreapeat)
 	end

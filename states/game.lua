@@ -8,12 +8,14 @@ function game:loadMap()
 	mapWidth  = map.width  * map.tilewidth
 	mapHeight = map.height * map.tileheight
 
-	game.players = Group.new()
-	game.blocks = Group.new()
-	game.explosions = Group.new()
-	game.god = God.new()
-	game.customParticles = Group.new()
+	self.players = Group.new()
+	self.blocks = Group.new()
+	self.explosions = Group.new()
+	self.god = God.new()
+	self.customParticles = Group.new()
 	initializeParticles() 
+
+	self.lava = Lava.new()
 
 	local playerCounter = 0
 
@@ -24,11 +26,11 @@ function game:loadMap()
 				local x = tileX * map.tilewidth  + layer.offsetx
 				local y = tileY * map.tileheight + layer.offsety
 				if layer.data[tile] == 1 then
-					game.blocks:add(Block.new(x,y))
+					self.blocks:add(Block.new(x,y))
 				elseif layer.data[tile] == 2  then
 					playerCounter = playerCounter + 1
 					if isPlaying[playerCounter]  then
-						game.players:add(
+						self.players:add(
 							Player.new(
 								x,y,
 								playerCounter,
@@ -37,7 +39,7 @@ function game:loadMap()
 						)
 					end
 				elseif layer.data[tile] == 3 then
-					game.blocks:add(Cloud.new(x,y))
+					self.blocks:add(Cloud.new(x,y))
 				end
 				tile = tile + 1
 			end
@@ -49,7 +51,7 @@ function game:load()
 	camera:translate(0,0)
 	self.pause = false
 	self.chat = 0
-	self.halfTime = true
+	self.halfTime = false
 	self:loadMap()
 	self.interface = ListInterface.new()
 	local left = 384
@@ -171,6 +173,8 @@ function game:update(dt)
 		for i, input in pairs(inputs) do
 			input:update()
 		end
+
+		self.lava:update(dt)
 		self.blocks:update(dt)
 		self.customParticles:update(dt)
 		self.players:update()
@@ -203,6 +207,8 @@ function game:draw()
 	end
 
 	drawParticles()
+	self.lava:draw()
+
 	camera:unset()
 
 	if self.pause then

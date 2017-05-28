@@ -34,6 +34,7 @@ require "objects.explosion"
 require "objects.particles"
 require "objects.characters"
 require "objects.customParticles"
+require "objects.lava"
 
 require "states.menu"
 require "states.controls"
@@ -116,11 +117,17 @@ function love.load()
 	end
 
 	chatColor =  Color.new(255, 40, 222)
+	-- colors = {
+	-- 	Color.new(106, 255, 106),
+	-- 	Color.new(0, 191, 255),
+	-- 	Color.new(255, 0, 50),
+	-- 	Color.new(255, 128, 0)
+	-- }
 	colors = {
-		Color.new(106, 255, 106),
-		Color.new(0, 191, 255),
-		Color.new(255, 0, 50),
-		Color.new(255, 128, 0)
+		GREEN:clone(),
+		BLUE:clone(),
+		RED:clone(),
+		YELLOW:clone()
 	}
 	mapName = "maps.test0"
 

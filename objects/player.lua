@@ -205,7 +205,7 @@ function Player:getGrounded()
 	end
 
 	if self.grounded then
-		if self.grounded.type == "cloud" then
+		if self.grounded.type == "cloud" and self.name ~= "Feather" then
 			self.grounded.erosion = true
 		end
 	end
@@ -268,13 +268,13 @@ function Player:wallJump()
 	end
 
 	if leftWall then
-		if leftWall.type == "cloud" then
+		if leftWall.type == "cloud" and self.name ~= "Feather" then
 			leftWall.erosion = true
 		end
 	end
 
 	if rightWall then
-		if rightWall.type == "cloud" then
+		if rightWall.type == "cloud" and self.name ~= "Feather" then
 			rightWall.erosion = true
 		end
 	end

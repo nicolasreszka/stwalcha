@@ -46,7 +46,10 @@ function Explosion:update()
 					1
 				)
 			end
-			game.blocks:remove(block)
+
+			if block.type ~= "solid" then
+				game.blocks:remove(block)
+			end
 		end
 
 		camera:move(

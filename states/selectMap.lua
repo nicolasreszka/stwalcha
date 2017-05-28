@@ -4,6 +4,8 @@ selectMap = State.new()
 
 local mapScreens = {
 	love.graphics.newImage('maps/neon.png'),
+	love.graphics.newImage('maps/neon2.png'),
+	love.graphics.newImage('maps/lava.png'),
 	love.graphics.newImage('maps/clouds.png')
 }
 
@@ -22,8 +24,26 @@ function selectMap:load()
 		end
 	))
 	self.interface:add(Button.new(
-		"Clouds",
+		"Neon 2",
 		Rect.new(left,top+margin,128,64),
+		function() 
+			mapName = "maps.neon2"
+			game:set()
+			gameState:load()
+		end
+	))
+	self.interface:add(Button.new(
+		"Lava",
+		Rect.new(left,top+margin*2,128,64),
+		function() 
+			mapName = "maps.lava"
+			game:set()
+			gameState:load()
+		end
+	))
+	self.interface:add(Button.new(
+		"Clouds",
+		Rect.new(left,top+margin*3,128,64),
 		function() 
 			mapName = "maps.clouds"
 			game:set()
@@ -32,7 +52,7 @@ function selectMap:load()
 	))
 	self.interface:add(Button.new(
 		"Back",
-		Rect.new(left,top+margin*2,128,64),
+		Rect.new(left,top+margin*4,128,64),
 		function() 
 			selectCharacters:set()
 			for i, selector in pairs(selectCharacters.selectors) do

@@ -15,7 +15,12 @@ function game:loadMap()
 	self.customParticles = Group.new()
 	initializeParticles() 
 
-	self.lava = Lava.new()
+	if mapName == "maps.lava" then
+		self.lava = Lava.new()
+		for tileX = 0, 63 do
+			self.blocks:add(SolidBlock.new(tileX*16,-16))
+		end
+	end
 
 	local playerCounter = 0
 
@@ -40,6 +45,8 @@ function game:loadMap()
 					end
 				elseif layer.data[tile] == 3 then
 					self.blocks:add(Cloud.new(x,y))
+				elseif layer.data[tile] == 4 then
+					self.blocks:add(SolidBlock.new(x,y))
 				end
 				tile = tile + 1
 			end
@@ -51,7 +58,7 @@ function game:load()
 	camera:translate(0,0)
 	self.pause = false
 	self.chat = 0
-	self.halfTime = false
+	self.halfTime = true
 	self:loadMap()
 	self.interface = ListInterface.new()
 	local left = 384
@@ -174,7 +181,10 @@ function game:update(dt)
 			input:update()
 		end
 
-		self.lava:update(dt)
+		if mapName == "maps.lava" then
+			self.lava:update(dt)
+		end
+
 		self.blocks:update(dt)
 		self.customParticles:update(dt)
 		self.players:update()
@@ -207,7 +217,10 @@ function game:draw()
 	end
 
 	drawParticles()
-	self.lava:draw()
+
+	if mapName == "maps.lava" then
+		self.lava:draw()
+	end
 
 	camera:unset()
 
@@ -218,4 +231,7 @@ function game:draw()
 		self.title:draw()
 		self.interface:draw()
 	end
+
+	-- RED:set()
+	-- love.graphics.print(self.god.state,64,64)
 end

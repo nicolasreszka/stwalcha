@@ -18,6 +18,7 @@ function God.new()
 	god.lookSubTimer = Clock.new(0.5)
 	god.lookSubTimer:forceAlarm()
 	god.waitTimer = Clock.new(1.5)
+	god.victoryWaitTimer = Clock.new(1.5)
 	god.lightingTimer = Clock.new(0.5)
 	god.fireworksTimer = Clock.new(.15)
 
@@ -140,13 +141,15 @@ function God:victoryAutomate()
 		self.pos.y = inExpo(-128,mapHeight/2,self.arrivalTimer)
 		sfx.god:setPosition(self.pos)
 		if self.arrivalTimer:alarm() then
-			if game.players.size == 1 then
-				self.waitTimer:setDuration(5)
-			end
 			self.state = "wait"
 		end
 	elseif self.state == "wait" then
 		if game.players.size == 1 then
+			self.victoryWaitTimer:setDuration(5)
+			self.eyeColor:transform(
+				inExpo(1,50,self.victoryWaitTimer),
+				baseEyeColor
+			)
 			self.fireworksTimer:tick()
 			if self.fireworksTimer:alarm() and self.fireworksTimer.duration < 0.5 then
 				local fireX = love.math.random(256,700)
@@ -157,11 +160,18 @@ function God:victoryAutomate()
 				self.fireworksTimer:setDuration(self.fireworksTimer.duration*1.1)
 				self.fireworksTimer:reset()
 			end
+		elseif not self.fireworksTimer:zero() then
+			self.eyeColor:transform(
+				inExpo(1,50,self.victoryWaitTimer),
+				RED
+			)
 		end
-		self.waitTimer:tick()
-		if self.waitTimer:alarm() then
+		self.victoryWaitTimer:tick()
+		if self.victoryWaitTimer:alarm() then
 			game:load()
 		end
+	else
+		self.state = "wait"
 	end
 end
 

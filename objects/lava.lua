@@ -64,6 +64,23 @@ function Lava:update(dt)
 	
 	self.line.a.y = self.line.a.y + (self.move * self.k)
 	self.line.b.y = self.line.b.y + (self.move * self.k)
+
+	for i,player in pairs(game.players.objects) do
+		if lineVsRect(self.line,player.rect) then
+			if game.chat == player.slot 
+			or game.god.state == "lighting" 
+			and game.god.player.slot == player.slot then
+				player:explode()
+			else
+				game.players:remove(player)
+			end
+		end
+	end
+
+	if game.explosions.size == 0
+	and game.players.size <= 1 then
+		game.halfTime = true
+	end
 end
 
 function Lava:draw()

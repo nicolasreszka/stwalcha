@@ -184,13 +184,17 @@ function Player:update()
 		self:blink()
 		self.explosionTimer:tick()
 		if self.explosionTimer:alarm() then
-			self.input:vibration(2)
-			game.explosions:add(Explosion.new(self.pos.x,self.pos.y))
-			game.players:remove(self)
+			self:explode()
 		end
 	else 
 		self.explosionTimer:reset()
 	end
+end
+
+function Player:explode()
+	self.input:vibration(2)
+	game.explosions:add(Explosion.new(self.pos.x,self.pos.y))
+	game.players:remove(self)
 end
 
 function Player:getGrounded() 

@@ -27,6 +27,7 @@ require "ui.animatedText"
 
 require "objects.input"
 require "objects.block"
+require "objects.solidBlock"
 require "objects.cloud"
 require "objects.player"
 require "objects.god"

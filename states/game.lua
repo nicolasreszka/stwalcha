@@ -17,9 +17,9 @@ function game:loadMap()
 
 	if mapName == "maps.lava" then
 		self.lava = Lava.new()
-		for tileX = 0, 63 do
-			self.blocks:add(SolidBlock.new(tileX*16,-16))
-		end
+		-- for tileX = 0, 63 do
+		-- 	self.blocks:add(SolidBlock.new(tileX*16,-16))
+		-- end
 	end
 
 	local playerCounter = 0
@@ -208,13 +208,14 @@ function game:draw()
 
 	self.blocks:draw()
 
-	self.customParticles:draw()
-	self.players:draw()
-	self.explosions:draw()
-	
 	if self.halfTime then
 		self.god:draw()
 	end
+
+	self.explosions:draw()
+	self.customParticles:draw()
+	self.players:draw()
+	
 
 	drawParticles()
 

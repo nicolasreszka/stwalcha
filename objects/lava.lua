@@ -15,10 +15,35 @@ function Lava.new()
 	lava.offsetDirection = -0.25
 	lava.offsetClock = Clock.new(2)
 	lava.moveClock = Clock.new(4.5)
+
+	lava.color1 = Color.new(200,0,0)
+	lava.color2 =  Color.new(200,128,0)
+	lava.color = lava.color1:clone()
+	lava.currentColor = 0
 	return lava
 end
 
 function Lava:update(dt)
+
+	if self.colorCurrent == 0 then
+		self.color:transform(
+			1,
+			self.color2
+		)
+		if self.color:compare(self.color2) then
+			self.colorCurrent = 1
+		end
+	else 
+		self.color:transform(
+			1,
+			self.color1
+		)
+		if self.color:compare(self.color1) then
+			self.colorCurrent = 0
+	
+		end
+	end
+
 	self.offsetClock:tick()
 	if self.offsetClock:alarm() then
 		self.offsetDirection = self.offsetDirection * -1
@@ -67,12 +92,29 @@ function Lava:update(dt)
 
 	for i,player in pairs(game.players.objects) do
 		if lineVsRect(self.line,player.rect) then
+			for drops = 0, love.math.random(6,8) do
+				game.customParticles:add(
+					LavaDrop.new(
+						player.pos.x, self.line.a.y
+					)
+				)
+			end
+
 			if game.chat == player.slot 
 			or game.god.state == "lighting" 
 			and game.god.player.slot == player.slot then
 				player:explode()
 			else
 				game.players:remove(player)
+			end
+		end
+	end
+
+	for i,customParticle in pairs(game.customParticles.objects) do
+		if customParticle.type == "drop" then
+			if customParticle.vy > 0 
+			and customParticle.circle.pos.y > self.line.a.y then
+				game.customParticles:remove(customParticle)
 			end
 		end
 	end
@@ -84,7 +126,7 @@ function Lava:update(dt)
 end
 
 function Lava:draw()
-	love.graphics.setColor(255,0,0,92)
+	self.color:set()
 	love.graphics.polygon("fill",
 		{
 			self.line.a.x,self.line.a.y,

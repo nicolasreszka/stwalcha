@@ -81,9 +81,12 @@ function drawParticles()
 	love.graphics.draw(redFireworks)
 	love.graphics.draw(greenFireworks)
 	love.graphics.draw(blueFireworks)
-	love.graphics.setColor(255,0,128)
+	if mapName == "maps.neon2" then
+		love.graphics.setColor(233, 255, 0)
+	else
+		love.graphics.setColor(255,0,128)
+	end
 	love.graphics.draw(confettis)
-
 end
 
 function instantiateDustBottom(x,y,amount)

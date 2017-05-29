@@ -1,5 +1,15 @@
 --Author : Nicolas Reszka
 
+-- TO DO :
+-- Background effects
+-- Sound design for lava
+-- Sound design for clouds
+-- Boom character (3 bombs in random directions instead of one)
+-- redesign "controls" et "options" menus
+-- Sound design for menus
+-- Add music?
+-- Better graphics?
+
 require "lib.maths"
 require "lib.color"
 require "lib.shapes"

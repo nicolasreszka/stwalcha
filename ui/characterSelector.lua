@@ -23,7 +23,7 @@ function CharacterSelector.new(slot)
 	end
 
 	selector.joinButton = Rect.new(
-		selector.x, selector.y, selector.w, selector.h
+		selector.x, selector.y+32, selector.w, selector.h-32
 	)
 
 	selector.leaveButton = Rect.new(
@@ -182,6 +182,8 @@ end
 
 function CharacterSelector:draw()
 	self.color:set()
+	--self.joinButton:draw("line")
+
 	if self.state == "inactive" then
 		self.joinText:draw()
 	elseif self.state == "joined" then

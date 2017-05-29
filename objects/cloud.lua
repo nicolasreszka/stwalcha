@@ -20,6 +20,7 @@ function Cloud.new(x,y)
 	block.clock = Clock.new(erosionDuration)
 	block.respawnClock = Clock.new(2)
 	block.erosion = false
+	block.reformation = false
 	return block
 end
 
@@ -40,7 +41,7 @@ function Cloud:update(dt)
 		if not game.players:rectsVsLine(self.rectBackup:bboxTop()) then
 			self.erosion = false
 		end
-	elseif #self.clouds <= self.cloudsNumber then
+	elseif self.reformation then
 		self.respawnClock:tick()
 		if self.respawnClock:alarm() then
 			local radius = love.math.random(4,16)
@@ -57,8 +58,11 @@ function Cloud:update(dt)
 				self.respawnClock:reset()
 				self.rect = self.rectBackup
 				self.clock:setDuration(erosionDuration)
+				self.reformation = false
 			end
 		end
+	elseif #self.clouds < self.cloudsNumber then
+		self.reformation = true
 	end
 end
 

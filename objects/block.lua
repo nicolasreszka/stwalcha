@@ -12,6 +12,11 @@ function Block.new(x,y)
 end
 
 function Block:draw()
-	love.graphics.setColor(255, 0, 128)
+	if mapName == "maps.neon2" then
+		love.graphics.setColor(233, 255,0)
+	else
+		love.graphics.setColor(255, 0, 128)
+	end
+	
 	self.rect:draw("line")
 end

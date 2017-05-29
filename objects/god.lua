@@ -14,10 +14,20 @@ function God.new()
 	god.state = "arrival"
 
 	god.arrivalTimer = Clock.new(1)
-	god.lookTimer = Clock.new(3)
-	god.lookSubTimer = Clock.new(0.5)
+
+	if mapName == "maps.lava" then
+		god.lookTimer = Clock.new(0.5)
+		god.lookSubTimer = Clock.new(0.25)
+		god.waitTimer = Clock.new(0.5)
+	else
+		god.lookTimer = Clock.new(1.5)
+		god.lookSubTimer = Clock.new(0.5)
+		god.waitTimer = Clock.new(1.25)
+	end
+	
+	
 	god.lookSubTimer:forceAlarm()
-	god.waitTimer = Clock.new(1.5)
+	
 	god.victoryWaitTimer = Clock.new(1.5)
 	god.lightingTimer = Clock.new(0.5)
 	god.fireworksTimer = Clock.new(.15)
@@ -28,9 +38,9 @@ function God.new()
 	god.pos = Point.new(mapWidth/2,-128)
 
 	god.eyeColor = baseEyeColor:clone()
-	god.leftEye = Point.new(god.pos.x-40,god.pos.y-8)
-	god.rightEye = Point.new(god.pos.x+24,god.pos.y-8)
-
+	-- god.leftEye = Point.new(god.pos.x-40,god.pos.y-8)
+	-- god.rightEye = Point.new(god.pos.x+24,god.pos.y-8)
+	god.eye = Point.new(god.pos.x,god.pos.y)
 	god.lookAngle = math.rad(270)
 	god.lightingPoints = {}
 
@@ -53,10 +63,13 @@ function God:update()
 			self.lookAngle = math.rad(90)
 		end
 	end
-	self.leftEye.x = self.pos.x-40 + lengthDirectionX(8,self.lookAngle)
-	self.leftEye.y = self.pos.y-8 + lengthDirectionY(8,self.lookAngle)
-	self.rightEye.x = self.pos.x+32 + lengthDirectionX(8,self.lookAngle)
-	self.rightEye.y = self.pos.y-8 + lengthDirectionY(8,self.lookAngle)
+	self.eye.x = self.pos.x + lengthDirectionX(8,self.lookAngle)
+	self.eye.y = self.pos.y + lengthDirectionY(8,self.lookAngle)
+	
+	-- self.leftEye.x = self.pos.x-40 + lengthDirectionX(8,self.lookAngle)
+	-- self.leftEye.y = self.pos.y-8 + lengthDirectionY(8,self.lookAngle)
+	-- self.rightEye.x = self.pos.x+32 + lengthDirectionX(8,self.lookAngle)
+	-- self.rightEye.y = self.pos.y-8 + lengthDirectionY(8,self.lookAngle)
 end
 
 function God:choiceAutomate()
@@ -66,7 +79,7 @@ function God:choiceAutomate()
 			sfx.god:playAt(self.pos)
 		end
 		self.arrivalTimer:tick()
-		self.pos.y = inExpo(-128,mapHeight/2,self.arrivalTimer)
+		self.pos.y = inExpo(-128,mapHeight/2-56,self.arrivalTimer)
 		sfx.god:setPosition(self.pos)
 		if self.arrivalTimer:alarm() then
 			self.state = "lookAround"
@@ -121,7 +134,7 @@ function God:choiceAutomate()
 		if self.arrivalTimer:alarm() then
 			sfx.god:playAt(self.pos)
 		end
-		self.pos.y = outExpo(-128,mapHeight/2,self.arrivalTimer)
+		self.pos.y = outExpo(-128,mapHeight/2-56,self.arrivalTimer)
 		self.arrivalTimer:rewind()
 		sfx.god:setPosition(self.pos)
 		if self.arrivalTimer:zero() then
@@ -138,7 +151,7 @@ function God:victoryAutomate()
 			sfx.god:playAt(self.pos)
 		end
 		self.arrivalTimer:tick()
-		self.pos.y = inExpo(-128,mapHeight/2,self.arrivalTimer)
+		self.pos.y = inExpo(-128,mapHeight/2-56,self.arrivalTimer)
 		sfx.god:setPosition(self.pos)
 		if self.arrivalTimer:alarm() then
 			self.state = "wait"
@@ -165,6 +178,9 @@ function God:victoryAutomate()
 				inExpo(1,50,self.victoryWaitTimer),
 				RED
 			)
+			-- if not sfx.god:isPlaying() then
+			-- 	sfx.god:playAt(self.pos)
+			-- end
 		end
 		self.victoryWaitTimer:tick()
 		if self.victoryWaitTimer:alarm() then
@@ -198,14 +214,41 @@ function God:createLighting()
 end
 
 function God:draw()
+	chatColor:set()
+	--love.graphics.rectangle("line",self.pos.x-64,self.pos.y-64,128,128)
+	love.graphics.polygon(
+		"fill",
+		{
+			self.pos.x,self.pos.y-64,
+			self.pos.x-64,self.pos.y+64,
+			self.pos.x+64,self.pos.y+64
+		}
+	)
 	GREEN:set()
-	love.graphics.rectangle("line",self.pos.x-64,self.pos.y-64,128,128)
+	love.graphics.polygon(
+		"line",
+		{
+			self.pos.x,self.pos.y-64,
+			self.pos.x-64,self.pos.y+64,
+			self.pos.x+64,self.pos.y+64
+		}
+	)
+	WHITE:set()
+	love.graphics.circle("fill",self.pos.x,self.pos.y,16)
 	BLUE:set()
-	love.graphics.rectangle("fill",self.pos.x-48,self.pos.y-16,24,24)
-	love.graphics.rectangle("fill",self.pos.x+24,self.pos.y-16,24,24)
+	love.graphics.circle("line",self.pos.x,self.pos.y,16)
 	self.eyeColor:set()
-	love.graphics.rectangle("fill",self.leftEye.x,self.leftEye.y,8,8)
-	love.graphics.rectangle("fill",self.rightEye.x,self.rightEye.y,8,8)
+	love.graphics.circle("fill",self.eye.x,self.eye.y,8)
+	BLUE:set()
+	love.graphics.circle("line",self.eye.x,self.eye.y,8)
+	BLACK:set()
+	love.graphics.circle("fill",self.eye.x,self.eye.y,2)
+
+	-- love.graphics.rectangle("fill",self.pos.x-48,self.pos.y-16,24,24)
+	-- love.graphics.rectangle("fill",self.pos.x+24,self.pos.y-16,24,24)
+	-- self.eyeColor:set()
+	-- love.graphics.rectangle("fill",self.leftEye.x,self.leftEye.y,8,8)
+	-- love.graphics.rectangle("fill",self.rightEye.x,self.rightEye.y,8,8)
 
 	if self.state == "lighting" then 
 		if not self.lightingTimer:zero() then

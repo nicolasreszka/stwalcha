@@ -19,8 +19,8 @@ function selectMap:load()
 		Rect.new(left,top,128,64),
 		function() 
 			mapName = "maps.neon"
+			game:load()
 			game:set()
-			gameState:load()
 		end
 	))
 	self.interface:add(Button.new(
@@ -28,8 +28,8 @@ function selectMap:load()
 		Rect.new(left,top+margin,128,64),
 		function() 
 			mapName = "maps.neon2"
+			game:load()
 			game:set()
-			gameState:load()
 		end
 	))
 	self.interface:add(Button.new(
@@ -37,8 +37,8 @@ function selectMap:load()
 		Rect.new(left,top+margin*2,128,64),
 		function() 
 			mapName = "maps.lava"
+			game:load()
 			game:set()
-			gameState:load()
 		end
 	))
 	self.interface:add(Button.new(
@@ -46,20 +46,20 @@ function selectMap:load()
 		Rect.new(left,top+margin*3,128,64),
 		function() 
 			mapName = "maps.clouds"
+			game:load()
 			game:set()
-			gameState:load()
 		end
 	))
 	self.interface:add(Button.new(
 		"Back",
 		Rect.new(left,top+margin*4,128,64),
 		function() 
-			selectCharacters:set()
 			for i, selector in pairs(selectCharacters.selectors) do
 				if selector:getState() == "ready" then
 					selector:setState("joined")
 				end 
 			end
+			selectCharacters:set()
 		end
 	))
 	self.title = AnimatedText.new(
@@ -80,8 +80,12 @@ function selectMap:keypressed(key,scancode,isrepeat)
 	self.interface:keypressed(key,scancode,isreapeat)
 
 	if scancode == "escape" then
-		selectMode:set()
-		gameState:load()
+		for i, selector in pairs(selectCharacters.selectors) do
+			if selector:getState() == "ready" then
+				selector:setState("joined")
+			end 
+		end
+		selectCharacters:set()
 	end
 end
 
@@ -93,8 +97,12 @@ function selectMap:gamepadpressed(joystick,button)
 	self.interface:gamepadpressed(inputs[1].joystick,button)
 
 	if joystick == inputs[1].joystick and button == "b" then
-		selectMode:set()
-		gameState:load()
+		for i, selector in pairs(selectCharacters.selectors) do
+			if selector:getState() == "ready" then
+				selector:setState("joined")
+			end 
+		end
+		selectCharacters:set()
 	end
 end
 

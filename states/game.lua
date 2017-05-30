@@ -75,16 +75,16 @@ function game:load()
 		"Change map",
 		Rect.new(left,top + margin * 1,256,64),
 		function() 
-			selectMap:set()
-			gameState:load()
+			selectMap:load()
+			selectMap:set()	
 		end
 	))
 	self.interface:add(Button.new(
 		"Back to main menu",
 		Rect.new(left-32,top + margin * 2,320,64),
-		function() 
+		function()
+			menu:load() 
 			menu:set()
-			gameState:load()
 		end
 	))
 	self.interface:add(Button.new(

@@ -99,6 +99,11 @@ function Lava:update(dt)
 					)
 				)
 			end
+			if not player.sfx.splash:isPlaying() then
+				player.sfx.splash.source:setPitch(love.math.random(0.75,1))
+
+				player.sfx.splash:playAt(player.pos)
+			end
 
 			if game.chat == player.slot 
 			or game.god.state == "lighting" 

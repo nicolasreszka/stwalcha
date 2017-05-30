@@ -34,8 +34,8 @@ function options:load()
 			data = data .. "volume = " .. love.audio.getVolume()
 			data = data .. ";"
 			love.filesystem.write("settings.txt",data)
+			menu:load()
 			menu:set()
-			gameState:load()
 		end
 	))
 end
@@ -56,8 +56,8 @@ function options:keypressed(key,scancode,isrepeat)
 	self.interface:keypressed(key,scancode,isreapeat)
 
 	if scancode == "escape" then
+		menu:load()
 		menu:set()
-		gameState:load()
 	end
 end
 
@@ -69,8 +69,8 @@ function options:gamepadpressed(joystick,button)
 	self.interface:gamepadpressed(inputs[1].joystick,button)
 
 	if joystick == inputs[1].joystick and button == "b" then
+		menu:load()
 		menu:set()
-		gameState:load()
 	end
 end
 

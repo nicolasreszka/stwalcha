@@ -79,8 +79,8 @@ function controls:load()
 				data = data .. "back" .. i .. " = " .. input.back .. ";"
 			end
 			love.filesystem.write("controls.txt",data)
+			menu:load()
 			menu:set()
-			gameState:load()
 		end
 	)
 	self.interface:add(1,backButton)

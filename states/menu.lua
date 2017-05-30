@@ -11,24 +11,24 @@ function menu:load()
 		"Play",
 		Rect.new(left,top,256,64),
 		function() 
+			selectCharacters:load()
 			selectCharacters:set()
-			gameState:load()
 		end
 	))
 	self.interface:add(Button.new(
 		"Controls",
 		Rect.new(left,top + margin * 1,256,64),
 		function() 
+			controls:load()
 			controls:set()
-			gameState:load()
 		end
 	))
 	self.interface:add(Button.new(
 		"Options",
 		Rect.new(left,top + margin * 2,256,64),
 		function() 
+			options:load()
 			options:set()
-			gameState:load()
 		end
 	))
 	self.interface:add(Button.new(

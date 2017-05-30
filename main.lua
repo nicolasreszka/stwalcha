@@ -96,6 +96,7 @@ function love.load()
 		slide = 	love.audio.newSource("sounds/slide.wav", "static"),
 		tick = 		love.audio.newSource("sounds/tick.wav", "static"),
 		fireworks = love.audio.newSource("sounds/fireworks.wav", "stream"),
+		splash =    love.audio.newSource("sounds/splash.wav", "stream"),
 		lighting =  Sound.new(love.audio.newSource("sounds/lighting.wav", "stream")),
 		explosion = Sound.new(love.audio.newSource("sounds/explosion.wav", "stream")),
 		god = 		Sound.new(love.audio.newSource("sounds/god.wav", "stream"))
@@ -145,8 +146,8 @@ function love.load()
 	isPlaying = {false,false,false,false}
 	choosenCharacters = {nil,nil,nil,nil}
 
+	menu:load()
 	menu:set()
-	gameState:load()
 end
 
 function love.joystickadded(joystick)

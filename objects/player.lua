@@ -45,7 +45,8 @@ function Player.new(x,y,slot,character)
 		bump = Sound.new(sfx.bump),
 		land = Sound.new(sfx.land),
 		slide = Sound.new(sfx.slide),
-		tick = Sound.new(sfx.tick)
+		tick = Sound.new(sfx.tick),
+		splash = Sound.new(sfx.splash)
 	}
 
 	player.width = character.width

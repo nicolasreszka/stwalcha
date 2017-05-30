@@ -2,7 +2,6 @@
 
 -- TO DO :
 -- Background effects
--- Sound design for clouds
 -- Boom character (3 bombs in random directions instead of one)
 -- redesign "controls" et "options" menus
 -- Sound design for menus
@@ -100,6 +99,12 @@ function love.load()
 		lighting =  Sound.new(love.audio.newSource("sounds/lighting.wav", "stream")),
 		explosion = Sound.new(love.audio.newSource("sounds/explosion.wav", "stream")),
 		god = 		Sound.new(love.audio.newSource("sounds/god.wav", "stream"))
+	}
+
+	uiSfx = {
+		move = love.audio.newSource("sounds/UI/move.wav", "static"),
+		yes = love.audio.newSource("sounds/UI/yes.wav", "static"),
+		no = love.audio.newSource("sounds/UI/no.wav", "static")
 	}
 
 	if love.filesystem.exists("settings.txt") then

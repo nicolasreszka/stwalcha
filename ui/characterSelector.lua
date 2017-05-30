@@ -84,6 +84,10 @@ function CharacterSelector.new(slot)
 	selector.index = 1
 	selector.delay = Clock.new(.2)
 
+	selector.sfx = {
+		yes = uiSfx.yes:clone(),
+		no = uiSfx.no:clone()
+	}
 	return selector
 end
 
@@ -100,26 +104,36 @@ function CharacterSelector:update(dt)
 		if inputs[self.slot].jumpPressed 
 		or pointVsRect(mouse,self.joinButton) and mouse.leftPressed then
 			self.state = "joined"
+			self.sfx.yes:stop()
+			self.sfx.yes:play()
 		end
 		self.joinText:update(dt)
 	elseif self.state == "joined" then
 		if inputs[self.slot].jumpPressed then
 			self.state = "ready"
+			self.sfx.yes:stop()
+			self.sfx.yes:play()
 		end
 		if pointVsRect(mouse,self.readyButton)  then
 			if mouse.leftPressed then
 				self.state = "ready"
+				self.sfx.yes:stop()
+				self.sfx.yes:play()
 			end
 			self.readyButtonText:update(dt)
 		end
 
 		if inputs[self.slot].backPressed then
 			self.state = "inactive"
+			self.sfx.no:stop()
+			self.sfx.no:play()
 		end
 
 		if pointVsRect(mouse,self.leaveButton)  then
 			if mouse.leftPressed then
 				self.state = "inactive"
+				self.sfx.no:stop()
+				self.sfx.no:play()
 			end
 			self.leaveText:update(dt)
 		end
@@ -175,6 +189,8 @@ function CharacterSelector:update(dt)
 		if inputs[self.slot].backPressed
 		or pointVsRect(mouse,self.joinButton) and mouse.leftPressed then
 			self.state = "joined"
+			self.sfx.no:stop()
+			self.sfx.no:play()
 		end
 		self.readyText:update(dt)
 	end

@@ -71,6 +71,7 @@ function selectCharacters:update(dt)
 	end
 
 	if isEveryoneLeft or self.backHover and mouse.leftPressed then
+		uiSfx.no:play()
 		menu:set()
 		menu:load()
 	end

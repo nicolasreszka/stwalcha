@@ -54,6 +54,7 @@ function selectMap:load()
 		"Back",
 		Rect.new(left,top+margin*4,128,64),
 		function() 
+			uiSfx.no:play()
 			for i, selector in pairs(selectCharacters.selectors) do
 				if selector:getState() == "ready" then
 					selector:setState("joined")

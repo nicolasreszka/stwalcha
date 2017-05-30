@@ -68,6 +68,7 @@ function game:load()
 		"Resume",
 		Rect.new(left,top,256,64),
 		function() 
+			uiSfx.yes:play()
 			self.pause = not self.pause
 		end
 	))
@@ -75,6 +76,7 @@ function game:load()
 		"Change map",
 		Rect.new(left,top + margin * 1,256,64),
 		function() 
+			uiSfx.no:play()
 			selectMap:load()
 			selectMap:set()	
 		end
@@ -83,6 +85,7 @@ function game:load()
 		"Back to main menu",
 		Rect.new(left-32,top + margin * 2,320,64),
 		function()
+			uiSfx.no:play()
 			menu:load() 
 			menu:set()
 		end

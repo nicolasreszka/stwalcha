@@ -35,7 +35,9 @@ end
 
 function ListInterface:mousemoved(x,y,dx,dy,istouch) 
 	for i, object in pairs(self.objects) do
-		if object:hover() then
+		if object:hover() and i~= self.index then
+			uiSfx.move:stop()
+			uiSfx.move:play()
 			self.index = i
 		end
 	end
@@ -152,6 +154,8 @@ function ListInterface:update(dt)
 			else 	
 				self.index = self.size
 			end
+			uiSfx.move:stop()
+			uiSfx.move:play()
 			self.delay:tick()
 		end
 	elseif self.keyNext then
@@ -161,6 +165,8 @@ function ListInterface:update(dt)
 			else 	
 				self.index = 1
 			end
+			uiSfx.move:stop()
+			uiSfx.move:play()
 			self.delay:tick()
 		end
 	else 

@@ -11,6 +11,7 @@ function menu:load()
 		"Play",
 		Rect.new(left,top,256,64),
 		function() 
+			uiSfx.yes:play()
 			selectCharacters:load()
 			selectCharacters:set()
 		end
@@ -19,6 +20,7 @@ function menu:load()
 		"Controls",
 		Rect.new(left,top + margin * 1,256,64),
 		function() 
+			uiSfx.yes:play()
 			controls:load()
 			controls:set()
 		end
@@ -27,6 +29,7 @@ function menu:load()
 		"Options",
 		Rect.new(left,top + margin * 2,256,64),
 		function() 
+			uiSfx.yes:play()
 			options:load()
 			options:set()
 		end

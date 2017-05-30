@@ -2,7 +2,6 @@
 
 -- TO DO :
 -- Background effects
--- Sound design for lava
 -- Sound design for clouds
 -- Boom character (3 bombs in random directions instead of one)
 -- redesign "controls" et "options" menus
@@ -97,6 +96,7 @@ function love.load()
 		tick = 		love.audio.newSource("sounds/tick.wav", "static"),
 		fireworks = love.audio.newSource("sounds/fireworks.wav", "stream"),
 		splash =    love.audio.newSource("sounds/splash.wav", "stream"),
+		lava =      Sound.new(love.audio.newSource("sounds/lava.wav", "stream")),
 		lighting =  Sound.new(love.audio.newSource("sounds/lighting.wav", "stream")),
 		explosion = Sound.new(love.audio.newSource("sounds/explosion.wav", "stream")),
 		god = 		Sound.new(love.audio.newSource("sounds/god.wav", "stream"))

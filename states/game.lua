@@ -162,6 +162,9 @@ end
 
 function game:update(dt)
 	if self.pause then
+		if sfx.lava:isPlaying() then
+			sfx.lava:pause()
+		end
 		self.interface:update(dt)
 		self.title:update(dt)
 	else 
@@ -182,6 +185,9 @@ function game:update(dt)
 		end
 
 		if mapName == "maps.lava" then
+			if not sfx.lava:isPlaying() then
+				sfx.lava.source:play()
+			end
 			self.lava:update(dt)
 		end
 

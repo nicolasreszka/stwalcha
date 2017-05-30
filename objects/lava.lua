@@ -24,6 +24,7 @@ function Lava.new()
 end
 
 function Lava:update(dt)
+	sfx.lava:setPosition({x=mapWidth/2,y=self.line.a.y})
 
 	if self.colorCurrent == 0 then
 		self.color:transform(

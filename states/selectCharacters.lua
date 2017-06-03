@@ -38,6 +38,8 @@ function selectCharacters:reload()
 	mapWidth = screen.w 
 	mapHeight = screen.h
 
+	game.chat = 0
+	game.halfTime = true
 	game.blocks = Group.new()
 	for tileX = 0, 63 do
 		game.blocks:add(SolidBlock.new(tileX*16,mapHeight-16))

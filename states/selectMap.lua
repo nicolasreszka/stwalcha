@@ -55,11 +55,7 @@ function selectMap:load()
 		Rect.new(left,top+margin*4,128,64),
 		function() 
 			uiSfx.no:play()
-			for i, selector in pairs(selectCharacters.selectors) do
-				if selector:getState() == "ready" then
-					selector:setState("joined")
-				end 
-			end
+			selectCharacters:reload()
 			selectCharacters:set()
 		end
 	))
@@ -81,11 +77,8 @@ function selectMap:keypressed(key,scancode,isrepeat)
 	self.interface:keypressed(key,scancode,isreapeat)
 
 	if scancode == "escape" then
-		for i, selector in pairs(selectCharacters.selectors) do
-			if selector:getState() == "ready" then
-				selector:setState("joined")
-			end 
-		end
+		uiSfx.no:play()
+		selectCharacters:reload()
 		selectCharacters:set()
 	end
 end
@@ -98,11 +91,8 @@ function selectMap:gamepadpressed(joystick,button)
 	self.interface:gamepadpressed(inputs[1].joystick,button)
 
 	if joystick == inputs[1].joystick and button == "b" then
-		for i, selector in pairs(selectCharacters.selectors) do
-			if selector:getState() == "ready" then
-				selector:setState("joined")
-			end 
-		end
+		uiSfx.no:play()
+		selectCharacters:reload()
 		selectCharacters:set()
 	end
 end

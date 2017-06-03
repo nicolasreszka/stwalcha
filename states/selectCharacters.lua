@@ -19,6 +19,39 @@ function selectCharacters:load()
 	self.backButton = Rect.new(32,680,128,64)
 	self.backHover = false
 	self.wait = Clock.new(.2)
+
+	mapWidth = screen.w 
+	mapHeight = screen.h
+
+	game.blocks = Group.new()
+	for tileX = 0, 63 do
+		game.blocks:add(SolidBlock.new(tileX*16,mapHeight-16))
+	end
+
+	game.players = Group.new()
+	game.customParticles = Group.new()
+	initializeParticles() 
+
+end
+
+function selectCharacters:reload()
+	mapWidth = screen.w 
+	mapHeight = screen.h
+
+	game.blocks = Group.new()
+	for tileX = 0, 63 do
+		game.blocks:add(SolidBlock.new(tileX*16,mapHeight-16))
+	end
+
+	game.players = Group.new()
+	game.customParticles = Group.new()
+	initializeParticles() 
+
+	for i, selector in pairs(self.selectors) do
+		if selector:getState() == "ready" then
+			selector:setState("joined")
+		end 
+	end
 end
 
 function selectCharacters:isEveryoneReady()
@@ -45,6 +78,11 @@ function selectCharacters:update(dt)
 	for i, input in pairs(inputs) do
 		input:update()
 	end
+
+	game.blocks:update(dt)
+	game.customParticles:update(dt)
+	game.players:update()
+	updateParticles()
 	
 	local isEveryoneLeft = true
 	for i, selector in pairs(self.selectors) do
@@ -79,18 +117,32 @@ function selectCharacters:update(dt)
 end
 
 function selectCharacters:draw()
+	game.blocks:draw()
+	game.customParticles:draw()
+	game.players:draw()
+	drawParticles()
+
 	for i, selector in pairs(self.selectors) do
 		selector:draw()
 	end
 	if self.backHover then
 		self.backText:draw()
+		self.backButton:draw("line")
 	else
+		BLACK:set()
+		love.graphics.printf(
+			"Back",
+			self.backText.x-3,self.backText.y-3,
+			self.backText.limit,"center"
+		)
+		self.backButton:draw("line")
 		GREEN:set()
 		love.graphics.printf(
 			"Back",
 			self.backText.x,self.backText.y,
 			self.backText.limit,"center"
 		)
+		self.backButton:draw("line")
 	end
-	self.backButton:draw("line")
+	
 end

@@ -5,8 +5,8 @@ function Lava.new()
 	local lava = {}
 	setmetatable(lava, Lava)
 	lava.line = Line.new(
-		-32,mapHeight*0.75,
-		mapWidth+32,mapHeight*0.75
+		-92,mapHeight*0.75,
+		mapWidth+92,mapHeight*0.75
 	)
 	lava.move = 0
 	lava.k = 0.5
@@ -137,8 +137,8 @@ function Lava:draw()
 		{
 			self.line.a.x,self.line.a.y,
 			self.line.b.x,self.line.b.y,
-			self.line.b.x,mapHeight+32,
-			self.line.a.x,mapHeight+32
+			self.line.b.x,mapHeight+92,
+			self.line.a.x,mapHeight+92
 		}
 	)
 end

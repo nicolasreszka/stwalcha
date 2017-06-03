@@ -88,6 +88,9 @@ function CharacterSelector.new(slot)
 		yes = uiSfx.yes:clone(),
 		no = uiSfx.no:clone()
 	}
+
+	selector.player = nil
+
 	return selector
 end
 
@@ -97,6 +100,19 @@ end
 
 function CharacterSelector:getState()
 	return self.state
+end
+
+function CharacterSelector:addPlayer()
+	self.player = Player.new(
+		256+96*self.slot,screen.h-256,
+		self.slot,
+		characters[self.index]
+	)
+	game.players:add(self.player)
+end
+
+function CharacterSelector:removePlayer()
+	game.players:remove(self.player)
 end
 
 function CharacterSelector:update(dt)
@@ -118,7 +134,7 @@ function CharacterSelector:update(dt)
 			if mouse.leftPressed then
 				self.state = "ready"
 				self.sfx.yes:stop()
-				self.sfx.yes:play()
+				self.sfx.yes:play()	
 			end
 			self.readyButtonText:update(dt)
 		end
@@ -183,6 +199,7 @@ function CharacterSelector:update(dt)
 
 		if self.state == "ready" then
 			choosenCharacters[self.slot] = characters[self.index]
+			self:addPlayer()
 		end
 
 	elseif self.state == "ready" then
@@ -191,6 +208,7 @@ function CharacterSelector:update(dt)
 			self.state = "joined"
 			self.sfx.no:stop()
 			self.sfx.no:play()
+			self:removePlayer()
 		end
 		self.readyText:update(dt)
 	end

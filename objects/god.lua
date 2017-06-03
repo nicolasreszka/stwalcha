@@ -109,6 +109,7 @@ function God:choiceAutomate()
 		)
 		if self.waitTimer:alarm() then
 			self.player.input:vibration(0.5)
+			sfx.lighting:stop()
 			sfx.lighting:playAt(self.player.pos)
 
 			self.waitTimer:reset()

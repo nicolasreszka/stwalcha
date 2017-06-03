@@ -93,12 +93,12 @@ function love.load()
 		land = 		love.audio.newSource("sounds/land.wav", "static"),
 		slide = 	love.audio.newSource("sounds/slide.wav", "static"),
 		tick = 		love.audio.newSource("sounds/tick.wav", "static"),
-		fireworks = love.audio.newSource("sounds/fireworks.wav", "stream"),
-		splash =    love.audio.newSource("sounds/splash.wav", "stream"),
-		lava =      Sound.new(love.audio.newSource("sounds/lava.wav", "stream")),
-		lighting =  Sound.new(love.audio.newSource("sounds/lighting.wav", "stream")),
-		explosion = Sound.new(love.audio.newSource("sounds/explosion.wav", "stream")),
-		god = 		Sound.new(love.audio.newSource("sounds/god.wav", "stream"))
+		fireworks = love.audio.newSource("sounds/fireworks.wav", "static"),
+		splash =    love.audio.newSource("sounds/splash.wav", "static"),
+		lava =      Sound.new(love.audio.newSource("sounds/lava.wav", "static")),
+		lighting =  Sound.new(love.audio.newSource("sounds/lighting.wav", "static")),
+		explosion = Sound.new(love.audio.newSource("sounds/explosion.wav", "static")),
+		god = 		Sound.new(love.audio.newSource("sounds/god.wav", "static"))
 	}
 
 	uiSfx = {

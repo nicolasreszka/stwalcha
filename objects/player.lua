@@ -87,6 +87,7 @@ function Player:update()
 	self.moveDirection = self.input.rightDown - self.input.leftDown
 
 	self:getGrounded()
+
  	self:landAndTakeOff()
 	
  	if self.name == "Mary" then
@@ -175,6 +176,7 @@ function Player:update()
 		end
 	end
 
+	self.vx = clamp(self.vx,-72,72)
 	self:horizontalCollisions()
 	self:verticalCollisions()
 
@@ -413,10 +415,18 @@ function Player:kickOtherPlayers()
 		else 
 			-- Throw player
 			if not player.thrown then
-				player.vx = self.vx*1.75 
-				player.thrown = true
-				if player.grounded then
-					player.vy = -math.max(math.abs(self.vx)*0.75,4)
+				if self.name == "Rascal" then
+					player.vx = self.vx*3.5
+					player.thrown = true
+					if player.grounded then
+						player.vy = -math.max(math.abs(self.vx)*1.25,6)
+					end
+				else
+					player.vx = self.vx*1.75 
+					player.thrown = true
+					if player.grounded then
+						player.vy = -math.max(math.abs(self.vx)*0.75,4)
+					end
 				end
 				player.pos.x = player.rect.pos.x
 				player.input:vibration(thrownDuration)

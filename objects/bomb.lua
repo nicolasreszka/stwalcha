@@ -10,6 +10,7 @@ function Bomb.new(x,y)
 	bomb.direction = love.math.random(0,360)
 	bomb.circle = Circle.new(x,y,16)
 	bomb.speed = 16
+	bomb.clock = Clock.new(5)
 	return bomb
 end
 
@@ -29,8 +30,10 @@ function Bomb:update(dt)
 		self.circle.pos.y = mapHeight-self.circle.radius/4
 	end
 
+	self.clock:tick()
 	if game.players:rectsVsCircle(self.circle) 
-	or game.blocks:rectsVsCircle(self.circle) then
+	or game.blocks:rectsVsCircle(self.circle)
+	or self.clock:alarm() then
 		game.explosions:add(Explosion.new(self.circle.pos.x,self.circle.pos.y,92))
 		game.bombs:remove(self)
 	end

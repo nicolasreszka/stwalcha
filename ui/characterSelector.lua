@@ -86,7 +86,9 @@ function CharacterSelector.new(slot)
 
 	selector.sfx = {
 		yes = uiSfx.yes:clone(),
-		no = uiSfx.no:clone()
+		no = uiSfx.no:clone(),
+		plus = uiSfx.plus:clone(),
+		minus = uiSfx.minus:clone()
 	}
 
 	selector.player = nil
@@ -174,6 +176,8 @@ function CharacterSelector:update(dt)
 				else 	
 					self.index = #characters
 				end
+				self.sfx.minus:stop()
+				self.sfx.minus:play()
 				self.delay:tick()
 			end
 		elseif inputs[self.slot].rightDown ~= 0
@@ -184,6 +188,8 @@ function CharacterSelector:update(dt)
 				else 	
 					self.index = 1
 				end
+				self.sfx.plus:stop()
+				self.sfx.plus:play()
 				self.delay:tick()
 			end
 		else 

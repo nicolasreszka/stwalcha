@@ -104,7 +104,9 @@ function love.load()
 	uiSfx = {
 		move = love.audio.newSource("sounds/UI/move.wav", "static"),
 		yes = love.audio.newSource("sounds/UI/yes.wav", "static"),
-		no = love.audio.newSource("sounds/UI/no.wav", "static")
+		no = love.audio.newSource("sounds/UI/no.wav", "static"),
+		minus = love.audio.newSource("sounds/UI/minus.wav", "static"),
+		plus = love.audio.newSource("sounds/UI/plus.wav", "static")
 	}
 
 	if love.filesystem.exists("settings.txt") then

@@ -97,6 +97,13 @@ function Switch:update(dt)
 		or self.mouseOK and self:hover()
 		or self.on and self.keyOFF 
 		or not self.on and self.keyON  then
+			if self.on then
+				uiSfx.minus:stop()
+				uiSfx.minus:play()
+			else
+				uiSfx.plus:stop()
+				uiSfx.plus:play()
+			end
 			self.on = not self.on
 			self.callback(self.on)
 		end

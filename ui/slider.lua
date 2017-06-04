@@ -176,12 +176,16 @@ function Slider:update(dt)
 				self.value = approachValues(self.value,0,step)
 				self:moveKnob()
 				self.delay:tick()
+				uiSfx.minus:stop()
+				uiSfx.minus:play()
 			end
 		elseif self.keyPlus then
 			if self.delay:zero() then
 				self.value = approachValues(self.value,1,step)
 				self:moveKnob()
 				self.delay:tick()
+				uiSfx.plus:stop()
+				uiSfx.plus:play()
 			end
 		else 
 			self.delay:reset()
@@ -210,6 +214,13 @@ function Slider:update(dt)
 		end
 			
 		if self.previousValue ~= self.value then
+			if self.grabbed then
+				if self.previousValue > self.value then
+					uiSfx.minus:play()
+				else
+					uiSfx.plus:play()
+				end
+			end
 			self.callback(self.value)
 		end
 		

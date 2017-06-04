@@ -4,70 +4,73 @@ controls = State.new()
 
 function controls:load()
 	self.interface = KeyBindingInterface.new()
-	local componentWidth = 128
+	local componentWidth = 172
 	local componentHeight = 64
-	local margin = 32
-	for y=1,4 do	
-		self.interface:add(1,KeyBinder.new(
+	local xInterface = 192
+	local yInterface = 128
+	local xMargin = 24
+	local yMargin = 32
+	for x=1,4 do	
+		self.interface:add(x,KeyBinder.new(
 			"left",
-			inputs[y].left,
+			inputs[x].left,
 			Rect.new(
-				256,
-				128+(componentHeight+margin)*(y-1),
+				xInterface+(componentWidth +xMargin)*(x-1),
+				yInterface+(componentHeight+yMargin),
 				componentWidth,
 				componentHeight
 			),
 			function(key) 
-				inputs[y].left = key
+				inputs[x].left = key
 			end
 		))
-		self.interface:add(2,KeyBinder.new(
+		self.interface:add(x,KeyBinder.new(
 			"right",
-			inputs[y].right,
+			inputs[x].right,
 			Rect.new(
-				256+(componentWidth +margin),
-				128+(componentHeight+margin)*(y-1),
+				xInterface+(componentWidth +xMargin)*(x-1),
+				yInterface+(componentHeight+yMargin)*2,
 				componentWidth,
 				componentHeight
 			),
 			function(key) 
-				inputs[y].right = key
+				inputs[x].right = key
 			end
 		))
-		self.interface:add(3,KeyBinder.new(
+		self.interface:add(x,KeyBinder.new(
 			"jump",
-			inputs[y].jump,
+			inputs[x].jump,
 			Rect.new(
-				256+(componentWidth +margin)*2,
-				128+(componentHeight+margin)*(y-1),
+				xInterface+(componentWidth +xMargin)*(x-1),
+				yInterface+(componentHeight+yMargin)*3,
 				componentWidth,
 				componentHeight
 			),
 			function(key) 
-				inputs[y].jump = key
+				inputs[x].jump = key
 			end
 		))
-		self.interface:add(4,KeyBinder.new(
+		self.interface:add(x,KeyBinder.new(
 			"back",
-			inputs[y].back,
+			inputs[x].back,
 			Rect.new(
-				256+(componentWidth +margin)*3,
-				128+(componentHeight+margin)*(y-1),
+				xInterface+(componentWidth +xMargin)*(x-1),
+				yInterface+(componentHeight+yMargin)*4,
 				componentWidth,
 				componentHeight
 			),
 			function(key) 
-				inputs[y].back = key
+				inputs[x].back = key
 			end
 		))
 	end
 
-	local backButton = Button.new(
-		"back",
+	self.backButton = Button.new(
+		"Back",
 		Rect.new(
-			256,
-			128+(componentHeight+margin)*4,
-			128,
+			xInterface,
+			yInterface+(componentHeight+yMargin)*5,
+			componentWidth,
 			componentHeight
 		),
 		function() 
@@ -79,14 +82,21 @@ function controls:load()
 				data = data .. "back" .. i .. " = " .. input.back .. ";"
 			end
 			love.filesystem.write("controls.txt",data)
+			uiSfx.no:stop()
+			uiSfx.no:play()
 			menu:load()
 			menu:set()
 		end
 	)
-	self.interface:add(1,backButton)
-	self.interface:add(2,backButton)
-	self.interface:add(3,backButton)
-	self.interface:add(4,backButton)
+	self.interface:add(1,self.backButton)
+	self.interface:add(2,self.backButton)
+	self.interface:add(3,self.backButton)
+	self.interface:add(4,self.backButton)
+
+	self.title = AnimatedText.new(
+		220,48,"Controls",
+		1,10,string.len("Controls")*72
+	)
 end
 
 function controls:mousemoved(x,y,dx,dy,istouch) 
@@ -119,18 +129,29 @@ end
 
 function controls:update(dt)
 	self.interface:update(dt)
+	self.title:update(dt)
 end
 
 function controls:draw()
+	love.graphics.setFont(font72)
+	self.title:draw()
+
 	for i=1,4 do
+		colors[i]:set()
 		love.graphics.setFont(font32)
-		love.graphics.print("player " .. i, 32, 32+96*i)
+		love.graphics.print(
+			"Player " .. i, 
+			192+(string.len("Player")*32+4)*(i-1), 
+			160
+		)
 	end
 
-	love.graphics.print("left", 256, 64)
-	love.graphics.print("right", 416,64)
-	love.graphics.print("jump", 576, 64)
-	love.graphics.print("back", 736, 64)
+	YELLOW:set()
+	love.graphics.print("Left", 48, 230)
+	love.graphics.print("Right",48, 230+96)
+	love.graphics.print("Jump", 48, 230+96*2)
+	love.graphics.print("Back", 48, 230+96*3)
 
 	self.interface:draw()
+	self.backButton.rect:draw("line")
 end

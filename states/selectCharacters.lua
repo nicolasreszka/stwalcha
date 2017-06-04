@@ -75,6 +75,14 @@ function selectCharacters:isEveryoneReady()
 	end
 end
 
+function selectCharacters:keypressed(key,scancode,isrepeat)
+	if scancode == "escape" then
+		uiSfx.no:play()
+		menu:load()
+		menu:set()		
+	end
+end
+
 function selectCharacters:update(dt)
 	
 	for i, input in pairs(inputs) do
@@ -101,8 +109,8 @@ function selectCharacters:update(dt)
 		for i, selector in pairs(self.selectors) do
 			isPlaying[i] = (selector:getState() == "ready")
 		end
-		selectMap:set()
 		selectMap:load()
+		selectMap:set()
 	end
 
 	self.backHover = pointVsRect(mouse,self.backButton)
@@ -112,8 +120,8 @@ function selectCharacters:update(dt)
 
 	if isEveryoneLeft or self.backHover and mouse.leftPressed then
 		uiSfx.no:play()
-		menu:set()
 		menu:load()
+		menu:set()
 	end
 
 end

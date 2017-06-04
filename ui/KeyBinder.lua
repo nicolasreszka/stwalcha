@@ -23,6 +23,8 @@ function KeyBinder:mousepressed(x,y,button,istouch)
 		self.mouseOK = true
 		if self.rebinding and not self:hover() then
 			self.rebinding = false
+			uiSfx.no:stop()
+			uiSfx.no:play()
 			gameState:mousemoved(mouse.x,mouse.y)
 		end
 	end
@@ -37,6 +39,8 @@ function KeyBinder:keypressed(key,scancode,isrepeat)
 		self.key = key
 		self.callback(key)
 		self.rebinding = false
+		uiSfx.yes:stop()
+		uiSfx.yes:play()
 	end
 end
 
@@ -54,6 +58,8 @@ function KeyBinder:update(dt)
 	if self.active then
 		if self.keyOK 
 		or self.mouseOK and self:hover() then
+			uiSfx.yes:stop()
+			uiSfx.yes:play()
 			self.rebinding = not self.rebinding
 		end
 	else
@@ -77,5 +83,10 @@ function KeyBinder:draw()
 
 	self.rect:draw("line")
 	love.graphics.setFont(font32)
-	love.graphics.print(self.key, self.rect.left+8, self.rect.top+8);
+	love.graphics.printf(
+		self.key,
+		self.rect.left, 
+		self.rect.top+12,
+		self.rect.w, "center"
+	);
 end

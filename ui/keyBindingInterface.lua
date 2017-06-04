@@ -32,9 +32,13 @@ function KeyBindingInterface:mousemoved(x,y,dx,dy,istouch)
 	if not self.objects[self.index.x][self.index.y].rebinding then
 		for x=1,self.width do
 			for y,object in pairs(self.objects[x]) do 
-				if object:hover() then
+				if object:hover() 
+				and not (x == self.index.x and y == self.index.y)
+				and not (x > 1 and y == 5) then
 					self.index.x = x
 					self.index.y = y
+					uiSfx.move:stop()
+					uiSfx.move:play()
 				end
 			end
 		end
@@ -46,17 +50,19 @@ function KeyBindingInterface:mousepressed(x,y,button,istouch)
 end
 
 function KeyBindingInterface:keypressed(key,scancode,isrepeat)
-	if scancode == "left" then
-		self.keyLeft = true
-	end
-	if scancode == "right" then
-		self.keyRight = true
-	end
-	if scancode == "up" then
-		self.keyUp = true
-	end
-	if scancode == "down" then
-		self.keyDown = true
+	if not self.objects[self.index.x][self.index.y].rebinding then
+		if scancode == "left" then
+			self.keyLeft = true
+		end
+		if scancode == "right" then
+			self.keyRight = true
+		end
+		if scancode == "up" then
+			self.keyUp = true
+		end
+		if scancode == "down" then
+			self.keyDown = true
+		end
 	end
 
 	if scancode == "escape" then
@@ -66,6 +72,8 @@ function KeyBindingInterface:keypressed(key,scancode,isrepeat)
 			menu:set()
 			gameState:load()
 		end
+		uiSfx.no:stop()
+		uiSfx.no:play()
 	end
 
 	self.objects[self.index.x][self.index.y]:keypressed(key,scancode,isrepeat)
@@ -164,6 +172,8 @@ function KeyBindingInterface:update(dt)
 				else 	
 					self.index.y = self.height
 				end
+				uiSfx.move:stop()
+				uiSfx.move:play()
 				self.delay:tick()
 			end
 		elseif self.keyDown then
@@ -173,6 +183,8 @@ function KeyBindingInterface:update(dt)
 				else 	
 					self.index.y = 1
 				end
+				uiSfx.move:stop()
+				uiSfx.move:play()
 				self.delay:tick()
 			end
 		elseif self.keyLeft then
@@ -182,6 +194,8 @@ function KeyBindingInterface:update(dt)
 				else 	
 					self.index.x = self.width
 				end
+				uiSfx.move:stop()
+				uiSfx.move:play()
 				self.delay:tick()
 			end
 		elseif self.keyRight then
@@ -191,6 +205,8 @@ function KeyBindingInterface:update(dt)
 				else 	
 					self.index.x = 1
 				end
+				uiSfx.move:stop()
+				uiSfx.move:play()
 				self.delay:tick()
 			end
 		else 
@@ -215,17 +231,33 @@ function KeyBindingInterface:update(dt)
 			elseif self.objects[self.index.x][self.index.y] ~= object then
 				object.active = false
 			end
-			object:update(dt)
+			if not (x > 1 and y == 5) then
+				object:update(dt)
+			end
 		end
 	end
 end
 
 function KeyBindingInterface:draw()
+	love.graphics.setFont(font32)
+	if self.objects[self.index.x][self.index.y].rebinding then
+		YELLOW:set()
+		love.graphics.print("[Any]: rebind key, [Escape]: cancel",420,620)
+	elseif self.index.y == 5 then
+		RED:set()
+		love.graphics.print("Back to main menu",420,620)
+	else
+		GREEN:set()
+		love.graphics.print("[Enter]: select key",420,620)
+	end
+
 	for x=1,self.width do
 		for y,object in pairs(self.objects[x]) do 
 			object:draw()
 		end
 	end
+
+
 end
 
 

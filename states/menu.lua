@@ -1,6 +1,8 @@
 --Author : Nicolas Reszka
 
 menu = State.new()
+menu.saveClock = Clock.new(0.5)
+menu.saveClock:forceAlarm()
 
 function menu:load()
 	self.interface = ListInterface.new()
@@ -82,6 +84,10 @@ end
 function menu:update(dt)
 	self.interface:update(dt)
 	self.title:update(dt)
+
+	if not self.saveClock:alarm() then
+		self.saveClock:tick()
+	end
 end
 
 function menu:draw()
@@ -91,4 +97,14 @@ function menu:draw()
 	-- love.graphics.setFont(font16)
 	-- love.graphics.print("2017 Nicolas Reszka", 32,700)
 	self.interface:draw()
+
+	if not self.saveClock:alarm() then
+		YELLOW:set()
+		love.graphics.printf(
+			"saving...", 
+			0,
+			720,
+			screen.w, "right"
+		)
+	end
 end

@@ -69,11 +69,10 @@ function KeyBindingInterface:keypressed(key,scancode,isrepeat)
 		if self.objects[self.index.x][self.index.y].rebinding then
 			self.objects[self.index.x][self.index.y].rebinding = false
 		else 	
+			controls.backButton.callback()
+			menu:load()
 			menu:set()
-			gameState:load()
 		end
-		uiSfx.no:stop()
-		uiSfx.no:play()
 	end
 
 	self.objects[self.index.x][self.index.y]:keypressed(key,scancode,isrepeat)
@@ -112,8 +111,9 @@ function KeyBindingInterface:gamepadpressed(joystick,button)
 		if self.objects[self.index.x][self.index.y].rebinding then
 			self.objects[self.index.x][self.index.y].rebinding = false
 		else 	
+			controls.backButton.callback()
+			menu:load()
 			menu:set()
-			gameState:load()
 		end
 	end
 

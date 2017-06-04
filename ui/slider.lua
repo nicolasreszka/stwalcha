@@ -18,15 +18,15 @@ function Slider.new(label,rect,value,callback,interfaceOrientation)
 
 	if interfaceOrientation == "horizontal" then
 		slider.track = Rect.new(
-			rect.pos.x+rect.w/2-16,
-			rect.pos.y+rect.h/2-16,
-			trackThickness, rect.h/2 
+			rect.pos.x+rect.w*0.75-72,
+			rect.pos.y+rect.h*0.25,
+			trackThickness, rect.h
 		)
 	else 
 		slider.track = Rect.new(
-			rect.pos.x+rect.w/2-16,
-			rect.pos.y+rect.h/2-16,
-			rect.w/2, trackThickness 
+			rect.pos.x+rect.w*0.75-72,
+			rect.pos.y+rect.h*0.25,
+			rect.w*0.25, trackThickness 
 		)
 	end
 	slider.knob = Rect.new(
@@ -235,12 +235,12 @@ function Slider:draw()
 	else 
 		GREEN:set()
 	end
-	self.rect:draw("line")
+	--self.rect:draw("line")
 	self.track:draw("line")
 	self.knob:draw("fill")
 
 	love.graphics.setFont(font32)
-	love.graphics.print(self.label, self.rect.left+8, self.rect.top+8)
-	love.graphics.setFont(font16)
-	love.graphics.print(math.floor(self.value*100), self.track.left-32, self.track.top)
+	love.graphics.print(self.label, self.rect.left+24, self.rect.top)
+	love.graphics.setFont(font16)	
+	love.graphics.print(math.floor(self.value*100) .. "%", self.track.right+12, self.track.top)
 end

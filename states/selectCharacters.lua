@@ -28,6 +28,8 @@ function selectCharacters:load()
 		game.blocks:add(SolidBlock.new(tileX*16,mapHeight-16))
 	end
 
+	game.chat = 0
+	game.halfTime = true
 	game.players = Group.new()
 	game.customParticles = Group.new()
 	initializeParticles() 

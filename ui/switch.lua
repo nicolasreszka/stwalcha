@@ -113,15 +113,15 @@ function Switch:draw()
 	else 
 		GREEN:set()
 	end
-	self.rect:draw("line")
+	--self.rect:draw("line")
 
 	love.graphics.setFont(font32)
-	love.graphics.print(self.label, self.rect.left+8, self.rect.top+8)
+	love.graphics.print(self.label, self.rect.left+24, self.rect.top)
 
 	if self.on then
-		love.graphics.print("on", self.rect.right-64, self.rect.top+8);
+		love.graphics.print("On", self.rect.right-64, self.rect.top);
 	else
-		love.graphics.print("off", self.rect.right-64, self.rect.top+8);
+		love.graphics.print("Off", self.rect.right-64, self.rect.top);
 	
 	end
 

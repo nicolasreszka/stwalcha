@@ -86,6 +86,7 @@ function controls:load()
 			uiSfx.no:play()
 			menu:load()
 			menu:set()
+			menu.saveClock:reset()
 		end
 	)
 	self.interface:add(1,self.backButton)

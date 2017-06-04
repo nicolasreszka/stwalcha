@@ -4,9 +4,12 @@ options = State.new()
 
 function options:load()
 	self.interface = ListInterface.new()
+	local left = 160
+	local top = 256
+	local margin = 92
 	self.interface:add(Switch.new(
-		"fullscreen",
-		Rect.new(64,64,360,64),
+		"Fullscreen",
+		Rect.new(left,top,720,32),
 		love.window.getFullscreen(),
 		function(on) 
 			if on then
@@ -17,16 +20,16 @@ function options:load()
 		end
 	))
 	self.interface:add(Slider.new(
-		"volume",
-		Rect.new(64,192,360,64),
+		"Volume",
+		Rect.new(left,top + margin,720,32),
 		love.audio.getVolume(),
 		function(value) 
 			love.audio.setVolume(value)
 		end
 	))
 	self.interface:add(Button.new(
-		"back",
-		Rect.new(64,320,128,64),
+		"Back",
+		Rect.new(left,top + margin * 2,128,64),
 		function() 
 			local data = ""
 			data = data .. "fullscreen = " .. booleanToString(love.window.getFullscreen())
@@ -34,10 +37,18 @@ function options:load()
 			data = data .. "volume = " .. love.audio.getVolume()
 			data = data .. ";"
 			love.filesystem.write("settings.txt",data)
+			uiSfx.no:stop()
+			uiSfx.no:play()
 			menu:load()
 			menu:set()
+			menu.saveClock:reset()
 		end
 	))
+
+	self.title = AnimatedText.new(
+		220,48,"Options",
+		1,10,string.len("Options")*72
+	)
 end
 
 function options:mousemoved(x,y,dx,dy,istouch) 
@@ -56,8 +67,7 @@ function options:keypressed(key,scancode,isrepeat)
 	self.interface:keypressed(key,scancode,isreapeat)
 
 	if scancode == "escape" then
-		menu:load()
-		menu:set()
+		self.interface.objects[3].callback()
 	end
 end
 
@@ -69,8 +79,7 @@ function options:gamepadpressed(joystick,button)
 	self.interface:gamepadpressed(inputs[1].joystick,button)
 
 	if joystick == inputs[1].joystick and button == "b" then
-		menu:load()
-		menu:set()
+		self.interface.objects[3].callback()
 	end
 end
 
@@ -84,11 +93,12 @@ end
 
 function options:update(dt)
 	self.interface:update(dt)
+	self.title:update(dt)
 end
 
 function options:draw()
-	WHITE:set()
-	love.graphics.setFont(font48)
-	love.graphics.print("Options",512,64)
+	
+	love.graphics.setFont(font72)
+	self.title:draw()
 	self.interface:draw()
 end

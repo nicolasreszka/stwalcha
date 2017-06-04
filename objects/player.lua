@@ -196,7 +196,13 @@ end
 
 function Player:explode()
 	self.input:vibration(2)
-	game.explosions:add(Explosion.new(self.pos.x,self.pos.y))
+	if self.name == "Boom" then
+		game.bombs:add(Bomb.new(self.pos.x,self.pos.y))
+		game.bombs:add(Bomb.new(self.pos.x,self.pos.y))
+		game.bombs:add(Bomb.new(self.pos.x,self.pos.y))
+	else
+		game.explosions:add(Explosion.new(self.pos.x,self.pos.y))
+	end
 	game.players:remove(self)
 end
 

@@ -14,6 +14,7 @@ function game:loadMap()
 	self.god = God.new()
 	self.customParticles = Group.new()
 	initializeParticles() 
+	self.bombs = Group.new()
 
 	if mapName == "maps.lava" then
 		self.lava = Lava.new()
@@ -175,6 +176,7 @@ function game:update(dt)
 			self.god:update()
 		end
 
+		self.bombs:update()
 		self.explosions:update()
 		if self.explosions.size == 0 and self.god.state ~= "lighting" then
 			if camera.pos.x ~= 0 or camera.pos.y ~= 0 then
@@ -221,6 +223,7 @@ function game:draw()
 		self.god:draw()
 	end
 
+	self.bombs:draw()
 	self.explosions:draw()
 	self.customParticles:draw()
 	self.players:draw()

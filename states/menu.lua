@@ -13,6 +13,7 @@ function menu:load()
 		"Play",
 		Rect.new(left,top,256,64),
 		function() 
+			menu.saveClock:forceAlarm()
 			uiSfx.yes:play()
 			selectCharacters:load()
 			selectCharacters:set()
@@ -20,7 +21,7 @@ function menu:load()
 	))
 	self.interface:add(Button.new(
 		"Controls",
-		Rect.new(left,top + margin * 1,256,64),
+		Rect.new(left,top + margin,256,64),
 		function() 
 			uiSfx.yes:play()
 			controls:load()
@@ -37,8 +38,18 @@ function menu:load()
 		end
 	))
 	self.interface:add(Button.new(
-		"Quit",
+		"Credits",
 		Rect.new(left,top + margin * 3,256,64),
+		function() 
+			menu.saveClock:forceAlarm()
+			uiSfx.yes:play()
+			credits:load()
+			credits:set()
+		end
+	))
+	self.interface:add(Button.new(
+		"Quit",
+		Rect.new(left,top + margin * 4,256,64),
 		function() 
 			love.event.quit()
 		end

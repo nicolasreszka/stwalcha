@@ -42,6 +42,7 @@ end
 
 function Screen:draw()
 	love.graphics.setColor( 0, 0, 4 )
+	--WHITE:set()
 	love.graphics.rectangle("fill",self.x,self.y,self.w*self.scale,self.h*self.scale)
 	WHITE:set()
 	love.graphics.setBlendMode("alpha","premultiplied")

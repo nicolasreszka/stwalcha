@@ -7,9 +7,10 @@ local maxRadius = 200
 local explosionShake = 4
 local aftermathShake = 2
 
-function Explosion.new(x,y)
+function Explosion.new(x,y,radius)
 	local explosion = {}
 	setmetatable(explosion, Explosion)
+	explosion.maxRadius = radius or maxRadius
 	explosion.range = Circle.new(x,y,16)
 	explosion.clock = Clock.new(1.5)
 	explosion.speed = 0
@@ -25,7 +26,7 @@ function Explosion:update()
 	self.speed = inOutExpo(6,32,self.clock)
 	self.range.radius = self.range.radius + self.speed
 
-	if self.range.radius < maxRadius then
+	if self.range.radius < self.maxRadius then
 		local list = game.players:rectsVsCircleList(self.range)
 		for i, player in pairs(list) do
 			game.players:remove(player)
@@ -71,7 +72,7 @@ end
 
 function Explosion:draw()
 	love.graphics.setColor(255,255,255)
-	if self.range.radius < maxRadius then
+	if self.range.radius < self.maxRadius then
 		self.range:draw("fill")
 	else 
 		self.range:draw("line")

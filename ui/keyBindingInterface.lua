@@ -68,6 +68,8 @@ function KeyBindingInterface:keypressed(key,scancode,isrepeat)
 	if scancode == "escape" then
 		if self.objects[self.index.x][self.index.y].rebinding then
 			self.objects[self.index.x][self.index.y].rebinding = false
+			uiSfx.no:stop()
+			uiSfx.no:play()
 		else 	
 			controls.backButton.callback()
 			menu:load()
@@ -110,6 +112,8 @@ function KeyBindingInterface:gamepadpressed(joystick,button)
 	if button == "b" then
 		if self.objects[self.index.x][self.index.y].rebinding then
 			self.objects[self.index.x][self.index.y].rebinding = false
+			uiSfx.no:stop()
+			uiSfx.no:play()
 		else 	
 			controls.backButton.callback()
 			menu:load()

@@ -1,10 +1,8 @@
 --Author : Nicolas Reszka
 
 -- TO DO :
--- Background effects
--- Boom character (3 bombs in random directions instead of one)
--- redesign "controls" et "options" menus
--- Sound design for menus
+-- Special level
+-- Competition Mode
 -- Add music?
 -- Better graphics?
 
@@ -44,6 +42,7 @@ require "objects.particles"
 require "objects.characters"
 require "objects.customParticles"
 require "objects.lava"
+require "objects.bomb"
 
 require "states.menu"
 require "states.controls"
@@ -51,6 +50,7 @@ require "states.options"
 require "states.selectCharacters"
 require "states.selectMap"
 require "states.game"
+require "states.credits"
 
 function loadData(filename)
 	local text = love.filesystem.read(filename)

@@ -9,7 +9,7 @@ function competitionMode:load()
 	local margin = 92
 	self.interface:add(Selector.new(
 		Rect.new(left,top,320,64),
-		{2,3,4,5,6,7,8,9,10},
+		{2,3,4,5,6,7},
 		2,
 		function(value)
 			numberOfRounds = value

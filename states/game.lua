@@ -15,7 +15,11 @@ function game:loadMap()
 	self.customParticles = Group.new()
 	initializeParticles() 
 	self.bombs = Group.new()
+	
 	self.specialObjects = Group.new()
+	self.playerSpawnPoints = {nil,nil,nil,nil}
+	victoryPoints = {0,0,0,0}
+	currentRound = 1
 
 	if mapName == "maps.lava" then
 		self.lava = Lava.new()
@@ -37,13 +41,16 @@ function game:loadMap()
 				elseif layer.data[tile] == 2  then
 					playerCounter = playerCounter + 1
 					if isPlaying[playerCounter]  then
-						self.players:add(
-							Player.new(
-								x,y,
-								playerCounter,
-								choosenCharacters[playerCounter]
+						if not competition then
+							self.players:add(
+								Player.new(
+									x,y,
+									playerCounter,
+									choosenCharacters[playerCounter]
+								)
 							)
-						)
+						end
+						self.playerSpawnPoints[playerCounter] = Point.new(x,y)
 					end
 				elseif layer.data[tile] == 3 then
 					self.blocks:add(Cloud.new(x,y))
@@ -62,6 +69,41 @@ function game:loadMap()
 	else
 		self.halfTime = true
 	end
+end
+
+function game:respawnPlayers()
+	-- local survivorSlot = 0
+	-- if self.players.size == 1 then
+	-- 	survivorSlot = self.players.objects[1].slot
+	-- end
+	self.players = Group.new()
+	if mapName == "maps.lava" 
+	and self.lava.line.a.y < 512 then
+		for i = 1, 4 do
+			if isPlaying[i] then
+				self.players:add(
+					Player.new(
+						32*16+64*(i-1),
+						3*16,
+						i,choosenCharacters[i]
+					)
+				)
+			end
+		end
+	else
+		for i = 1, 4 do
+			if isPlaying[i] then
+				self.players:add(
+					Player.new(
+						self.playerSpawnPoints[i].x,
+						self.playerSpawnPoints[i].y,
+						i,choosenCharacters[i]
+					)
+				)
+			end
+		end
+	end
+	self.chat = {false,false,false,false}
 end
 
 function game:load()
@@ -197,7 +239,7 @@ function game:update(dt)
 			input:update()
 		end
 
-		if mapName == "maps.lava" then
+		if mapName == "maps.lava" and gameState == self then
 			if not sfx.lava:isPlaying() then
 				sfx.lava.source:play()
 			end

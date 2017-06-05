@@ -66,6 +66,9 @@ function Explosion:update()
 
 	if self.clock:alarm() then
 		game.halfTime = true
+		if competition and game.players.size <= 1 then
+			game.god.halfTimeCompetitionTrigger = true
+		end
 		game.explosions:remove(self)
 	end
 end

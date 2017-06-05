@@ -54,6 +54,7 @@ require "states.selectMap"
 require "states.game"
 require "states.credits"
 require "states.competitionMode"
+require "states.victory"
 
 function loadData(filename)
 	local text = love.filesystem.read(filename)
@@ -154,6 +155,8 @@ function love.load()
 	
 	competition = false
 	numberOfRounds = 3
+	currentRound = 1
+	victoryPoints = {0,0,0,0}
 
 	isPlaying = {false,false,false,false}
 	choosenCharacters = {nil,nil,nil,nil}
@@ -162,13 +165,16 @@ function love.load()
 	menu:set()
 
 	--debug mode
-	competition = true
-	numberOfRounds = 3
-	isPlaying = {true,true,false,false}
-	choosenCharacters = {characters[1],characters[1],nil,nil}
-	mapName = "maps.neon"
-	game:load()
-	game:set()
+	-- competition = true
+	-- numberOfRounds = 3
+	-- isPlaying = {true,true,false,false}
+	-- choosenCharacters = {characters[1],characters[1],nil,nil}
+	-- victoryPoints = {1,1,0,0}
+	-- victory:load()
+	-- victory:set()
+	-- mapName = "maps.neon"
+	-- game:load()
+	-- game:set()
 
 end
 

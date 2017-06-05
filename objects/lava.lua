@@ -41,7 +41,6 @@ function Lava:update(dt)
 		)
 		if self.color:compare(self.color1) then
 			self.colorCurrent = 0
-	
 		end
 	end
 
@@ -112,6 +111,16 @@ function Lava:update(dt)
 				player:explode()
 			else
 				game.players:remove(player)
+				if game.players.size <= 1
+				and game.explosions.size == 0 then
+					game.halfTime = true
+				end
+			end
+
+			if competition then 
+				if game.players.size <= 1 then
+					game.god.halfTimeCompetitionTrigger = true
+				end
 			end
 		end
 	end
@@ -123,11 +132,6 @@ function Lava:update(dt)
 				game.customParticles:remove(customParticle)
 			end
 		end
-	end
-
-	if game.explosions.size == 0
-	and game.players.size <= 1 then
-		game.halfTime = true
 	end
 end
 

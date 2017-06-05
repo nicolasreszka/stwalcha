@@ -17,6 +17,7 @@ function Explosion.new(x,y,radius)
 	for i,player in pairs(game.players.objects) do
 		inputs[player.slot]:vibration(3)
 	end
+	sfx.explosion:stop()
 	sfx.explosion:playAt(explosion.range.pos)
 	return explosion
 end
@@ -29,7 +30,11 @@ function Explosion:update()
 	if self.range.radius < self.maxRadius then
 		local list = game.players:rectsVsCircleList(self.range)
 		for i, player in pairs(list) do
-			game.players:remove(player)
+			if game.chat[player.slot] then
+				player:explode()
+			else
+				game.players:remove(player)
+			end
 		end
 
 		local list = game.blocks:rectsVsCircleList(self.range)
@@ -65,9 +70,14 @@ function Explosion:update()
 	end
 
 	if self.clock:alarm() then
-		game.halfTime = true
-		if competition and game.players.size <= 1 then
-			game.god.halfTimeCompetitionTrigger = true
+		local thereIsChat = false
+		for i,player in pairs(game.players.objects) do
+			if isPlaying[player.slot] and game.chat[player.slot] then
+				thereIsChat = true
+			end
+		end
+		if not thereIsChat or game.players.size <= 1 then
+			game.halfTime = true
 		end
 		game.explosions:remove(self)
 	end

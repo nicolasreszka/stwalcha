@@ -10,7 +10,7 @@ function Bomb.new(x,y)
 	bomb.direction = love.math.random(0,360)
 	bomb.circle = Circle.new(x,y,16)
 	bomb.speed = 16
-	bomb.clock = Clock.new(5)
+	bomb.clock = Clock.new(10)
 	return bomb
 end
 

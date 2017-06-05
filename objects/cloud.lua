@@ -32,15 +32,9 @@ function Cloud:update(dt)
 			if #self.clouds == 0 then
 				self.rect = nil
 			else
-				if mapName == "maps.chaseSpecial" then
-					self.clock:setDuration(
-						self.clock:getDuration()*0.5
-					)
-				else
-					self.clock:setDuration(
-						self.clock:getDuration()*0.75
-					)
-				end
+				self.clock:setDuration(
+					self.clock:getDuration()*0.75
+				)
 				table.remove(self.clouds,1)
 			end
 		end

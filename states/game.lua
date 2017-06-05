@@ -15,11 +15,7 @@ function game:loadMap()
 	self.customParticles = Group.new()
 	initializeParticles() 
 	self.bombs = Group.new()
-	
 	self.specialObjects = Group.new()
-	self.playerSpawnPoints = {nil,nil,nil,nil}
-	victoryPoints = {0,0,0,0}
-	currentRound = 1
 
 	if mapName == "maps.lava" then
 		self.lava = Lava.new()
@@ -41,75 +37,39 @@ function game:loadMap()
 				elseif layer.data[tile] == 2  then
 					playerCounter = playerCounter + 1
 					if isPlaying[playerCounter]  then
-						if not competition then
-							self.players:add(
-								Player.new(
-									x,y,
-									playerCounter,
-									choosenCharacters[playerCounter]
-								)
+						self.players:add(
+							Player.new(
+								x,y,
+								playerCounter,
+								choosenCharacters[playerCounter]
 							)
-						end
-						self.playerSpawnPoints[playerCounter] = Point.new(x,y)
+						)
 					end
 				elseif layer.data[tile] == 3 then
 					self.blocks:add(Cloud.new(x,y))
 				elseif layer.data[tile] == 4 then
 					self.blocks:add(SolidBlock.new(x,y))
 				elseif layer.data[tile] == 5 then
-					self.specialObjects:add(Eye.new(x,y))
-				end
+ 					self.specialObjects:add(Eye.new(x,y))
+  				end
 				tile = tile + 1
 			end
 		end
 	end
 
-	if mapName == "maps.chaseSpecial" then
+	if mapName == "maps.getTheEye" then
 		self.halfTime = false
 	else
 		self.halfTime = true
 	end
-end
 
-function game:respawnPlayers()
-	-- local survivorSlot = 0
-	-- if self.players.size == 1 then
-	-- 	survivorSlot = self.players.objects[1].slot
-	-- end
-	self.players = Group.new()
-	if mapName == "maps.lava" 
-	and self.lava.line.a.y < 512 then
-		for i = 1, 4 do
-			if isPlaying[i] then
-				self.players:add(
-					Player.new(
-						32*16+64*(i-1),
-						3*16,
-						i,choosenCharacters[i]
-					)
-				)
-			end
-		end
-	else
-		for i = 1, 4 do
-			if isPlaying[i] then
-				self.players:add(
-					Player.new(
-						self.playerSpawnPoints[i].x,
-						self.playerSpawnPoints[i].y,
-						i,choosenCharacters[i]
-					)
-				)
-			end
-		end
-	end
-	self.chat = {false,false,false,false}
 end
 
 function game:load()
 	camera:translate(0,0)
 	self.pause = false
 	self.chat = {false,false,false,false}
+	self.halfTime = true
 	self:loadMap()
 	self.interface = ListInterface.new()
 	local left = 384
@@ -239,7 +199,7 @@ function game:update(dt)
 			input:update()
 		end
 
-		if mapName == "maps.lava" and gameState == self then
+		if mapName == "maps.lava" then
 			if not sfx.lava:isPlaying() then
 				sfx.lava.source:play()
 			end
@@ -273,12 +233,13 @@ function game:draw()
 	if self.halfTime then
 		self.god:draw()
 	end
+	self.specialObjects:draw()
 
 	self.bombs:draw()
 	self.explosions:draw()
 	self.customParticles:draw()
 	self.players:draw()
-	self.specialObjects:draw()
+	
 
 	drawParticles()
 

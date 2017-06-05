@@ -183,7 +183,7 @@ function Player:update()
 	self.groundedBefore = self.grounded
 	self:applyRestitution()
 
-	if game.chat[self.slot] then
+	if game.chat[self.slot]  then
 		self:blink()
 		self.explosionTimer:tick()
 		if self.explosionTimer:alarm() then
@@ -384,7 +384,8 @@ end
 
 function Player:changeChat(player)
 	if not self.touched and not player.touched then
-		if game.chat[self.slot] and not game.chat[player.slot] then
+		if  game.chat[self.slot] 
+		and not game.chat[player.slot] then
 			game.chat[self.slot] = false
 			game.chat[player.slot] = true
 			self.touched = true
@@ -393,7 +394,8 @@ function Player:changeChat(player)
 			player.colorCurrent = 0
 			player.color = chatColor:clone()
 			player.sfx.tick:playAt(player.pos)
-		elseif not game.chat[self.slot] and game.chat[player.slot] then
+		elseif not game.chat[self.slot] 
+		and game.chat[player.slot] then
 			game.chat[self.slot] = true
 			game.chat[player.slot] = false
 			player.touched = true
@@ -549,7 +551,7 @@ function Player:blink()
 end
 
 function Player:draw()
-	if game.chat[self.slot] == true then
+	if game.chat[self.slot] then
 		chatColor:set()
 		love.graphics.draw(
 			self.image,

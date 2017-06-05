@@ -44,73 +44,25 @@ function God.new()
 	god.lookAngle = math.rad(270)
 	god.lightingPoints = {}
 
-	god.roundWaitTimer = Clock.new(1.75)
-	god.roundText = AnimatedText.new(
-		352,screen.h/2-72,"Round 1",
-		0.45,20,320
-	)
-
-	god.halfTimeCompetitionTrigger = false
 	return god
 end
 
 function God:update()
-	if self.halfTimeCompetitionTrigger then
-		if game.players.size == 1 then
-			local slot = game.players.objects[1].slot
-			victoryPoints[slot] = victoryPoints[slot] + 1 
-		end
-		game.players = Group.new()
-		if currentRound == numberOfRounds then
-			love.timer.sleep(1)
-			if sfx.lava:isPlaying() then
-				sfx.lava:stop()
-			end
-			victory:load()
-			victory:set()
+	if game.players.size > 1 then
+		self:choiceAutomate()
+		if self.state == "arrival" then
+			self.lookAngle = math.rad(90)
 		else
-			currentRound = currentRound + 1
-			if currentRound == numberOfRounds then
-				self.roundText.text = "Final Round !"
-				self.roundText.limit = 720
-				self.roundText.x = 152
-			else
-				self.roundText.text = "Round ".. currentRound	
-			end
-		end
-		self.pos.y = -128
-		self.state = "arrival"
-		self.arrivalTimer:reset()
-		self.waitTimer:reset()
-		self.lightingTimer:reset()
-		self.roundWaitTimer:reset()
-		self.halfTimeCompetitionTrigger = false
-	end
-
-	if self.roundWaitTimer:alarm() 
-	or not competition then
-		if game.players.size > 1 then
-			self:choiceAutomate()
-			if self.state == "arrival" then
-				self.lookAngle = math.rad(90)
-			else
-				self:eyeMovement(self.player)
-			end
-		elseif competition then
-			game:respawnPlayers()
-		else
-			self:victoryAutomate()
-			if game.players.size == 1 then
-				self:eyeMovement(game.players.objects[1])
-			else 
-				self.lookAngle = math.rad(90)
-			end
+			self:eyeMovement(self.player)
 		end
 	else 
-		self.roundWaitTimer:tick()
-		self.roundText:update(dt)
+		self:victoryAutomate()
+		if game.players.size == 1 then
+			self:eyeMovement(game.players.objects[1])
+		else 
+			self.lookAngle = math.rad(90)
+		end
 	end
-
 	self.eye.x = self.pos.x + lengthDirectionX(8,self.lookAngle)
 	self.eye.y = self.pos.y + lengthDirectionY(8,self.lookAngle)
 	
@@ -188,7 +140,6 @@ function God:choiceAutomate()
 		sfx.god:setPosition(self.pos)
 		if self.arrivalTimer:zero() then
 			game.halfTime = false
-			
 			self.state = "arrival"
 			self.eyeColor = baseEyeColor:clone()
 		end
@@ -250,6 +201,7 @@ function God:eyeMovement(player)
 	end
 end
 
+
 function God:createLighting(player)
 	local lightingPoints = {}
 	local lastX = player.pos.x+player.rect.w/2
@@ -279,12 +231,6 @@ function God:drawLighting(lightingPoints)
 end
 
 function God:draw()
-	if not self.roundWaitTimer:alarm() and competition then
-		love.graphics.setFont(font72)
-		self.roundText:draw()
-	end
-
-
 	chatColor:set()
 	--love.graphics.rectangle("line",self.pos.x-64,self.pos.y-64,128,128)
 	love.graphics.polygon(

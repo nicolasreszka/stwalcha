@@ -52,10 +52,10 @@ function selectMap:load()
 		end
 	))
 	self.interface:add(Button.new(
-		"Chase",
-		Rect.new(left,top+margin*4,128,64),
+		"Get The Eye!",
+		Rect.new(left-64,top+margin*4,256,64),
 		function() 
-			mapName = "maps.chaseSpecial"
+			mapName = "maps.getTheEye"
 			game:load()
 			game:set()
 		end

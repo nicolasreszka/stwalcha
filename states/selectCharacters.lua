@@ -80,13 +80,8 @@ end
 function selectCharacters:keypressed(key,scancode,isrepeat)
 	if scancode == "escape" then
 		uiSfx.no:play()
-		if competition then 
-			competitionMode:load()
-			competitionMode:set()
-		else
-			menu:load()
-			menu:set()
-		end	
+		menu:load()
+		menu:set()		
 	end
 end
 
@@ -127,13 +122,8 @@ function selectCharacters:update(dt)
 
 	if isEveryoneLeft or self.backHover and mouse.leftPressed then
 		uiSfx.no:play()
-		if competition then 
-			competitionMode:load()
-			competitionMode:set()
-		else
-			menu:load()
-			menu:set()
-		end
+		menu:load()
+		menu:set()
 	end
 
 end

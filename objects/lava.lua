@@ -106,7 +106,7 @@ function Lava:update(dt)
 				player.sfx.splash:playAt(player.pos)
 			end
 
-			if game.chat == player.slot 
+			if game.chat[player.slot] == true 
 			or game.god.state == "lighting" 
 			and game.god.player.slot == player.slot then
 				player:explode()

@@ -121,13 +121,13 @@ function God:choiceAutomate()
 			love.math.random(-shake,shake)
 		)
 		self.lightingTimer:tick()
-		self:createLighting()
+		self.lightingPoints = self:createLighting(self.player)
 		if self.lightingTimer:alarm() then
 			self.player.touched = true
 			self.player.colorCurrent = 0
 			self.player.color = chatColor:clone()
 			self.player.sfx.tick:playAt(self.player.pos)
-			game.chat = self.player.slot
+			game.chat[self.player.slot] = true
 			self.lightingTimer:reset()
 			self.state = "departure"
 		end
@@ -201,17 +201,32 @@ function God:eyeMovement(player)
 	end
 end
 
-function God:createLighting()
-	self.lightingPoints = {}
-	local lastX = self.player.pos.x+self.player.rect.w/2
-	local lastY = self.player.pos.y
-	table.insert(self.lightingPoints,Point.new(lastX,lastY))
+function God:createLighting(player)
+	local lightingPoints = {}
+	local lastX = player.pos.x+player.rect.w/2
+	local lastY = player.pos.y
+	table.insert(lightingPoints,Point.new(lastX,lastY))
 	for y = lastY-love.math.random(32,64), -64, -love.math.random(32,64) do
 		local x = lastX + love.math.random(-48,48)
-		table.insert(self.lightingPoints,Point.new(x,y))
+		table.insert(lightingPoints,Point.new(x,y))
 		lastX = x
 		lastY = y
 	end	
+
+	return lightingPoints
+end
+
+function God:drawLighting(lightingPoints)
+	WHITE:set()
+	local lastY = lightingPoints[1].y
+	local lastX = lightingPoints[1].x
+	for i, point in pairs(lightingPoints) do
+		love.graphics.setLineWidth(love.graphics.getLineWidth()+1)
+		love.graphics.line(lastX, lastY, point.x, point.y)
+		lastX = point.x
+		lastY = point.y
+	end	
+	love.graphics.setLineWidth(1)
 end
 
 function God:draw()
@@ -253,16 +268,7 @@ function God:draw()
 
 	if self.state == "lighting" then 
 		if not self.lightingTimer:zero() then
-			WHITE:set()
-			local lastY = self.lightingPoints[1].y
-			local lastX = self.lightingPoints[1].x
-			for i, point in pairs(self.lightingPoints) do
-				love.graphics.setLineWidth(love.graphics.getLineWidth()+1)
-				love.graphics.line(lastX, lastY, point.x, point.y)
-				lastX = point.x
-				lastY = point.y
-			end	
-			love.graphics.setLineWidth(1)
+			self:drawLighting(self.lightingPoints)
 		end
 	end
 end

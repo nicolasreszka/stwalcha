@@ -6,6 +6,7 @@ local mapScreens = {
 	love.graphics.newImage('maps/neon.png'),
 	love.graphics.newImage('maps/neon2.png'),
 	love.graphics.newImage('maps/lava.png'),
+	love.graphics.newImage('maps/clouds.png'),
 	love.graphics.newImage('maps/clouds.png')
 }
 
@@ -51,8 +52,17 @@ function selectMap:load()
 		end
 	))
 	self.interface:add(Button.new(
-		"Back",
+		"Chase",
 		Rect.new(left,top+margin*4,128,64),
+		function() 
+			mapName = "maps.chaseSpecial"
+			game:load()
+			game:set()
+		end
+	))
+	self.interface:add(Button.new(
+		"Back",
+		Rect.new(left,top+margin*5,128,64),
 		function() 
 			uiSfx.no:play()
 			selectCharacters:reload()

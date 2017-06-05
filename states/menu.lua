@@ -10,9 +10,10 @@ function menu:load()
 	local top = 256
 	local margin = 64+16
 	self.interface:add(Button.new(
-		"Play",
+		"Infinite Mode",
 		Rect.new(left,top,256,64),
 		function() 
+			competition = false
 			menu.saveClock:forceAlarm()
 			uiSfx.yes:play()
 			selectCharacters:load()
@@ -20,8 +21,19 @@ function menu:load()
 		end
 	))
 	self.interface:add(Button.new(
+		"Competition Mode",
+		Rect.new(left-32,top + margin,320,64),
+		function() 
+			competition = true
+			menu.saveClock:forceAlarm()
+			uiSfx.yes:play()
+			competitionMode:load()
+			competitionMode:set()
+		end
+	))
+	self.interface:add(Button.new(
 		"Controls",
-		Rect.new(left,top + margin,256,64),
+		Rect.new(left,top + margin * 2,256,64),
 		function() 
 			uiSfx.yes:play()
 			controls:load()
@@ -30,7 +42,7 @@ function menu:load()
 	))
 	self.interface:add(Button.new(
 		"Options",
-		Rect.new(left,top + margin * 2,256,64),
+		Rect.new(left,top + margin * 3,256,64),
 		function() 
 			uiSfx.yes:play()
 			options:load()
@@ -39,7 +51,7 @@ function menu:load()
 	))
 	self.interface:add(Button.new(
 		"Credits",
-		Rect.new(left,top + margin * 3,256,64),
+		Rect.new(left,top + margin * 4,256,64),
 		function() 
 			menu.saveClock:forceAlarm()
 			uiSfx.yes:play()
@@ -49,7 +61,7 @@ function menu:load()
 	))
 	self.interface:add(Button.new(
 		"Quit",
-		Rect.new(left,top + margin * 4,256,64),
+		Rect.new(left,top + margin * 5,256,64),
 		function() 
 			love.event.quit()
 		end

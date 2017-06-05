@@ -15,6 +15,7 @@ function game:loadMap()
 	self.customParticles = Group.new()
 	initializeParticles() 
 	self.bombs = Group.new()
+	self.specialObjects = Group.new()
 
 	if mapName == "maps.lava" then
 		self.lava = Lava.new()
@@ -48,18 +49,25 @@ function game:loadMap()
 					self.blocks:add(Cloud.new(x,y))
 				elseif layer.data[tile] == 4 then
 					self.blocks:add(SolidBlock.new(x,y))
+				elseif layer.data[tile] == 5 then
+					self.specialObjects:add(Eye.new(x,y))
 				end
 				tile = tile + 1
 			end
 		end
+	end
+
+	if mapName == "maps.chaseSpecial" then
+		self.halfTime = false
+	else
+		self.halfTime = true
 	end
 end
 
 function game:load()
 	camera:translate(0,0)
 	self.pause = false
-	self.chat = 0
-	self.halfTime = true
+	self.chat = {false,false,false,false}
 	self:loadMap()
 	self.interface = ListInterface.new()
 	local left = 384
@@ -199,6 +207,7 @@ function game:update(dt)
 		self.blocks:update(dt)
 		self.customParticles:update(dt)
 		self.players:update()
+		self.specialObjects:update(dt)
 		updateParticles()
 	end
 end
@@ -227,7 +236,7 @@ function game:draw()
 	self.explosions:draw()
 	self.customParticles:draw()
 	self.players:draw()
-	
+	self.specialObjects:draw()
 
 	drawParticles()
 

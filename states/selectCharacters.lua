@@ -28,7 +28,7 @@ function selectCharacters:load()
 		game.blocks:add(SolidBlock.new(tileX*16,mapHeight-16))
 	end
 
-	game.chat = 0
+	game.chat = {false,false,false,false}
 	game.halfTime = true
 	game.players = Group.new()
 	game.customParticles = Group.new()
@@ -40,7 +40,7 @@ function selectCharacters:reload()
 	mapWidth = screen.w 
 	mapHeight = screen.h
 
-	game.chat = 0
+	game.chat = {false,false,false,false}
 	game.halfTime = true
 	game.blocks = Group.new()
 	for tileX = 0, 63 do
@@ -80,8 +80,13 @@ end
 function selectCharacters:keypressed(key,scancode,isrepeat)
 	if scancode == "escape" then
 		uiSfx.no:play()
-		menu:load()
-		menu:set()		
+		if competition then 
+			competitionMode:load()
+			competitionMode:set()
+		else
+			menu:load()
+			menu:set()
+		end	
 	end
 end
 
@@ -122,8 +127,13 @@ function selectCharacters:update(dt)
 
 	if isEveryoneLeft or self.backHover and mouse.leftPressed then
 		uiSfx.no:play()
-		menu:load()
-		menu:set()
+		if competition then 
+			competitionMode:load()
+			competitionMode:set()
+		else
+			menu:load()
+			menu:set()
+		end
 	end
 
 end

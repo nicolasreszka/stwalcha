@@ -2,6 +2,9 @@
 
 controls = State.new()
 
+local keyboardImage = love.graphics.newImage('sprites/keyboard.png')
+local gamepadImage = love.graphics.newImage('sprites/gamepad.png')
+
 function controls:load()
 	self.interface = KeyBindingInterface.new()
 	local componentWidth = 172
@@ -145,6 +148,22 @@ function controls:draw()
 			192+(string.len("Player")*32+4)*(i-1), 
 			160
 		)
+		if inputs[i].joystick == nil 
+		or not inputs[i].joystick:isConnected() then
+			love.graphics.draw(
+				keyboardImage,
+				192+(string.len("Player")*32+4)*(i-1)+64,
+				720	
+			)
+		else
+			love.graphics.draw(
+				gamepadImage,
+				192+(string.len("Player")*32+4)*(i-1)+64,
+				710	
+			)
+		end
+
+
 	end
 
 	YELLOW:set()

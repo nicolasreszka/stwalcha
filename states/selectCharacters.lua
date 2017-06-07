@@ -56,6 +56,8 @@ function selectCharacters:reload()
 			selector:setState("joined")
 		end 
 	end
+
+	self.wait:reset()
 end
 
 function selectCharacters:isEveryoneReady()

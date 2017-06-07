@@ -1,7 +1,7 @@
 Eye = {}
 Eye.__index = Eye
 
-local shake = 4
+local shake = 8
 local image = love.graphics.newImage('sprites/Eye.png')
 
 function Eye.new(x,y)
@@ -48,9 +48,7 @@ function Eye:update(dt)
 			self.taken = true
 			sfx.lighting:playAt({x=0,y=0})
 			for i,player in pairs(game.players.objects) do
-				if player.slot ~= self.player.slot then
-					player.input:vibration(0.5)
-				end
+				player.input:vibration(0.5)
 			end
 		end
 	end

@@ -3,6 +3,8 @@
 Block = Object.new()
 Block.__index = Block
 
+local image = love.graphics.newImage("backgrounds/neonBlock.png")
+
 function Block.new(x,y)
 	local block = {}
 	setmetatable(block, Block)
@@ -17,6 +19,10 @@ function Block:draw()
 	else
 		love.graphics.setColor(255, 0, 128)
 	end
-	
-	self.rect:draw("line")
+		
+	WHITE:set()
+	love.graphics.draw(
+		image,
+		self.rect.left,self.rect.top
+	)
 end

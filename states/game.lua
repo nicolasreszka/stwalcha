@@ -63,6 +63,17 @@ function game:loadMap()
 		self.halfTime = true
 	end
 
+	if mapName == "maps.neon" then
+		self.sky = love.graphics.newImage("backgrounds/neonSky.png")
+		self.stars = love.graphics.newImage("backgrounds/neonStars.png")
+		self.parallax = {
+			love.graphics.newImage("backgrounds/mountainsFar.png"),
+			love.graphics.newImage("backgrounds/mountainsMiddle.png"),
+			love.graphics.newImage("backgrounds/mountainsClose.png"),
+			love.graphics.newImage("backgrounds/mountainsCloser.png"),
+			love.graphics.newImage("backgrounds/mountainsClosest.png")
+		}
+	end
 end
 
 function game:load()
@@ -158,6 +169,10 @@ function game:gamepadpressed(joystick,button)
 	end
 
 	if self.pause then
+		if button == "b" then
+			self.pause = false
+		end
+
 		self.interface:gamepadpressed(joystick,button)
 	end
 end
@@ -188,12 +203,26 @@ function game:update(dt)
 
 		self.bombs:update()
 		self.explosions:update()
-		if self.explosions.size == 0 and self.god.state ~= "lighting" then
+		if self.explosions.size == 0 
+		and self.god.state ~= "lighting"
+		and self.specialObjects.size == 0 then
 			if camera.pos.x ~= 0 or camera.pos.y ~= 0 then
 				camera.pos.x = approachValues(camera.pos.x,0,1)
 				camera.pos.y = approachValues(camera.pos.y,0,1)
 			end
 		end
+
+		-- if love.keyboard.isDown("left") then
+		-- 	camera:move(-4,0)
+		-- elseif love.keyboard.isDown("right") then
+		-- 	camera:move(4,0)
+		-- end
+
+		-- if  love.keyboard.isDown("up") then
+		-- 	camera:move(0,-4)
+		-- elseif love.keyboard.isDown("down") then
+		-- 	camera:move(0,4)
+		-- end
 
 		for i, input in pairs(inputs) do
 			input:update()
@@ -216,6 +245,26 @@ end
 
 function game:draw()
 	camera:set()
+
+	if mapName == "maps.neon" then
+		love.graphics.draw(
+			self.sky,
+			camera.pos.x,camera.pos.y
+		)
+
+		love.graphics.draw(
+			self.stars,
+			camera.pos.x,camera.pos.y
+		)
+
+		for i,back in pairs(self.parallax) do
+			love.graphics.draw(
+				back,
+				-512+i*camera.pos.x*0.2,
+				192+camera.pos.y*i*0.2
+			)
+		end 	
+	end
 
 	if mapName == "maps.clouds" then
 		love.graphics.setColor(30, 147, 206)

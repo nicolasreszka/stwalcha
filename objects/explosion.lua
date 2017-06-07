@@ -4,8 +4,8 @@ Explosion = Object.new()
 Explosion.__index = Explosion
 
 local maxRadius = 200
-local explosionShake = 4
-local aftermathShake = 2
+local explosionShake = 8
+local aftermathShake = 4
 
 function Explosion.new(x,y,radius)
 	local explosion = {}

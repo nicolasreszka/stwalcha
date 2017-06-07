@@ -34,41 +34,72 @@ function Input:vibration(duration)
 end
 
 function Input:update()
-	if love.keyboard.isDown(self.left)
-	or self.joystick and (self.joystick:isGamepadDown("dpleft")
-	or self.joystick:getGamepadAxis("leftx") < -deadzone) then
-		self.leftDown = 1
-	else 
-		self.leftDown = 0
-	end
 
-	if love.keyboard.isDown(self.right)
-	or self.joystick and (self.joystick:isGamepadDown("dpright")
-	or self.joystick:getGamepadAxis("leftx") > deadzone) then
-		self.rightDown = 1
-	else 
-		self.rightDown = 0
-	end
+	if self.joystick and self.joystick:isConnected() then
+		if self.joystick and (self.joystick:isGamepadDown("dpleft")
+		or self.joystick:getGamepadAxis("leftx") < -deadzone) then
+			self.leftDown = 1
+		else 
+			self.leftDown = 0
+		end
 
-	if love.keyboard.isDown(self.jump)
-	or self.joystick and self.joystick:isGamepadDown("a") then
-		self.jumpDown = true
-	else 
-		self.jumpDown = false
-	end
+		if self.joystick and (self.joystick:isGamepadDown("dpright")
+		or self.joystick:getGamepadAxis("leftx") > deadzone) then
+			self.rightDown = 1
+		else 
+			self.rightDown = 0
+		end
 
-	self.jumpPressed = false
-	if not self.jumpBefore and self.jumpDown then
-		self.jumpPressed = true
-	end
+		if self.joystick and self.joystick:isGamepadDown("a") then
+			self.jumpDown = true
+		else 
+			self.jumpDown = false
+		end
 
-	self.jumpBefore = self.jumpDown
+		self.jumpPressed = false
+		if not self.jumpBefore and self.jumpDown then
+			self.jumpPressed = true
+		end
 
-	if love.keyboard.isDown(self.back)
-	or self.joystick and self.joystick:isGamepadDown("b") then
-		self.backDown = true
-	else 
-		self.backDown = false
+		self.jumpBefore = self.jumpDown
+
+		if self.joystick and self.joystick:isGamepadDown("b") then
+			self.backDown = true
+		else 
+			self.backDown = false
+		end
+
+	else
+		if love.keyboard.isDown(self.left) then
+			self.leftDown = 1
+		else 
+			self.leftDown = 0
+		end
+
+		if love.keyboard.isDown(self.right) then
+			self.rightDown = 1
+		else 
+			self.rightDown = 0
+		end
+
+		if love.keyboard.isDown(self.jump) then
+			self.jumpDown = true
+		else 
+			self.jumpDown = false
+		end
+
+		self.jumpPressed = false
+		if not self.jumpBefore and self.jumpDown then
+			self.jumpPressed = true
+		end
+
+		self.jumpBefore = self.jumpDown
+
+		if love.keyboard.isDown(self.back) then
+			self.backDown = true
+		else 
+			self.backDown = false
+		end
 	end
 
 	self.backPressed = false

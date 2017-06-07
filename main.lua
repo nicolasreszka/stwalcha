@@ -138,15 +138,15 @@ function love.load()
 
 	chatColor =  Color.new(255, 40, 222)
 	-- colors = {
-	-- 	Color.new(106, 255, 106),
-	-- 	Color.new(0, 191, 255),
+	-- 	Color.new(139, 230, 180),
+	-- 	Color.new(159, 195, 255),
 	-- 	Color.new(255, 0, 50),
 	-- 	Color.new(255, 128, 0)
 	-- }
 	colors = {
 		GREEN:clone(),
-		BLUE:clone(),
 		RED:clone(),
+		BLUE:clone(),
 		YELLOW:clone()
 	}
 
@@ -155,6 +155,15 @@ function love.load()
 
 	menu:load()
 	menu:set()
+
+	--debug
+	isPlaying = {true,true,false,false}
+	choosenCharacters = {characters[1],characters[1],nil,nil}
+	mapName = "maps.neon"
+	game:load()
+	game.halfTime = false
+	game:set()
+
 end
 
 function love.joystickadded(joystick)

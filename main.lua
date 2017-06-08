@@ -157,9 +157,9 @@ function love.load()
 	menu:set()
 
 	--debug
-	isPlaying = {true,true,false,false}
-	choosenCharacters = {characters[1],characters[1],nil,nil}
-	mapName = "maps.neon"
+	isPlaying = {true,true,false,true}
+	choosenCharacters = {characters[1],characters[1],nil,characters[1]}
+	mapName = "maps.lava"
 	game:load()
 	game.halfTime = false
 	game:set()

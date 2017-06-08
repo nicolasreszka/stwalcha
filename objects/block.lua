@@ -4,6 +4,8 @@ Block = Object.new()
 Block.__index = Block
 
 local image = love.graphics.newImage("backgrounds/neonBlock.png")
+local image2 = love.graphics.newImage("backgrounds/neon2Block.png")
+local image3 = love.graphics.newImage("backgrounds/lavaBlock.png")
 
 function Block.new(x,y)
 	local block = {}
@@ -15,14 +17,24 @@ end
 
 function Block:draw()
 	if mapName == "maps.neon2" then
-		love.graphics.setColor(233, 255,0)
+		WHITE:set()
+		love.graphics.draw(
+			image2,
+			self.rect.left,self.rect.top
+		)
+	elseif mapName == "maps.lava" then
+		WHITE:set()
+		love.graphics.draw(
+			image3,
+			self.rect.left,self.rect.top
+		)
 	else
-		love.graphics.setColor(255, 0, 128)
+		WHITE:set()
+		love.graphics.draw(
+			image,
+			self.rect.left,self.rect.top
+		)
 	end
 		
-	WHITE:set()
-	love.graphics.draw(
-		image,
-		self.rect.left,self.rect.top
-	)
+	
 end

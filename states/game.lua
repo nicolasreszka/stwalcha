@@ -65,14 +65,24 @@ function game:loadMap()
 
 	if mapName == "maps.neon" then
 		self.sky = love.graphics.newImage("backgrounds/neonSky.png")
-		self.stars = love.graphics.newImage("backgrounds/neonStars.png")
-		self.parallax = {
-			love.graphics.newImage("backgrounds/mountainsFar.png"),
-			love.graphics.newImage("backgrounds/mountainsMiddle.png"),
-			love.graphics.newImage("backgrounds/mountainsClose.png"),
-			love.graphics.newImage("backgrounds/mountainsCloser.png"),
-			love.graphics.newImage("backgrounds/mountainsClosest.png")
-		}
+		self.background = love.graphics.newImage("backgrounds/mountains.png")
+		-- self.parallax = {
+		-- 	love.graphics.newImage("backgrounds/mountainsFar.png"),
+		-- 	love.graphics.newImage("backgrounds/mountainsMiddle.png"),
+		-- 	love.graphics.newImage("backgrounds/mountainsClose.png"),
+		-- 	love.graphics.newImage("backgrounds/mountainsCloser.png"),
+		-- 	love.graphics.newImage("backgrounds/mountainsClosest.png")
+		-- }
+	elseif mapName == "maps.neon2" then
+	    self.sky = love.graphics.newImage("backgrounds/neon2Sky.png")
+		self.background = love.graphics.newImage("backgrounds/forest.png")
+	elseif mapName == "maps.clouds" then
+	    self.sky = love.graphics.newImage("backgrounds/cloudsSky.png")
+		self.background = love.graphics.newImage("backgrounds/clouds.png")
+	elseif mapName == "maps.lava" then
+		self.sky = love.graphics.newImage("backgrounds/lavaSky.png")
+		self.background = love.graphics.newImage("backgrounds/volcanos.png")
+		self.lavaFlow = love.graphics.newImage("backgrounds/lavaFlow.png")
 	end
 end
 
@@ -246,35 +256,50 @@ end
 function game:draw()
 	camera:set()
 
-	if mapName == "maps.neon" then
+		-- for i,back in pairs(self.parallax) do
+		-- 	-- love.graphics.draw(
+		-- 	-- 	back,
+		-- 	-- 	-512+i*camera.pos.x*0.2,
+		-- 	-- 	192+camera.pos.y*i*0.2
+		-- 	-- )
+		-- 	love.graphics.draw(
+		-- 		back,
+		-- 		-512,
+		-- 		192
+		-- 	)
+		-- end 	
+
+
+	-- if mapName == "maps.clouds" then
+	-- 	love.graphics.setColor(30, 147, 206)
+	-- 	love.graphics.rectangle(
+	-- 		"fill",
+	-- 		camera.pos.x,
+	-- 		camera.pos.y,
+	-- 		screen.w,
+	-- 		screen.h
+	-- 	)
+	-- end
+
+	love.graphics.draw(
+		self.sky,
+		camera.pos.x,camera.pos.y
+	)
+
+	love.graphics.draw(
+		self.background,
+		-512,
+		-384
+	)
+
+	if mapName == "maps.lava" then
+		self.lava.color:set()
 		love.graphics.draw(
-			self.sky,
-			camera.pos.x,camera.pos.y
+			self.lavaFlow,
+			-512,
+			-384
 		)
-
-		love.graphics.draw(
-			self.stars,
-			camera.pos.x,camera.pos.y
-		)
-
-		for i,back in pairs(self.parallax) do
-			love.graphics.draw(
-				back,
-				-512+i*camera.pos.x*0.2,
-				192+camera.pos.y*i*0.2
-			)
-		end 	
-	end
-
-	if mapName == "maps.clouds" then
-		love.graphics.setColor(30, 147, 206)
-		love.graphics.rectangle(
-			"fill",
-			camera.pos.x,
-			camera.pos.y,
-			screen.w,
-			screen.h
-		)
+		self.lava:draw()
 	end
 
 	self.blocks:draw()

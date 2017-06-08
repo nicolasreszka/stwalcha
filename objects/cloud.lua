@@ -67,7 +67,8 @@ function Cloud:update(dt)
 end
 
 function Cloud:draw()
-	love.graphics.setColor(255, 155, 223, 92)
+	--love.graphics.setColor(255, 155, 223, 92)
+	love.graphics.setColor(255, 224, 224, 200)
 	if #self.clouds > 0 then
 		for i,cloud in pairs(self.clouds) do
 			cloud:draw("fill")

@@ -3,8 +3,6 @@
 SolidBlock = Object.new()
 SolidBlock.__index = SolidBlock
 
-local image = love.graphics.newImage("backgrounds/solidBlock.png")
-
 function SolidBlock.new(x,y)
 	local block = {}
 	setmetatable(block, SolidBlock)
@@ -14,9 +12,6 @@ function SolidBlock.new(x,y)
 end
 
 function SolidBlock:draw()
-	WHITE:set()
-	love.graphics.draw(
-		image,
-		self.rect.left,self.rect.top
-	)
+	love.graphics.setColor(21,5,28)
+	self.rect:draw("fill")
 end

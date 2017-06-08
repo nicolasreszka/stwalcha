@@ -2,6 +2,24 @@
 
 game = State.new()
 
+
+local sky = {
+	love.graphics.newImage("backgrounds/neonSky.png"),
+	love.graphics.newImage("backgrounds/neon2Sky.png"),
+	love.graphics.newImage("backgrounds/lavaSky.png"),
+	love.graphics.newImage("backgrounds/cloudsSky.png"),
+	love.graphics.newImage("backgrounds/getTheEyeSky.png")
+}
+local background = {
+	love.graphics.newImage("backgrounds/mountains.png"),
+	love.graphics.newImage("backgrounds/forest.png"),
+	love.graphics.newImage("backgrounds/volcanos.png"),
+	love.graphics.newImage("backgrounds/moon.png"),
+	love.graphics.newImage("backgrounds/clouds.png")
+}
+
+local lavaFlow = love.graphics.newImage("backgrounds/lavaFlow.png")
+
 function game:loadMap()
 	local map = require(mapName)
 
@@ -19,9 +37,6 @@ function game:loadMap()
 
 	if mapName == "maps.lava" then
 		self.lava = Lava.new()
-		-- for tileX = 0, 63 do
-		-- 	self.blocks:add(SolidBlock.new(tileX*16,-16))
-		-- end
 	end
 
 	local playerCounter = 0
@@ -64,25 +79,15 @@ function game:loadMap()
 	end
 
 	if mapName == "maps.neon" then
-		self.sky = love.graphics.newImage("backgrounds/neonSky.png")
-		self.background = love.graphics.newImage("backgrounds/mountains.png")
-		-- self.parallax = {
-		-- 	love.graphics.newImage("backgrounds/mountainsFar.png"),
-		-- 	love.graphics.newImage("backgrounds/mountainsMiddle.png"),
-		-- 	love.graphics.newImage("backgrounds/mountainsClose.png"),
-		-- 	love.graphics.newImage("backgrounds/mountainsCloser.png"),
-		-- 	love.graphics.newImage("backgrounds/mountainsClosest.png")
-		-- }
+		self.backgroundIndex = 1
 	elseif mapName == "maps.neon2" then
-	    self.sky = love.graphics.newImage("backgrounds/neon2Sky.png")
-		self.background = love.graphics.newImage("backgrounds/forest.png")
-	elseif mapName == "maps.clouds" then
-	    self.sky = love.graphics.newImage("backgrounds/cloudsSky.png")
-		self.background = love.graphics.newImage("backgrounds/clouds.png")
+		self.backgroundIndex = 2
 	elseif mapName == "maps.lava" then
-		self.sky = love.graphics.newImage("backgrounds/lavaSky.png")
-		self.background = love.graphics.newImage("backgrounds/volcanos.png")
-		self.lavaFlow = love.graphics.newImage("backgrounds/lavaFlow.png")
+		self.backgroundIndex = 3
+	elseif mapName == "maps.clouds" then
+		self.backgroundIndex = 4
+	elseif mapName == "maps.getTheEye" then
+		self.backgroundIndex = 5
 	end
 end
 
@@ -256,46 +261,20 @@ end
 function game:draw()
 	camera:set()
 
-		-- for i,back in pairs(self.parallax) do
-		-- 	-- love.graphics.draw(
-		-- 	-- 	back,
-		-- 	-- 	-512+i*camera.pos.x*0.2,
-		-- 	-- 	192+camera.pos.y*i*0.2
-		-- 	-- )
-		-- 	love.graphics.draw(
-		-- 		back,
-		-- 		-512,
-		-- 		192
-		-- 	)
-		-- end 	
-
-
-	-- if mapName == "maps.clouds" then
-	-- 	love.graphics.setColor(30, 147, 206)
-	-- 	love.graphics.rectangle(
-	-- 		"fill",
-	-- 		camera.pos.x,
-	-- 		camera.pos.y,
-	-- 		screen.w,
-	-- 		screen.h
-	-- 	)
-	-- end
-
 	love.graphics.draw(
-		self.sky,
+		sky[self.backgroundIndex],
 		camera.pos.x,camera.pos.y
 	)
-
+	
 	love.graphics.draw(
-		self.background,
-		-512,
-		-384
+		background[self.backgroundIndex],
+		-512,-384
 	)
 
 	if mapName == "maps.lava" then
 		self.lava.color:set()
 		love.graphics.draw(
-			self.lavaFlow,
+			lavaFlow,
 			-512,
 			-384
 		)
@@ -313,7 +292,6 @@ function game:draw()
 	self.explosions:draw()
 	self.customParticles:draw()
 	self.players:draw()
-	
 
 	drawParticles()
 

@@ -1,10 +1,7 @@
 --Author : Nicolas Reszka
 
 -- TO DO :
--- Special level
--- Competition Mode
 -- Add music?
--- Better graphics?
 
 require "lib.maths"
 require "lib.color"
@@ -157,12 +154,12 @@ function love.load()
 	menu:set()
 
 	--debug
-	isPlaying = {true,true,false,true}
-	choosenCharacters = {characters[1],characters[1],nil,characters[1]}
-	mapName = "maps.lava"
-	game:load()
-	game.halfTime = false
-	game:set()
+	-- isPlaying = {true,true,true,true}
+	-- choosenCharacters = {characters[1],characters[1],characters[1],characters[1]}
+	-- mapName = "maps.getTheEye"
+	-- game:load()
+	-- game.halfTime = false
+	-- game:set()
 
 end
 

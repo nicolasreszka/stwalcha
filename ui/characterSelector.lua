@@ -10,16 +10,16 @@ function CharacterSelector.new(slot)
 	local colorMode
 	if slot == 1 then
 		selector.x, selector.y = 0, 8
-		colorMode = 5
+		colorMode = colors[selector.slot]
 	elseif slot == 2 then
 		selector.x, selector.y = selector.w, 8
-		colorMode = 6
+		colorMode = colors[selector.slot]
 	elseif slot == 3 then
 		selector.x, selector.y = 0, selector.h+8
-		colorMode = 2
+		colorMode = colors[selector.slot]
 	elseif slot == 4 then 
 		selector.x, selector.y = selector.w, selector.h+8
-		colorMode = 4
+		colorMode = colors[selector.slot]
 	end
 
 	selector.joinButton = Rect.new(
@@ -58,19 +58,19 @@ function CharacterSelector.new(slot)
 
 	selector.readyButtonText = AnimatedText.new(
 		selector.x,selector.y+256,
-		"Press [jump] when ready",1,
+		"Press [".. inputs[slot].jump .. "] when ready",1,
 		10,selector.w,colorMode,"horizontal"
 	)
 
 	selector.leaveText = AnimatedText.new(
 		selector.x,selector.y+300,
-		"Press [back] to leave",1,
+		"Press [".. inputs[slot].back .. "] to leave",1,
 		10,selector.w,colorMode,"horizontal"
 	)
 
 	selector.joinText = AnimatedText.new(
 		selector.x,selector.y+128,
-		"Press [jump] to join",1,
+		"Press [".. inputs[slot].jump .. "] to join",1,
 		10,selector.w,colorMode
 	)
 
@@ -221,12 +221,19 @@ function CharacterSelector:update(dt)
 end
 
 function CharacterSelector:draw()
-	self.color:set()
+	
 	--self.joinButton:draw("line")
 
 	if self.state == "inactive" then
 		self.joinText:draw()
 	elseif self.state == "joined" then
+		BLACK:set()
+		love.graphics.printf(
+			"Choose your character",
+			self.x-2,self.y+16-2,
+			self.w,"center"
+		)
+		self.color:set()
 		love.graphics.printf(
 			"Choose your character",
 			self.x,self.y+16,
@@ -235,29 +242,57 @@ function CharacterSelector:draw()
 		if pointVsRect(mouse,self.readyButton)  then
 			self.readyButtonText:draw()
 		else
+			BLACK:set()
 			love.graphics.printf(
-				"Press [jump] when ready",
+				self.readyButtonText.text,
+				self.x-2,self.y+256-2,
+				self.w,"center"
+			)
+			self.color:set()
+			love.graphics.printf(
+				self.readyButtonText.text,
 				self.x,self.y+256,
 				self.w,"center"
 			)
 		end
-		self.color:set()
 		if pointVsRect(mouse,self.leaveButton)  then
 			self.leaveText:draw()
 		else
+			BLACK:set()
 			love.graphics.printf(
-				"Press [back] to leave",
+				self.leaveText.text,
+				self.x-2,self.y+300-2,
+				self.w,"center"
+			)
+			self.color:set()
+			love.graphics.printf(
+				self.leaveText.text,
 				self.x,self.y+300,
 				self.w,"center"
 			)
 		end
 
+		BLACK:set()
+		love.graphics.rectangle(
+			"line",
+			self.leftButton.left-2,
+			self.leftButton.top-2,
+			self.leftButton.w,
+			self.leftButton.h
+		)
 		self.color:set()
 		self.leftButton:draw("line")
 		
 		if pointVsRect(mouse,self.leftButton)  then
 			self.leftText:draw()
 		else
+			BLACK:set()
+			love.graphics.printf(
+				"<",
+				self.leftText.x-2,self.leftText.y-2,
+				self.leftButton.w,"center"
+			)
+			self.color:set()
 			love.graphics.printf(
 				"<",
 				self.leftText.x,self.leftText.y,
@@ -265,12 +300,27 @@ function CharacterSelector:draw()
 			)
 		end
 
+		BLACK:set()
+		love.graphics.rectangle(
+			"line",
+			self.rightButton.left-2,
+			self.rightButton.top-2,
+			self.rightButton.w,
+			self.rightButton.h
+		)
 		self.color:set()
 		self.rightButton:draw("line")
 
 		if pointVsRect(mouse,self.rightButton)  then
 			self.rightText:draw()
 		else
+			BLACK:set()
+			love.graphics.printf(
+				">",
+				self.rightText.x-2,self.rightText.y-2,
+				self.rightButton.w,"center"
+			)
+			self.color:set()
 			love.graphics.printf(
 				">",
 				self.rightText.x,self.rightText.y,

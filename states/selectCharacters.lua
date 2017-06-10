@@ -2,6 +2,9 @@
 
 selectCharacters = State.new()
 
+
+local backgroundImage = love.graphics.newImage("backgrounds/otherMenusBackground.png")
+
 function selectCharacters:load()
 	self.selectors = {}
 	for slot = 1, 4 do
@@ -13,13 +16,14 @@ function selectCharacters:load()
 	self.selectors[4]:setState("inactive")
 	self.backText = AnimatedText.new(
 		32,692,
-		"Back",1,
+		"<< Back",1,
 		10,4*32
 	)
 	self.backButton = Rect.new(32,680,128,64)
 	self.backHover = false
 	self.wait = Clock.new(.2)
 
+	mapName = "maps.neon2"
 	mapWidth = screen.w 
 	mapHeight = screen.h
 
@@ -33,10 +37,10 @@ function selectCharacters:load()
 	game.players = Group.new()
 	game.customParticles = Group.new()
 	initializeParticles() 
-
-end
+	end
 
 function selectCharacters:reload()
+	mapName = "maps.neon2"
 	mapWidth = screen.w 
 	mapHeight = screen.h
 
@@ -58,6 +62,7 @@ function selectCharacters:reload()
 	end
 
 	self.wait:reset()
+
 end
 
 function selectCharacters:isEveryoneReady()
@@ -131,6 +136,12 @@ function selectCharacters:update(dt)
 end
 
 function selectCharacters:draw()
+	WHITE:set()
+	love.graphics.draw(
+		backgroundImage,
+		0,0
+	)
+
 	game.blocks:draw()
 	game.customParticles:draw()
 	game.players:draw()
@@ -141,22 +152,22 @@ function selectCharacters:draw()
 	end
 	if self.backHover then
 		self.backText:draw()
-		self.backButton:draw("line")
+		--self.backButton:draw("line")
 	else
 		BLACK:set()
 		love.graphics.printf(
-			"Back",
+			"<< Back",
 			self.backText.x-3,self.backText.y-3,
 			self.backText.limit,"center"
 		)
-		self.backButton:draw("line")
-		GREEN:set()
+		--self.backButton:draw("line")
+		YELLOW:set()
 		love.graphics.printf(
-			"Back",
+			"<< Back",
 			self.backText.x,self.backText.y,
 			self.backText.limit,"center"
 		)
-		self.backButton:draw("line")
+		--self.backButton:draw("line")
 	end
 	
 end

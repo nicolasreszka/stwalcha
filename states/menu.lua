@@ -58,7 +58,7 @@ function menu:load()
 	))
 	self.title = AnimatedText.new(
 		200,64,"Stwalcha",
-		0.75,16,string.len("Stwalcha")*72
+		1,16,string.len("Stwalcha")*72
 	)
 
 	self.float = 0
@@ -118,6 +118,7 @@ function menu:update(dt)
 end
 
 function menu:draw()
+	WHITE:set()
 	love.graphics.draw(
 		backgroundImage,
 		0,0

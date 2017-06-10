@@ -30,7 +30,7 @@ function AnimatedText.new(x,y,text,time,offset,limit,colorMode,style)
 	if animatedText.colorMode == "rainbow" then
 		animatedText.color = RED:clone()
 	else
-		animatedText.color = animatedText.colors[colorMode]
+		animatedText.color = colorMode
 	end
 
 	animatedText.limit = limit
@@ -58,7 +58,7 @@ function AnimatedText:update(dt)
 			nextColorIndex = 1
 			self.colorIndex = 1
 		end
-		self.color:transform(8,self.colors[nextColorIndex])
+		self.color:transform(1,self.colors[nextColorIndex])
 		if self.color:compare(self.colors[nextColorIndex]) then
 			self.colorIndex = self.colorIndex + 1
 		end

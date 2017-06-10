@@ -2,22 +2,24 @@
 
 selectMap = State.new()
 
+local backgroundImage = love.graphics.newImage("backgrounds/otherMenusBackground.png")
+
 local mapScreens = {
 	love.graphics.newImage('maps/neon.png'),
 	love.graphics.newImage('maps/neon2.png'),
 	love.graphics.newImage('maps/lava.png'),
 	love.graphics.newImage('maps/clouds.png'),
-	love.graphics.newImage('maps/clouds.png')
+	love.graphics.newImage('maps/getTheEye.png')
 }
 
 function selectMap:load()
 	self.interface = ListInterface.new()
 	local left = 64
-	local top = 180
+	local top = 160
 	local margin = 64+16
 	self.interface:add(Button.new(
-		"Neon",
-		Rect.new(left,top,128,64),
+		"Mountains",
+		Rect.new(left-64,top,256,64),
 		function() 
 			mapName = "maps.neon"
 			game:load()
@@ -25,7 +27,7 @@ function selectMap:load()
 		end
 	))
 	self.interface:add(Button.new(
-		"Neon 2",
+		"Jungle",
 		Rect.new(left,top+margin,128,64),
 		function() 
 			mapName = "maps.neon2"
@@ -52,8 +54,8 @@ function selectMap:load()
 		end
 	))
 	self.interface:add(Button.new(
-		"Get The Eye!",
-		Rect.new(left-64,top+margin*4,256,64),
+		"Karma",
+		Rect.new(left,top+margin*4,128,64),
 		function() 
 			mapName = "maps.getTheEye"
 			game:load()
@@ -61,7 +63,7 @@ function selectMap:load()
 		end
 	))
 	self.interface:add(Button.new(
-		"Back",
+		"<< Back",
 		Rect.new(left,top+margin*5,128,64),
 		function() 
 			uiSfx.no:play()
@@ -121,11 +123,17 @@ function selectMap:update(dt)
 end
 
 function selectMap:draw()
+	WHITE:set()
+	love.graphics.draw(
+		backgroundImage,
+		0,0
+	)
+
 	if self.interface.index ~= self.interface.size then
 		local screenX = 256
 		local screenY = 160
 		local screenScale = 0.6
-		GREEN:set()
+		BLACK:set()
 		love.graphics.rectangle(
 			"line",
 			screenX,screenY,

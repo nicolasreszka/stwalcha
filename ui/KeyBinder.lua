@@ -83,12 +83,14 @@ function KeyBinder:draw(playerColor)
 	self.rect:draw("fill")
 	BLACK:set()
 	love.graphics.setFont(font32)
-	love.graphics.printf(
-		self.key,
-		self.rect.left-2, 
-		self.rect.top+12-2,
-		self.rect.w, "center"
-	)
+	if not (self.active and self.rebinding) then
+		love.graphics.printf(
+			self.key,
+			self.rect.left-2, 
+			self.rect.top+12-2,
+			self.rect.w, "center"
+		)
+	end
 
 	if self.active then
 		if self.rebinding then
@@ -102,10 +104,13 @@ function KeyBinder:draw(playerColor)
 
 	self.rect:draw("line")
 	love.graphics.setFont(font32)
-	love.graphics.printf(
-		self.key,
-		self.rect.left, 
-		self.rect.top+12,
-		self.rect.w, "center"
-	)
+
+	if not (self.active and self.rebinding) then
+		love.graphics.printf(
+			self.key,
+			self.rect.left, 
+			self.rect.top+12,
+			self.rect.w, "center"
+		)
+	end
 end

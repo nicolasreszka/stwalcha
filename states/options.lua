@@ -90,7 +90,7 @@ function options:keypressed(key,scancode,isrepeat)
 	self.interface:keypressed(key,scancode,isreapeat)
 
 	if scancode == "escape" then
-		self.interface.objects[3].callback()
+		self.interface.objects[4].callback()
 	end
 end
 
@@ -102,7 +102,7 @@ function options:gamepadpressed(joystick,button)
 	self.interface:gamepadpressed(inputs[1].joystick,button)
 
 	if joystick == inputs[1].joystick and button == "b" then
-		self.interface.objects[3].callback()
+		self.interface.objects[4].callback()
 	end
 end
 

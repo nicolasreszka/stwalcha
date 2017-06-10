@@ -70,15 +70,34 @@ function KeyBinder:update(dt)
 	self.mouseOK = false
 end
 
-function KeyBinder:draw()
+function KeyBinder:draw(playerColor)
+	BLACK:set()
+	love.graphics.rectangle(
+		"line",
+		self.rect.left-2,
+		self.rect.top-2,
+		self.rect.w,
+		self.rect.h
+	)
+	love.graphics.setColor(0,0,0,128)
+	self.rect:draw("fill")
+	BLACK:set()
+	love.graphics.setFont(font32)
+	love.graphics.printf(
+		self.key,
+		self.rect.left-2, 
+		self.rect.top+12-2,
+		self.rect.w, "center"
+	)
+
 	if self.active then
 		if self.rebinding then
-			YELLOW:set()
+			CYAN:set()
 		else
-			RED:set()
+			chatColor:set()
 		end
 	else 
-		GREEN:set()
+		playerColor:set()
 	end
 
 	self.rect:draw("line")
@@ -88,5 +107,5 @@ function KeyBinder:draw()
 		self.rect.left, 
 		self.rect.top+12,
 		self.rect.w, "center"
-	);
+	)
 end

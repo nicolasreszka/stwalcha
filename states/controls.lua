@@ -4,6 +4,10 @@ controls = State.new()
 
 local keyboardImage = love.graphics.newImage('sprites/keyboard.png')
 local gamepadImage = love.graphics.newImage('sprites/gamepad.png')
+local backgroundImage = love.graphics.newImage("backgrounds/otherMenusBackground.png")
+local leftImage = love.graphics.newImage('sprites/controlsLeft.png')
+local rightImage = love.graphics.newImage('sprites/controlsRight.png')
+local jumpImage = love.graphics.newImage('sprites/controlsJump.png')
 
 function controls:load()
 	self.interface = KeyBindingInterface.new()
@@ -69,7 +73,7 @@ function controls:load()
 	end
 
 	self.backButton = Button.new(
-		"Back",
+		"<< Back",
 		Rect.new(
 			xInterface,
 			yInterface+(componentHeight+yMargin)*5,
@@ -137,12 +141,24 @@ function controls:update(dt)
 end
 
 function controls:draw()
+	WHITE:set()
+	love.graphics.draw(
+		backgroundImage,
+		0,0
+	)
+
 	love.graphics.setFont(font72)
 	self.title:draw()
 
 	for i=1,4 do
-		colors[i]:set()
 		love.graphics.setFont(font32)
+		BLACK:set()
+		love.graphics.print(
+			"Player " .. i, 
+			192+(string.len("Player")*32+4)*(i-1)-2, 
+			160-2
+		)
+		colors[i]:set()
 		love.graphics.print(
 			"Player " .. i, 
 			192+(string.len("Player")*32+4)*(i-1), 
@@ -162,16 +178,22 @@ function controls:draw()
 				710	
 			)
 		end
-
-
 	end
 
+	-- WHITE:set()
+	-- love.graphics.draw(leftImage, 48, 230)
+	-- love.graphics.draw(rightImage, 48, 230+96)
+	-- love.graphics.draw(jumpImage, 48, 230+96*2)
+	BLACK:set()
+	love.graphics.print("[left]", 48-2, 230-2)
+	love.graphics.print("[right]", 48-2, 230+96-2)
+	love.graphics.print("[jump]", 48-2, 230+96*2-2)
+	love.graphics.print("[leave]", 48-2, 230+96*3-2)
 	YELLOW:set()
-	love.graphics.print("Left", 48, 230)
-	love.graphics.print("Right",48, 230+96)
-	love.graphics.print("Jump", 48, 230+96*2)
-	love.graphics.print("Back", 48, 230+96*3)
+	love.graphics.print("[left]", 48, 230)
+	love.graphics.print("[right]", 48, 230+96)
+	love.graphics.print("[jump]", 48, 230+96*2)
+	love.graphics.print("[leave]", 48, 230+96*3)
 
 	self.interface:draw()
-	self.backButton.rect:draw("line")
 end

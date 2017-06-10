@@ -213,7 +213,7 @@ function game:update(dt)
 		self.title:update(dt)
 	else 
 		if self.halfTime then
-			--self.god:update()
+			self.god:update()
 		end
 
 		self.bombs:update()
@@ -260,7 +260,7 @@ end
 
 function game:draw()
 	camera:set()
-
+	
 	love.graphics.draw(
 		sky[self.backgroundIndex],
 		camera.pos.x,camera.pos.y

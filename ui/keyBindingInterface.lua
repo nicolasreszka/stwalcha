@@ -245,19 +245,21 @@ end
 function KeyBindingInterface:draw()
 	love.graphics.setFont(font32)
 	if self.objects[self.index.x][self.index.y].rebinding then
-		YELLOW:set()
+		BLACK:set()
+		love.graphics.print("[Any]: rebind key, [Escape]: cancel",420-2,620-2)
+		CYAN:set()
 		love.graphics.print("[Any]: rebind key, [Escape]: cancel",420,620)
 	elseif self.index.y == 5 then
-		RED:set()
-		love.graphics.print("Back to main menu",420,620)
 	else
-		GREEN:set()
+		BLACK:set()
+		love.graphics.print("[Enter]: select key",420-2,620-2)
+		chatColor:set()
 		love.graphics.print("[Enter]: select key",420,620)
 	end
 
 	for x=1,self.width do
 		for y,object in pairs(self.objects[x]) do 
-			object:draw()
+			object:draw(colors[x])
 		end
 	end
 

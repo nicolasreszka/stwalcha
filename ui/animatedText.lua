@@ -58,7 +58,7 @@ function AnimatedText:update(dt)
 			nextColorIndex = 1
 			self.colorIndex = 1
 		end
-		self.color:transform(1,self.colors[nextColorIndex])
+		self.color:transform(3,self.colors[nextColorIndex])
 		if self.color:compare(self.colors[nextColorIndex]) then
 			self.colorIndex = self.colorIndex + 1
 		end

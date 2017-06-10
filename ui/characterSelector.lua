@@ -328,10 +328,17 @@ function CharacterSelector:draw()
 			)
 		end
 
-		colors[self.slot]:set()
 		love.graphics.setFont(font32)
+		
+		BLACK:set()
+		love.graphics.printf(
+			characters[self.index].name,
+			self.x-2, 
+			self.y+192-2, 
+			self.w,"center"
+		)
 
-
+		colors[self.slot]:set()
 		love.graphics.printf(
 			characters[self.index].name,
 			self.x, 

@@ -241,10 +241,32 @@ function Slider:update(dt)
 end
 
 function Slider:draw()
+	BLACK:set()
+	--self.rect:draw("line")
+	love.graphics.rectangle(
+		"line",
+		self.track.left-2,
+		self.track.top-2,
+		self.track.w,
+		self.track.h
+	)
+	love.graphics.rectangle(
+		"line",
+		self.knob.left-2,
+		self.knob.top-2,
+		self.knob.w,
+		self.knob.h
+	)
+
+	love.graphics.setFont(font32)
+	love.graphics.print(self.label, self.rect.left+24-2, self.rect.top-2)
+	love.graphics.setFont(font16)	
+	love.graphics.print(math.floor(self.value*100) .. "%", self.track.right+12-2, self.track.top-2)
+
 	if self.active then
-		RED:set()
+		CYAN:set()
 	else 
-		GREEN:set()
+		YELLOW:set()
 	end
 	--self.rect:draw("line")
 	self.track:draw("line")

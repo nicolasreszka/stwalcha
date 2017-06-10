@@ -1,7 +1,11 @@
 --Author : Nicolas Reszka
 
 -- TO DO :
+-- Particle colors matches block color
+-- Better Chat aura
+-- Better Henry rainbow trail
 -- Add music?
+-- Remove the boot ?
 
 require "lib.maths"
 require "lib.color"
@@ -141,12 +145,6 @@ function love.load()
 		Color.new(0, 165, 255),
 		Color.new(212, 255, 0)
 	}
-	-- colors = {
-	-- 	GREEN:clone(),
-	-- 	RED:clone(),
-	-- 	BLUE:clone(),
-	-- 	YELLOW:clone()
-	-- }
 
 	isPlaying = {false,false,false,false}
 	choosenCharacters = {nil,nil,nil,nil}

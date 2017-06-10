@@ -1,7 +1,7 @@
 --Author : Nicolas Reszka
 
 menu = State.new()
-menu.saveClock = Clock.new(0.5)
+menu.saveClock = Clock.new(0.75)
 menu.saveClock:forceAlarm()
 
 local backgroundImage = love.graphics.newImage("backgrounds/menuBackground.png")
@@ -160,9 +160,16 @@ function menu:draw()
 	self.interface:draw()
 
 	if not self.saveClock:alarm() then
+		BLACK:set()
+		love.graphics.printf(
+			"Saving... ", 
+			-2,
+			720-2,
+			screen.w, "right"
+		)
 		YELLOW:set()
 		love.graphics.printf(
-			"saving...", 
+			"Saving... ", 
 			0,
 			720,
 			screen.w, "right"

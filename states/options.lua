@@ -2,6 +2,8 @@
 
 options = State.new()
 
+local backgroundImage = love.graphics.newImage("backgrounds/otherMenusBackground.png")
+
 function options:load()
 	self.interface = ListInterface.new()
 	local left = 160
@@ -28,7 +30,7 @@ function options:load()
 		end
 	))
 	self.interface:add(Button.new(
-		"Back",
+		"<< Back",
 		Rect.new(left,top + margin * 2,128,64),
 		function() 
 			local data = ""
@@ -97,7 +99,12 @@ function options:update(dt)
 end
 
 function options:draw()
-	
+	WHITE:set()
+	love.graphics.draw(
+		backgroundImage,
+		0,0
+	)
+
 	love.graphics.setFont(font72)
 	self.title:draw()
 	self.interface:draw()

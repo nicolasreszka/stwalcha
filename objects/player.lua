@@ -77,7 +77,7 @@ function Player.new(x,y,slot,character)
 
 	player.name = character.name
 	player.weedClock = Clock.new(0.15)
-	player.rainbowClock = Clock.new(0.01)
+	player.rainbowClock = Clock.new(0.005)
 	player.waitForParticles = false
 
 	if player.name == "Henry" then

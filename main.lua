@@ -1,7 +1,8 @@
 --Author : Nicolas Reszka
 
 -- TO DO :
--- Add music?
+-- gamepad controls in character selection
+-- Add music
 
 require "lib.maths"
 require "lib.color"

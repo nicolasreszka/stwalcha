@@ -82,9 +82,12 @@ function drawParticles()
 	love.graphics.draw(greenFireworks)
 	love.graphics.draw(blueFireworks)
 	if mapName == "maps.neon2" then
-		love.graphics.setColor(233, 255, 0)
+		love.graphics.setColor(255,243,56)
+		--love.graphics.setColor(177,177,19)
+	elseif mapName == "maps.lava" then
+		love.graphics.setColor(52,15,34)
 	else
-		love.graphics.setColor(255,0,128)
+		love.graphics.setColor(0,6,22)
 	end
 	love.graphics.draw(confettis)
 end

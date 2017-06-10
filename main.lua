@@ -1,11 +1,7 @@
 --Author : Nicolas Reszka
 
 -- TO DO :
--- Particle colors matches block color
--- Better Chat aura
--- Better Henry rainbow trail
 -- Add music?
--- Remove the boot ?
 
 require "lib.maths"
 require "lib.color"
@@ -116,6 +112,11 @@ function love.load()
 		local data = loadData("settings.txt")
 		love.window.setFullscreen(data["fullscreen"])
 		love.audio.setVolume(data["volume"])
+		if data["filter"] == true then
+			screen.canvas:setFilter("linear","linear",16)
+		else
+			screen.canvas:setFilter("nearest","nearest")
+		end
 	end
 
 	if love.filesystem.exists("controls.txt") then
@@ -153,8 +154,8 @@ function love.load()
 	menu:set()
 
 	--debug
-	-- isPlaying = {true,true,true,true}
-	-- choosenCharacters = {characters[1],characters[1],characters[1],characters[1]}
+	-- isPlaying = {true,false,false,false}
+	-- choosenCharacters = {characters[8],nil,nil,nil}
 	-- mapName = "maps.getTheEye"
 	-- game:load()
 	-- -- game.halfTime = false

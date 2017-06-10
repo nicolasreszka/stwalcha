@@ -21,9 +21,28 @@ function options:load()
 			end
 		end
 	))
+	local filter = screen.canvas:getFilter()
+	if filter == "linear" then
+		filter = true
+	else
+		filter = false
+	end
+	self.filterSwitch = Switch.new(
+		"Filter",
+		Rect.new(left,top + margin,720,32),
+		filter,
+		function(on) 
+			if on then
+				screen.canvas:setFilter("linear","linear",16)
+			else
+				screen.canvas:setFilter("nearest","nearest")
+			end
+		end
+	)
+	self.interface:add(self.filterSwitch)
 	self.interface:add(Slider.new(
 		"Volume",
-		Rect.new(left,top + margin,720,32),
+		Rect.new(left,top + margin*2,720,32),
 		love.audio.getVolume(),
 		function(value) 
 			love.audio.setVolume(value)
@@ -31,10 +50,12 @@ function options:load()
 	))
 	self.interface:add(Button.new(
 		"<< Back",
-		Rect.new(left,top + margin * 2,128,64),
+		Rect.new(left,top + margin * 3,128,64),
 		function() 
 			local data = ""
 			data = data .. "fullscreen = " .. booleanToString(love.window.getFullscreen())
+			data = data .. ";"
+			data = data .. "filter = " .. booleanToString(self.filterSwitch.on)
 			data = data .. ";"
 			data = data .. "volume = " .. love.audio.getVolume()
 			data = data .. ";"

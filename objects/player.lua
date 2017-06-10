@@ -80,6 +80,10 @@ function Player.new(x,y,slot,character)
 	player.rainbowClock = Clock.new(0.01)
 	player.waitForParticles = false
 
+	if player.name == "Henry" then
+		player.rainbowPoints = {}
+	end
+
 	return player
 end
 
@@ -115,14 +119,30 @@ function Player:update()
 	 			self.rainbowClock:reset()
 	 		end
 	 	elseif self.vx ~= 0 or self.vy ~= 0 then
-	 		game.customParticles:add(
-	 			Rainbow.new(
-	 				self.pos.x+self.width/2,
-	 				self.pos.y+self.height/2,
-	 				angle({x=0,y=0},{x=self.vx,y=self.vy}) 
-	 			)
+	 		-- game.customParticles:add(
+	 		-- 	Rainbow.new(
+	 		-- 		self.pos.x+self.width/2,
+	 		-- 		self.pos.y+self.height/2,
+	 		-- 		angle({x=0,y=0},{x=self.vx,y=self.vy}) 
+	 		-- 	)
+	 		-- )
+	 		table.insert(
+	 			self.rainbowPoints,
+	 			{
+	 				x=self.pos.x+self.width/2,
+	 				y=self.pos.y+self.height/2,
+	 				alpha=255
+	 			}
 	 		)
 	 		self.waitForParticles = true
+	 	end
+	 	for i,rainbowPoint in pairs(self.rainbowPoints) do
+	 		rainbowPoint.alpha = rainbowPoint.alpha - 5
+	 		if rainbowPoint.alpha <= 0 then
+	 			table.remove(
+	 				self.rainbowPoints,i
+	 			)
+	 		end
 	 	end
  	end
 
@@ -551,6 +571,71 @@ function Player:blink()
 end
 
 function Player:draw()
+	if self.name == "Henry" then
+		if #self.rainbowPoints > 1 then
+			local lastY = self.rainbowPoints[1].y
+			local lastX = self.rainbowPoints[1].x
+			love.graphics.setLineWidth(2)
+			for i, rainbowPoint in pairs(self.rainbowPoints) do
+				if distance(rainbowPoint, {x=lastX,y=lastY}) < 500 then
+					local a = math.rad(
+						math.deg(
+							angle(
+								rainbowPoint,
+								{x=lastX,y=lastY}
+							)+90
+						)
+					)
+					love.graphics.setColor(255,0,0,rainbowPoint.alpha)
+					love.graphics.line(
+						lastX-lengthDirectionX(10,a), 
+						lastY-lengthDirectionY(10,a), 
+						rainbowPoint.x-lengthDirectionX(10,a), 
+						rainbowPoint.y-lengthDirectionY(10,a)
+					)
+					love.graphics.setColor(255,255,0,rainbowPoint.alpha)
+					love.graphics.line(
+						lastX-lengthDirectionX(8,a), 
+						lastY-lengthDirectionY(8,a), 
+						rainbowPoint.x-lengthDirectionX(8,a), 
+						rainbowPoint.y-lengthDirectionY(8,a)
+					)
+					love.graphics.setColor(0,255,0,rainbowPoint.alpha)
+					love.graphics.line(
+						lastX-lengthDirectionX(6,a), 
+						lastY-lengthDirectionY(6,a), 
+						rainbowPoint.x-lengthDirectionX(6,a), 
+						rainbowPoint.y-lengthDirectionY(6,a)
+					)
+					love.graphics.setColor(0,255,255,rainbowPoint.alpha)
+					love.graphics.line(
+						lastX-lengthDirectionX(4,a), 
+						lastY-lengthDirectionY(4,a), 
+						rainbowPoint.x-lengthDirectionX(4,a), 
+						rainbowPoint.y-lengthDirectionY(4,a)
+					)
+					love.graphics.setColor(255,0,255,rainbowPoint.alpha)
+					love.graphics.line(
+						lastX-lengthDirectionX(2,a), 
+						lastY-lengthDirectionY(2,a), 
+						rainbowPoint.x-lengthDirectionX(2,a), 
+						rainbowPoint.y-lengthDirectionY(2,a)
+					)
+					love.graphics.setColor(0,0,255,rainbowPoint.alpha)
+					love.graphics.line(
+						lastX,
+						lastY, 
+						rainbowPoint.x, 
+						rainbowPoint.y
+					)
+				end
+				lastX = rainbowPoint.x
+				lastY = rainbowPoint.y
+			end	
+			love.graphics.setLineWidth(1)
+		end
+	end
+
 	if game.chat[self.slot] then
 		self.color:set()
 	else 	

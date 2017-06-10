@@ -15,7 +15,7 @@ function Button.new(label,rect,callback)
 	button.animatedText = AnimatedText.new(
 		rect.left, 
 		rect.top+12,
-		label,1,16,rect.w
+		label,0.75,10,rect.w
 	)
 	return button
 end
@@ -59,7 +59,14 @@ function Button:draw(mode)
 	if self.active then
 		self.animatedText:draw()
 	else 
-		GREEN:set()
+		BLACK:set()
+		love.graphics.printf(
+			self.label, 
+			self.rect.left-2, 
+			self.rect.top+12-2,
+			self.rect.w, "center"
+		);
+		YELLOW:set()
 		love.graphics.printf(
 			self.label, 
 			self.rect.left, 

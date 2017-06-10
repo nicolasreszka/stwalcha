@@ -83,6 +83,7 @@ function love.load()
 	font32 = love.graphics.newFont("sprites/font.ttf", 32)
 	font48 = love.graphics.newFont("sprites/font.ttf", 48)
 	font72 = love.graphics.newFont("sprites/font.ttf", 72)
+	font128 = love.graphics.newFont("sprites/font.ttf", 128)
 
 	love.audio.setPosition(0,0,0)
 	sfx = {
@@ -133,19 +134,19 @@ function love.load()
 		}
 	end
 
-	chatColor =  Color.new(255, 40, 222)
-	-- colors = {
-	-- 	Color.new(139, 230, 180),
-	-- 	Color.new(159, 195, 255),
-	-- 	Color.new(255, 0, 50),
-	-- 	Color.new(255, 128, 0)
-	-- }
+	chatColor =  Color.new(255, 0, 208)
 	colors = {
-		GREEN:clone(),
-		RED:clone(),
-		BLUE:clone(),
-		YELLOW:clone()
+		Color.new(0, 255, 85),
+		Color.new(255, 0, 60),
+		Color.new(0, 165, 255),
+		Color.new(212, 255, 0)
 	}
+	-- colors = {
+	-- 	GREEN:clone(),
+	-- 	RED:clone(),
+	-- 	BLUE:clone(),
+	-- 	YELLOW:clone()
+	-- }
 
 	isPlaying = {false,false,false,false}
 	choosenCharacters = {nil,nil,nil,nil}
@@ -158,7 +159,7 @@ function love.load()
 	-- choosenCharacters = {characters[1],characters[1],characters[1],characters[1]}
 	-- mapName = "maps.getTheEye"
 	-- game:load()
-	-- game.halfTime = false
+	-- -- game.halfTime = false
 	-- game:set()
 
 end

@@ -552,39 +552,6 @@ end
 
 function Player:draw()
 	if game.chat[self.slot] then
-		chatColor:set()
-		love.graphics.draw(
-			self.image,
-			self.pos.x-self.xScale*self.width/2+self.width/2-2, 
-			self.pos.y-self.yScale*self.height/2+self.height/2, 
-			0,
-			self.xScale, 
-			self.yScale
-		)
-		love.graphics.draw(
-			self.image,
-			self.pos.x-self.xScale*self.width/2+self.width/2+2, 
-			self.pos.y-self.yScale*self.height/2+self.height/2, 
-			0,
-			self.xScale, 
-			self.yScale
-		)
-		love.graphics.draw(
-			self.image,
-			self.pos.x-self.xScale*self.width/2+self.width/2, 
-			self.pos.y-self.yScale*self.height/2+self.height/2+2, 
-			0,
-			self.xScale, 
-			self.yScale
-		)
-		love.graphics.draw(
-			self.image,
-			self.pos.x-self.xScale*self.width/2+self.width/2, 
-			self.pos.y-self.yScale*self.height/2+self.height/2-2, 
-			0,
-			self.xScale, 
-			self.yScale
-		)
 		self.color:set()
 	else 	
 		colors[self.slot]:set()
@@ -599,4 +566,15 @@ function Player:draw()
 		self.yScale
 	)
 
+	if game.chat[self.slot] then
+		chatColor:set()
+		love.graphics.setLineWidth(2)
+		love.graphics.rectangle(
+			"line",
+			self.pos.x-self.xScale*self.width/2+self.width/2, 
+			self.pos.y-self.yScale*self.height/2+self.height/2,
+			self.width*self.xScale,self.height*self.yScale
+		)
+		love.graphics.setLineWidth(1)
+	end
 end

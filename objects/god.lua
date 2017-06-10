@@ -44,6 +44,8 @@ function God.new()
 	god.lookAngle = math.rad(270)
 	god.lightingPoints = {}
 
+	god.float = 0
+
 	return god
 end
 
@@ -65,6 +67,14 @@ function God:update()
 	end
 	self.eye.x = self.pos.x + lengthDirectionX(8,self.lookAngle)
 	self.eye.y = self.pos.y + lengthDirectionY(8,self.lookAngle)
+
+	if self.state ~= "arrival" or self.state ~= "departure" then
+		self.float = self.float + 3
+		if self.float >= 360 then
+			self.float = 0
+		end
+		self.pos.y = self.pos.y + 0.5*math.cos(math.rad(self.float))
+	end
 	
 	-- self.leftEye.x = self.pos.x-40 + lengthDirectionX(8,self.lookAngle)
 	-- self.leftEye.y = self.pos.y-8 + lengthDirectionY(8,self.lookAngle)
@@ -231,8 +241,9 @@ function God:drawLighting(lightingPoints)
 end
 
 function God:draw()
-	chatColor:set()
+	--chatColor:set()
 	--love.graphics.rectangle("line",self.pos.x-64,self.pos.y-64,128,128)
+	love.graphics.setColor(100, 187, 146)
 	love.graphics.polygon(
 		"fill",
 		{
@@ -241,7 +252,8 @@ function God:draw()
 			self.pos.x+64,self.pos.y+64
 		}
 	)
-	GREEN:set()
+	love.graphics.setLineWidth(2)
+	BLACK:set()
 	love.graphics.polygon(
 		"line",
 		{
@@ -250,6 +262,7 @@ function God:draw()
 			self.pos.x+64,self.pos.y+64
 		}
 	)
+	love.graphics.setLineWidth(1)
 	WHITE:set()
 	love.graphics.circle("fill",self.pos.x,self.pos.y,16)
 	BLUE:set()

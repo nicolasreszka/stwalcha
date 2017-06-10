@@ -21,6 +21,7 @@ function AnimatedText.new(x,y,text,time,offset,limit,colorMode,style)
 		Color.new(255,128,0),
 		YELLOW:clone(),
 		GREEN:clone(),
+		CYAN:clone(),
 		BLUE:clone(),
 		Color.new(128,0,255)
 	}
@@ -50,30 +51,32 @@ function AnimatedText:update(dt)
 			self.finished = true
 		end
 	end
-	self.xOffset = linear(1, self.xOffsetMax, self.clock)
+	self.xOffset = linear(0, self.xOffsetMax, self.clock)
 	if self.colorMode == "rainbow" then	
 		local nextColorIndex = self.colorIndex + 1
-		if nextColorIndex > 7 then
+		if nextColorIndex > 8 then
 			nextColorIndex = 1
 			self.colorIndex = 1
 		end
-		self.color:transform(4,self.colors[nextColorIndex])
+		self.color:transform(8,self.colors[nextColorIndex])
 		if self.color:compare(self.colors[nextColorIndex]) then
 			self.colorIndex = self.colorIndex + 1
 		end
 	end
-
-
 end
 
 function AnimatedText:draw()
-	for i = 0, self.xOffset do
-		local p = (i/self.xOffset)
-		love.graphics.setColor(
-			p*self.color.red,
-			p*self.color.green,
-			p*self.color.blue
-		)
+	for i = 0, self.xOffset+1 do
+		if i == self.xOffset+1 then
+			self.color:set()
+		else
+			local p = (i/self.xOffset)
+			love.graphics.setColor(
+				p*self.color.red,
+				p*self.color.green,
+				p*self.color.blue
+			)
+		end
 
 		if self.style == "normal" then
 			love.graphics.printf(

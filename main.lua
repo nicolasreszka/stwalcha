@@ -1,7 +1,6 @@
 --Author : Nicolas Reszka
 
 -- TO DO :
--- gamepad controls in character selection
 -- Add music
 
 require "lib.maths"
@@ -170,6 +169,17 @@ function love.joystickadded(joystick)
 		or not input.joystick:isConnected() then
 			input.joystick = joystick
 			break
+		end
+	end
+end
+
+function love.joystickremoved(joystick)
+	for i, input in pairs(inputs) do
+		if input.joystick ~= nil then
+			if input.joystick:getID() == joystick:getID() then
+				input.joystick = nil
+				break
+			end
 		end
 	end
 end

@@ -118,6 +118,18 @@ function CharacterSelector:removePlayer()
 end
 
 function CharacterSelector:update(dt)
+	if inputs[self.slot].joystick == nil 
+	or not inputs[self.slot].joystick:isConnected() then
+		self.readyButtonText.text = "Press [".. inputs[self.slot].jump .. "] when ready"
+		self.leaveText.text ="Press [".. inputs[self.slot].back .. "] to leave"
+		self.joinText.text = "Press [".. inputs[self.slot].jump .. "] to join"
+	else
+		self.readyButtonText.text = "Press (A) when ready"
+		self.leaveText.text ="Press (B) to leave"
+		self.joinText.text = "Press (A) to join"
+	end
+
+
 	if self.state == "inactive" then
 		if inputs[self.slot].jumpPressed 
 		or pointVsRect(mouse,self.joinButton) and mouse.leftPressed then

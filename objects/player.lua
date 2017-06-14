@@ -79,6 +79,8 @@ function Player.new(x,y,slot,character)
 	player.weedClock = Clock.new(0.15)
 	player.rainbowClock = Clock.new(0.005)
 	player.waitForParticles = false
+	player.waitForFire = false
+	player.fireClock = Clock.new(0.0025)
 
 	if player.name == "Henry" then
 		player.rainbowPoints = {}
@@ -94,6 +96,26 @@ function Player:update()
 
  	self:landAndTakeOff()
 	
+ 	if game.chat[self.slot] then
+ 		if self.waitForFire then
+	 		self.fireClock:tick()
+	 		if self.waitForFire:alarm() then
+	 			self.waitForFire = false
+	 			self.waitForFire:reset()
+	 		end
+	 	else
+	 		instantiateFire(
+	 			love.math.random(
+	 				self.pos.x,self.pos.x+self.width
+	 			),
+	 			love.math.random(
+	 				self.pos.y,self.pos.y+self.height*0.5
+	 			),
+	 			love.math.random(2,8)
+	 		)
+	 	end
+ 	end
+
  	if self.name == "Mary" then
  		if self.waitForParticles then
 	 		self.weedClock:tick()

@@ -10,12 +10,12 @@ function credits:load()
 
 	self.title2 = AnimatedText.new(
 		0,256,"Powered by Löve",
-		1.5,10,screen.w
+		1.75,10,screen.w
 	)
 
 	self.title3 = AnimatedText.new(
 		0,620,"Press any key to leave this screen",
-		0.75,8,screen.w
+		2,6,screen.w
 	)
 end
 

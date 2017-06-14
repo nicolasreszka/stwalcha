@@ -291,6 +291,8 @@ function game:draw()
 	self.bombs:draw()
 	self.explosions:draw()
 	self.customParticles:draw()
+	chatColor:set()
+	love.graphics.draw(fireParticles)
 	self.players:draw()
 
 	drawParticles()

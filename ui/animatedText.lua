@@ -23,7 +23,7 @@ function AnimatedText.new(x,y,text,time,offset,limit,colorMode,style)
 		GREEN:clone(),
 		CYAN:clone(),
 		BLUE:clone(),
-		Color.new(128,0,255)
+		Color.new(255,0,255)
 	}
 	animatedText.colorIndex = 1
 
@@ -54,13 +54,12 @@ function AnimatedText:update(dt)
 	self.xOffset = linear(0, self.xOffsetMax, self.clock)
 	if self.colorMode == "rainbow" then	
 		local nextColorIndex = self.colorIndex + 1
-		if nextColorIndex > 8 then
+		if nextColorIndex > #self.colors then
 			nextColorIndex = 1
-			self.colorIndex = 1
 		end
 		self.color:transform(3,self.colors[nextColorIndex])
 		if self.color:compare(self.colors[nextColorIndex]) then
-			self.colorIndex = self.colorIndex + 1
+			self.colorIndex = nextColorIndex
 		end
 	end
 end

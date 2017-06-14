@@ -5,6 +5,7 @@ Block.__index = Block
 
 
 local image = love.graphics.newImage("backgrounds/neon2Block.png")
+local image2 = love.graphics.newImage("backgrounds/neonBlock.png")
 
 function Block.new(x,y)
 	local block = {}
@@ -19,6 +20,12 @@ function Block:draw()
 		WHITE:set()
 		love.graphics.draw(
 			image,
+			self.rect.left,self.rect.top
+		)
+	elseif mapName == "maps.getTheEye" then
+		WHITE:set()
+		love.graphics.draw(
+			image2,
 			self.rect.left,self.rect.top
 		)
 	elseif mapName == "maps.lava" then

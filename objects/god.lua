@@ -5,7 +5,7 @@ God.__index = God
 
 local baseEyeColor = YELLOW:clone()
 local shake = 8
-local eyeSpeed = 5
+local eyeSpeed = 6
 
 function God.new()
 	local god = {}

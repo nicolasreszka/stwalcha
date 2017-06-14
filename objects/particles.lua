@@ -2,8 +2,15 @@
 
 local squareImage = love.graphics.newImage('sprites/particle.png')
 local rainImage = love.graphics.newImage('sprites/rainParticle.png')
+local flameImage = love.graphics.newImage('sprites/flameParticle.png')
 
 function initializeParticles()
+
+	fireParticles = love.graphics.newParticleSystem(flameImage, 100)
+	fireParticles:setParticleLifetime(0.2,0.35)
+	fireParticles:setSizeVariation(0.5)
+	fireParticles:setLinearAcceleration(-400, -500, 400, -350)
+	fireParticles:setColors(255, 255, 255, 255, 255, 255, 255, 0)
 
 	dustBottom = love.graphics.newParticleSystem(squareImage, 100)
 	dustBottom:setParticleLifetime(0.2,0.4)
@@ -70,6 +77,7 @@ function updateParticles()
 	blueFireworks:update(dt)
 	confettis:update(dt)
 	rain:update(dt)
+	fireParticles:update(dt)
 end
 
 function drawParticles()
@@ -90,6 +98,11 @@ function drawParticles()
 		love.graphics.setColor(0,6,22)
 	end
 	love.graphics.draw(confettis)
+end
+
+function instantiateFire(x,y,amount)
+	fireParticles:setPosition(x,y)
+	fireParticles:emit(amount)
 end
 
 function instantiateDustBottom(x,y,amount)

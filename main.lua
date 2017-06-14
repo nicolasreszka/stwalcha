@@ -2,6 +2,17 @@
 
 -- TO DO :
 -- Add music
+-- (main gauche insistante répétitive)
+-- Jungle music : monkey skulls do lab sol fa (c ab g f)
+-- Autre posibilité : do sib lab sol (c Bb Ab G) (main gauche) do ré mib doaigu (C D Eb C(aigu) (main droite)
+-- Preset : log drum (bells)
+-- Montagne : (main gauche insistante répétitive)
+-- main gauche : Do Fa
+-- main droite (do mib) (si ré) (do mib) (ré fa) (mib sol) (sol sib) (fa la)
+-- Lava :
+-- xylophone (g014) 
+-- main gauche do ré mib fa (do fa principales)
+-- main droite do ré mib sol do(aigu) mib(aigu) ré si do
 
 require "lib.maths"
 require "lib.color"
@@ -50,7 +61,7 @@ require "states.selectMap"
 require "states.game"
 require "states.credits"
 
-function loadData(filename)
+local function loadData(filename)
 	local text = love.filesystem.read(filename)
 	local strings = text:split(";")
 	local data = {}
@@ -155,7 +166,7 @@ function love.load()
 
 	--debug
 	-- isPlaying = {true,false,false,false}
-	-- choosenCharacters = {characters[8],nil,nil,nil}
+	-- choosenCharacters = {characters[1],characters[1],nil,nil}
 	-- mapName = "maps.getTheEye"
 	-- game:load()
 	-- -- game.halfTime = false

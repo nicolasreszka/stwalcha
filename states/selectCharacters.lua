@@ -157,7 +157,7 @@ function selectCharacters:draw()
 		BLACK:set()
 		love.graphics.printf(
 			"<< Back",
-			self.backText.x-3,self.backText.y-3,
+			self.backText.x-2,self.backText.y-2,
 			self.backText.limit,"center"
 		)
 		--self.backButton:draw("line")

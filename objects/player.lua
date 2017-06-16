@@ -592,7 +592,7 @@ function Player:blink()
 	end
 end
 
-function Player:draw()
+function Player:drawRainbow()
 	if self.name == "Henry" then
 		if #self.rainbowPoints > 1 then
 			local lastY = self.rainbowPoints[1].y
@@ -657,7 +657,9 @@ function Player:draw()
 			love.graphics.setLineWidth(1)
 		end
 	end
+end
 
+function Player:draw()
 	if game.chat[self.slot] then
 		self.color:set()
 	else 	
@@ -683,5 +685,23 @@ function Player:draw()
 			self.width*self.xScale,self.height*self.yScale
 		)
 		love.graphics.setLineWidth(1)
+	end
+
+	if showPlayerNames then
+		love.graphics.setFont(font16)
+		BLACK:set()
+		love.graphics.printf(
+			self.name,
+			self.pos.x-(64-self.width/2)-1,
+			self.pos.y-self.yScale*self.height/2+self.height/2-48-1,
+			128,"center"
+		)
+		colors[self.slot]:set()
+		love.graphics.printf(
+			self.name,
+			self.pos.x-(64-self.width/2),
+			self.pos.y-self.yScale*self.height/2+self.height/2-48,
+			128,"center"
+		)
 	end
 end

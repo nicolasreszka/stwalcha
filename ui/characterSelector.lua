@@ -237,8 +237,10 @@ function CharacterSelector:draw()
 	--self.joinButton:draw("line")
 
 	if self.state == "inactive" then
+		love.graphics.setFont(font32)
 		self.joinText:draw()
 	elseif self.state == "joined" then
+		love.graphics.setFont(font32)
 		BLACK:set()
 		love.graphics.printf(
 			"Choose your character",
@@ -340,7 +342,7 @@ function CharacterSelector:draw()
 			)
 		end
 
-		love.graphics.setFont(font32)
+		
 		
 		BLACK:set()
 		love.graphics.printf(
@@ -395,6 +397,7 @@ function CharacterSelector:draw()
 			0
 		)
 	elseif self.state == "ready" then
+		love.graphics.setFont(font32)
 		self.readyText:draw()
 	end
 end

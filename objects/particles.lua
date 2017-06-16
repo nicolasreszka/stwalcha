@@ -6,7 +6,7 @@ local flameImage = love.graphics.newImage('sprites/flameParticle.png')
 
 function initializeParticles()
 
-	fireParticles = love.graphics.newParticleSystem(flameImage, 100)
+	fireParticles = love.graphics.newParticleSystem(flameImage, 256)
 	fireParticles:setParticleLifetime(0.2,0.35)
 	fireParticles:setSizeVariation(0.5)
 	fireParticles:setLinearAcceleration(-400, -500, 400, -350)

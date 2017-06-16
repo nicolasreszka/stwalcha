@@ -144,6 +144,9 @@ function selectCharacters:draw()
 
 	game.blocks:draw()
 	game.customParticles:draw()
+	for i, player in pairs(game.players.objects) do
+		player:drawRainbow()
+	end
 	game.players:draw()
 	drawParticles()
 

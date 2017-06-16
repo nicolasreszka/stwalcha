@@ -261,7 +261,7 @@ function Slider:draw()
 	love.graphics.setFont(font32)
 	love.graphics.print(self.label, self.rect.left+24-2, self.rect.top-2)
 	love.graphics.setFont(font16)	
-	love.graphics.print(math.floor(self.value*100) .. "%", self.track.right+12-2, self.track.top-2)
+	love.graphics.print(math.floor(self.value*100) .. "%", self.track.right+12-2, self.track.top-6-2)
 
 	if self.active then
 		CYAN:set()
@@ -275,5 +275,5 @@ function Slider:draw()
 	love.graphics.setFont(font32)
 	love.graphics.print(self.label, self.rect.left+24, self.rect.top)
 	love.graphics.setFont(font16)	
-	love.graphics.print(math.floor(self.value*100) .. "%", self.track.right+12, self.track.top)
+	love.graphics.print(math.floor(self.value*100) .. "%", self.track.right+12, self.track.top-6)
 end

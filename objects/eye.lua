@@ -46,6 +46,7 @@ function Eye:update(dt)
 		self.player = game.players:rectsVsRect(self.rect)
 		if self.player then
 			self.taken = true
+			sfx.lighting:stop()
 			sfx.lighting:playAt({x=0,y=0})
 			for i,player in pairs(game.players.objects) do
 				player.input:vibration(0.5)

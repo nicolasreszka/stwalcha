@@ -90,7 +90,7 @@ function love.load()
 	mouse.leftPressed = false
 	audioListener = Point.new(screen.w/2,screen.h/2)
 
-	font16 = love.graphics.newFont("sprites/font.ttf", 16)
+	font16 = love.graphics.newFont("sprites/font.ttf", 24)
 	font32 = love.graphics.newFont("sprites/font.ttf", 32)
 	font48 = love.graphics.newFont("sprites/font.ttf", 48)
 	font72 = love.graphics.newFont("sprites/font.ttf", 72)
@@ -119,6 +119,8 @@ function love.load()
 		plus = love.audio.newSource("sounds/UI/plus.wav", "static")
 	}
 
+	showPlayerNames = true
+
 	if love.filesystem.exists("settings.txt") then
 		local data = loadData("settings.txt")
 		love.window.setFullscreen(data["fullscreen"])
@@ -128,6 +130,7 @@ function love.load()
 		else
 			screen.canvas:setFilter("nearest","nearest")
 		end
+		showPlayerNames = data["showPlayerNames"]
 	end
 
 	if love.filesystem.exists("controls.txt") then
@@ -240,9 +243,9 @@ function love.gamepadaxis(joystick,axis,value)
 end
 
 function love.update(dt)
-	if dt < 1/60 then
-		love.timer.sleep(1/60 - dt)
-	end
+	-- if dt < 1/60 then
+	-- 	love.timer.sleep(1/60 - dt)
+	-- end
 	gameState:update(dt)
 	mouse.leftPressed = false
 end

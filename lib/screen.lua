@@ -10,8 +10,8 @@ function Screen.new(w,h)
 	screen.w, screen.h = w, h
 	screen.scale = 1
 	screen.canvas = love.graphics.newCanvas(w,h)
-	screen.canvas:setFilter("nearest")
-	--screen.canvas:setFilter("linear","linear")
+	--screen.canvas:setFilter("nearest")
+	screen.canvas:setFilter("linear","linear")
 	return screen
 end
 

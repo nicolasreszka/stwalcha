@@ -291,6 +291,9 @@ function game:draw()
 	self.bombs:draw()
 	self.explosions:draw()
 	self.customParticles:draw()
+	for i, player in pairs(self.players.objects) do
+		player:drawRainbow()
+	end
 	chatColor:set()
 	love.graphics.draw(fireParticles)
 	self.players:draw()

@@ -40,9 +40,21 @@ function options:load()
 		end
 	)
 	self.interface:add(self.filterSwitch)
+	self.interface:add(Switch.new(
+		"Show player names",
+		Rect.new(left,top + margin * 2,720,32),
+		showPlayerNames,
+		function(on) 
+			if on then
+				showPlayerNames = true
+			else
+				showPlayerNames = false
+			end
+		end
+	))
 	self.interface:add(Slider.new(
 		"Volume",
-		Rect.new(left,top + margin*2,720,32),
+		Rect.new(left,top + margin * 3,720,32),
 		love.audio.getVolume(),
 		function(value) 
 			love.audio.setVolume(value)
@@ -50,12 +62,14 @@ function options:load()
 	))
 	self.interface:add(Button.new(
 		"<< Back",
-		Rect.new(left,top + margin * 3,128,64),
+		Rect.new(left,top + margin * 4,128,64),
 		function() 
 			local data = ""
 			data = data .. "fullscreen = " .. booleanToString(love.window.getFullscreen())
 			data = data .. ";"
 			data = data .. "filter = " .. booleanToString(self.filterSwitch.on)
+			data = data .. ";"
+			data = data .. "showPlayerNames = " .. booleanToString(showPlayerNames)
 			data = data .. ";"
 			data = data .. "volume = " .. love.audio.getVolume()
 			data = data .. ";"

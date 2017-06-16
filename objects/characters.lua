@@ -72,7 +72,7 @@ characters = {
 		squashX = 1.50,
 		squashY = .75,
 		stretchX = .50,
-		stretchY = 1.25,
+		stretchY = 1.275,
 		restitution = 0.035,
 		accelerationGround = .2,
 		accelerationAir = .6,
@@ -193,7 +193,7 @@ characters = {
 		maxSpeedGround = 8,
 		maxSpeedAir = 10,
 		jumpForce = 8,
-		gravity = .4,
+		gravity = .375,
 		maxGravity = 48,
 		image = love.graphics.newImage('sprites/Mary.png')
 	}

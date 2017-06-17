@@ -100,14 +100,15 @@ characters = {
 		accelerationAir = .6,
 		accelerationDuration = 1,
 		frictionGround = .4,
-		frictionAir = .2,
+		frictionAir = .6,
 		frictionDuration = .2,
 		maxSpeedGround = 8,
 		maxSpeedAir = 10,
 		jumpForce = 8,
-		gravity = .4,
+		gravity = .375,
 		maxGravity = 48,
-		image = love.graphics.newImage('sprites/Boot.png')
+		image = love.graphics.newImage('sprites/Boot.png'),
+		outline = love.graphics.newImage('sprites/BootOutline.png')
 	},
 	{
 		name = "Simon",

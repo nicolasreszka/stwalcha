@@ -84,6 +84,8 @@ function Player.new(x,y,slot,character)
 
 	if player.name == "Henry" then
 		player.rainbowPoints = {}
+	elseif player.name == "Boot" then
+		player.outline = character.outline
 	end
 
 	return player
@@ -677,14 +679,25 @@ function Player:draw()
 
 	if game.chat[self.slot] then
 		chatColor:set()
-		love.graphics.setLineWidth(2)
-		love.graphics.rectangle(
-			"line",
-			self.pos.x-self.xScale*self.width/2+self.width/2, 
-			self.pos.y-self.yScale*self.height/2+self.height/2,
-			self.width*self.xScale,self.height*self.yScale
-		)
-		love.graphics.setLineWidth(1)
+		if self.name == "Boot" then
+			love.graphics.draw(
+				self.outline,
+				self.pos.x-self.xScale*self.width/2+self.width/2-1, 
+				self.pos.y-self.yScale*self.height/2+self.height/2-1, 
+				0,
+				self.xScale, 
+				self.yScale
+			)
+		else 
+			love.graphics.setLineWidth(2)
+			love.graphics.rectangle(
+				"line",
+				self.pos.x-self.xScale*self.width/2+self.width/2, 
+				self.pos.y-self.yScale*self.height/2+self.height/2,
+				self.width*self.xScale,self.height*self.yScale
+			)
+			love.graphics.setLineWidth(1)
+		end
 	end
 
 	if showPlayerNames then

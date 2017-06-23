@@ -2,12 +2,7 @@
 
 controls = State.new()
 
-local keyboardImage = love.graphics.newImage('sprites/keyboard.png')
-local gamepadImage = love.graphics.newImage('sprites/gamepad.png')
 local backgroundImage = love.graphics.newImage("backgrounds/otherMenusBackground.png")
-local leftImage = love.graphics.newImage('sprites/controlsLeft.png')
-local rightImage = love.graphics.newImage('sprites/controlsRight.png')
-local jumpImage = love.graphics.newImage('sprites/controlsJump.png')
 
 function controls:load()
 	self.interface = KeyBindingInterface.new()
@@ -124,15 +119,15 @@ function controls:keyreleased(key,scancode)
 end
 
 function controls:gamepadpressed(joystick,button) 
-	self.interface:gamepadpressed(inputs[1].joystick,button)
+	self.interface:gamepadpressed(joystick,button)
 end
 
 function controls:gamepadreleased(joystick,button) 
-	self.interface:gamepadreleased(inputs[1].joystick,button)
+	self.interface:gamepadreleased(joystick,button)
 end
 
 function controls:gamepadaxis(joystick,axis,value) 
-	self.interface:gamepadaxis(inputs[1].joystick,axis,value) 
+	self.interface:gamepadaxis(joystick,axis,value) 
 end
 
 function controls:update(dt)

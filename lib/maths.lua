@@ -40,4 +40,3 @@ function approachValues(begin,change,shift)
 		return math.max(begin - shift, change)
 	end
 end
-

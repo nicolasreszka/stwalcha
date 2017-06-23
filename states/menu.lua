@@ -87,15 +87,15 @@ function menu:keyreleased(key,scancode)
 end
 
 function menu:gamepadpressed(joystick,button) 
-	self.interface:gamepadpressed(inputs[1].joystick,button)
+	self.interface:gamepadpressed(joystick,button)
 end
 
 function menu:gamepadreleased(joystick,button) 
-	self.interface:gamepadreleased(inputs[1].joystick,button)
+	self.interface:gamepadreleased(joystick,button)
 end
 
 function menu:gamepadaxis(joystick,axis,value) 
-	self.interface:gamepadaxis(inputs[1].joystick,axis,value) 
+	self.interface:gamepadaxis(joystick,axis,value) 
 end
 
 function menu:update(dt)

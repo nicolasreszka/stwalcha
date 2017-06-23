@@ -22,8 +22,10 @@ function selectMap:load()
 		Rect.new(left-64,top,256,64),
 		function() 
 			mapName = "maps.neon"
+			dj:setTrack("mountains")
 			game:load()
 			game:set()
+			dj:reset()
 		end
 	))
 	self.interface:add(Button.new(
@@ -31,8 +33,10 @@ function selectMap:load()
 		Rect.new(left,top+margin,128,64),
 		function() 
 			mapName = "maps.neon2"
+			dj:setTrack("jungle")
 			game:load()
 			game:set()
+			dj:reset()
 		end
 	))
 	self.interface:add(Button.new(
@@ -40,8 +44,10 @@ function selectMap:load()
 		Rect.new(left,top+margin*2,128,64),
 		function() 
 			mapName = "maps.lava"
+			dj:setTrack("lava")
 			game:load()
 			game:set()
+			dj:reset()
 		end
 	))
 	self.interface:add(Button.new(
@@ -49,8 +55,10 @@ function selectMap:load()
 		Rect.new(left,top+margin*3,128,64),
 		function() 
 			mapName = "maps.clouds"
+			dj:setTrack("clouds")
 			game:load()
 			game:set()
+			dj:reset()
 		end
 	))
 	self.interface:add(Button.new(
@@ -58,8 +66,10 @@ function selectMap:load()
 		Rect.new(left,top+margin*4,128,64),
 		function() 
 			mapName = "maps.getTheEye"
+			dj:setTrack("karma")
 			game:load()
 			game:set()
+			dj:reset()
 		end
 	))
 	self.interface:add(Button.new(
@@ -100,9 +110,9 @@ function selectMap:keyreleased(key,scancode)
 end
 
 function selectMap:gamepadpressed(joystick,button) 
-	self.interface:gamepadpressed(inputs[1].joystick,button)
+	self.interface:gamepadpressed(joystick,button)
 
-	if joystick == inputs[1].joystick and button == "b" then
+	if button == "b" then
 		uiSfx.no:play()
 		selectCharacters:reload()
 		selectCharacters:set()
@@ -110,11 +120,11 @@ function selectMap:gamepadpressed(joystick,button)
 end
 
 function selectMap:gamepadreleased(joystick,button) 
-	self.interface:gamepadreleased(inputs[1].joystick,button)
+	self.interface:gamepadreleased(joystick,button)
 end
 
 function selectMap:gamepadaxis(joystick,axis,value) 
-	self.interface:gamepadaxis(inputs[1].joystick,axis,value) 
+	self.interface:gamepadaxis(joystick,axis,value) 
 end
 
 function selectMap:update(dt)

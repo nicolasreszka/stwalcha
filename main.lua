@@ -1,19 +1,5 @@
 --Author : Nicolas Reszka
 
--- TO DO :
--- Add music
--- (main gauche insistante répétitive)
--- Jungle music : monkey skulls do lab sol fa (c ab g f)
--- Autre posibilité : do sib lab sol (c Bb Ab G) (main gauche) do ré mib doaigu (C D Eb C(aigu) (main droite)
--- Preset : log drum (bells)
--- Montagne : (main gauche insistante répétitive)
--- main gauche : Do Fa
--- main droite (do mib) (si ré) (do mib) (ré fa) (mib sol) (sol sib) (fa la)
--- Lava :
--- xylophone (g014) 
--- main gauche do ré mib fa (do fa principales)
--- main droite do ré mib sol do(aigu) mib(aigu) ré si do
-
 require "lib.maths"
 require "lib.color"
 require "lib.shapes"
@@ -52,6 +38,7 @@ require "objects.customParticles"
 require "objects.lava"
 require "objects.bomb"
 require "objects.eye"
+require "objects.dj"
 
 require "states.menu"
 require "states.controls"
@@ -60,6 +47,13 @@ require "states.selectCharacters"
 require "states.selectMap"
 require "states.game"
 require "states.credits"
+
+local modeWidth, modeHeight, modeFlags = love.window.getMode()
+if modeFlags.vsync == false then
+	runFunction = require("lib.frameLimit")
+else 
+	runFunction = require("lib.run")
+end
 
 local function loadData(filename)
 	local text = love.filesystem.read(filename)
@@ -119,30 +113,66 @@ function love.load()
 		plus = love.audio.newSource("sounds/UI/plus.wav", "static")
 	}
 
-	showPlayerNames = true
+	dj:load()
+
+	showPlayerNames = true	
+
+	musicVolume = 1.0
+	soundVolume = 1.0
 
 	if love.filesystem.exists("settings.txt") then
 		local data = loadData("settings.txt")
-		love.window.setFullscreen(data["fullscreen"])
-		love.audio.setVolume(data["volume"])
-		if data["filter"] == true then
-			screen.canvas:setFilter("linear","linear",16)
-		else
-			screen.canvas:setFilter("nearest","nearest")
+		if data["fullscreen"] ~= nil and type(data["fullscreen"]) == "boolean" then
+			love.window.setFullscreen(data["fullscreen"])
 		end
-		showPlayerNames = data["showPlayerNames"]
+		if data["filter"] ~= nil and type(data["filter"]) == "boolean" then
+			if data["filter"] == true then
+				screen.canvas:setFilter("linear","linear",16)
+			else
+				screen.canvas:setFilter("nearest","nearest")
+			end
+		end
+		if data["showPlayerNames"] ~= nil and type(data["showPlayerNames"]) == "boolean" then
+			showPlayerNames = data["showPlayerNames"]
+		end
+		if data["musicvolume"] ~= nil and type(data["musicvolume"]) == "number" then
+			musicVolume = data["musicvolume"]
+			dj:setVolume(musicVolume)
+		end
+		if data["volume"] ~= nil and type(data["volume"]) == "number" then
+			soundVolume = data["volume"]
+			for i,uiSound in pairs(uiSfx) do
+				uiSound:setVolume(soundVolume)
+			end
+			for i,soundFX in pairs(sfx) do
+				soundFX:setVolume(soundVolume)
+			end
+		end
 	end
 
 	if love.filesystem.exists("controls.txt") then
 		local data = loadData("controls.txt")
 		inputs = {}
 		for i = 1, 4 do
-			inputs[i] = Input.new(
-				data["left" .. i],
-				data["right" .. i],
-				data["jump" .. i],
-				data["back" .. i]
-			)
+			if data["left" .. i] ~= nil and data["right" .. i] ~= nil
+			and data["jump" .. i] ~= nil and data["back" .. i] ~= nil then
+				inputs[i] = Input.new(
+					data["left" .. i],
+					data["right" .. i],
+					data["jump" .. i],
+					data["back" .. i]
+				)
+			else
+				if i == 1 then
+					inputs[i] = Input.new("left","right","up","down")
+				elseif i == 2 then
+					inputs[i] = Input.new("q","d","z","s")
+				elseif i == 3 then
+					inputs[i] = Input.new("j","l","i","k")
+				elseif i == 4 then
+					inputs[i] = Input.new("kp4","kp6","kp8","kp5")
+				end
+			end
 		end
 	else 
 		inputs = {
@@ -164,17 +194,9 @@ function love.load()
 	isPlaying = {false,false,false,false}
 	choosenCharacters = {nil,nil,nil,nil}
 
+
 	menu:load()
 	menu:set()
-
-	--debug
-	-- isPlaying = {true,false,false,false}
-	-- choosenCharacters = {characters[1],characters[1],nil,nil}
-	-- mapName = "maps.getTheEye"
-	-- game:load()
-	-- -- game.halfTime = false
-	-- game:set()
-
 end
 
 function love.joystickadded(joystick)
@@ -243,9 +265,6 @@ function love.gamepadaxis(joystick,axis,value)
 end
 
 function love.update(dt)
-	-- if dt < 1/60 then
-	-- 	love.timer.sleep(1/60 - dt)
-	-- end
 	gameState:update(dt)
 	mouse.leftPressed = false
 end
@@ -257,7 +276,12 @@ end
 function love.draw()
 	screen:set()
 	gameState:draw()
+	WHITE:set()
 	screen:unset()
 	screen:draw()
+end
+
+function love.run()
+	runFunction.run()
 end
 

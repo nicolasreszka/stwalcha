@@ -113,6 +113,7 @@ function game:load()
 		"Change map",
 		Rect.new(left,top + margin * 1,256,64),
 		function() 
+			camera:translate(0,0)
 			uiSfx.no:play()
 			selectMap:load()
 			selectMap:set()	
@@ -122,6 +123,7 @@ function game:load()
 		"Back to main menu",
 		Rect.new(left-32,top + margin * 2,320,64),
 		function()
+			camera:translate(0,0)
 			uiSfx.no:play()
 			menu:load() 
 			menu:set()
@@ -161,10 +163,6 @@ end
 function game:keypressed(key,scancode,isrepeat)
 	if scancode == "escape" then
 		self.pause = not self.pause
-	end
-
-	if scancode == "r" then
-		self:load()
 	end
 
 	if self.pause then
@@ -209,6 +207,9 @@ function game:update(dt)
 		if sfx.lava:isPlaying() then
 			sfx.lava:pause()
 		end
+		if dj:isPlaying() then
+			dj:pause()
+		end
 		self.interface:update(dt)
 		self.title:update(dt)
 	else 
@@ -227,18 +228,6 @@ function game:update(dt)
 			end
 		end
 
-		-- if love.keyboard.isDown("left") then
-		-- 	camera:move(-4,0)
-		-- elseif love.keyboard.isDown("right") then
-		-- 	camera:move(4,0)
-		-- end
-
-		-- if  love.keyboard.isDown("up") then
-		-- 	camera:move(0,-4)
-		-- elseif love.keyboard.isDown("down") then
-		-- 	camera:move(0,4)
-		-- end
-
 		for i, input in pairs(inputs) do
 			input:update()
 		end
@@ -255,6 +244,11 @@ function game:update(dt)
 		self.players:update()
 		self.specialObjects:update(dt)
 		updateParticles()
+
+		dj:update()
+		if not dj:isPlaying() then
+			dj:play()
+		end
 	end
 end
 
@@ -313,7 +307,4 @@ function game:draw()
 		self.title:draw()
 		self.interface:draw()
 	end
-
-	-- RED:set()
-	-- love.graphics.print(self.god.state,64,64)
 end

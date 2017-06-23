@@ -17,6 +17,10 @@ function Sound:setPosition(position)
 	self.source:setPosition(x,y,0)
 end
 
+function Sound:setVolume(volume)
+	self.source:setVolume(volume)
+end
+
 function Sound:playAt(position)
 	self:setPosition(position)
 	self.source:play()

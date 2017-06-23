@@ -7,7 +7,7 @@ local backgroundImage = love.graphics.newImage("backgrounds/otherMenusBackground
 function options:load()
 	self.interface = ListInterface.new()
 	local left = 160
-	local top = 256
+	local top = 192
 	local margin = 92
 	self.interface:add(Switch.new(
 		"Fullscreen",
@@ -53,17 +53,32 @@ function options:load()
 		end
 	))
 	self.interface:add(Slider.new(
-		"Volume",
+		"Sfx volume",
 		Rect.new(left,top + margin * 3,720,32),
-		love.audio.getVolume(),
+		soundVolume,
 		function(value) 
-			love.audio.setVolume(value)
+			soundVolume = value
+			for i,uiSound in pairs(uiSfx) do
+				uiSound:setVolume(soundVolume)
+			end
+		end
+	))
+	self.interface:add(Slider.new(
+		"Music volume",
+		Rect.new(left,top + margin * 4,720,32),
+		musicVolume,
+		function(value) 
+			musicVolume = value
 		end
 	))
 	self.interface:add(Button.new(
 		"<< Back",
-		Rect.new(left,top + margin * 4,128,64),
+		Rect.new(left,top + margin * 5,128,64),
 		function() 
+			for i,soundFX in pairs(sfx) do
+				soundFX:setVolume(soundVolume)
+			end
+			dj:setVolume(musicVolume)
 			local data = ""
 			data = data .. "fullscreen = " .. booleanToString(love.window.getFullscreen())
 			data = data .. ";"
@@ -71,7 +86,9 @@ function options:load()
 			data = data .. ";"
 			data = data .. "showPlayerNames = " .. booleanToString(showPlayerNames)
 			data = data .. ";"
-			data = data .. "volume = " .. love.audio.getVolume()
+			data = data .. "volume = " .. soundVolume
+			data = data .. ";"
+			data = data .. "musicvolume = " .. musicVolume
 			data = data .. ";"
 			love.filesystem.write("settings.txt",data)
 			uiSfx.no:stop()
@@ -104,7 +121,7 @@ function options:keypressed(key,scancode,isrepeat)
 	self.interface:keypressed(key,scancode,isreapeat)
 
 	if scancode == "escape" then
-		self.interface.objects[4].callback()
+		self.interface.objects[6].callback()
 	end
 end
 
@@ -113,19 +130,19 @@ function options:keyreleased(key,scancode)
 end
 
 function options:gamepadpressed(joystick,button) 
-	self.interface:gamepadpressed(inputs[1].joystick,button)
+	self.interface:gamepadpressed(joystick,button)
 
-	if joystick == inputs[1].joystick and button == "b" then
-		self.interface.objects[4].callback()
+	if button == "b" then
+		self.interface.objects[6].callback()
 	end
 end
 
 function options:gamepadreleased(joystick,button) 
-	self.interface:gamepadreleased(inputs[1].joystick,button)
+	self.interface:gamepadreleased(joystick,button)
 end
 
 function options:gamepadaxis(joystick,axis,value) 
-	self.interface:gamepadaxis(inputs[1].joystick,axis,value) 
+	self.interface:gamepadaxis(joystick,axis,value) 
 end
 
 function options:update(dt)
